@@ -9,17 +9,17 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 
 
 const LandingPage = () => {
-    const [email, set_email] = useState("");
-    const [password, set_password] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const navigate = useNavigate(); // Initialize useNavigate hook
 
-    const Sign_in = async () => {
+    const signIn = async () => {
         try {
             await signInWithEmailAndPassword(myAuth, email, password);
             navigate('/Admin');
-            console.log("admin login success");
         }
         catch (error) {
+            //TODO: add popup; login failed
             const errorCode = error.code;
             const errorMessage = error.message;
             console.error(errorCode, errorMessage);
@@ -30,12 +30,11 @@ const LandingPage = () => {
         <div className="landing-page">
             <div className="header">
                 <h1>חיפוש מקוואות נשים</h1>
-
                 <div className="admin_login">
-            <input id="email_login" placeholder="Email..." onChange={(e) => set_email(e.target.value)}></input>
-            <input id="password_login" placeholder="Password..." onChange={(e) => set_password(e.target.value)}></input>
-            <button id="button_login" onClick={Sign_in}>SIGN IN</button>
-        </div>
+                    <input id="email_login" placeholder="Email..." onChange={(e) => setEmail(e.target.value)}></input>
+                    <input id="password_login" placeholder="Password..." onChange={(e) => setPassword(e.target.value)}></input>
+                    <button id="button_login" onClick={signIn}>SIGN IN</button>
+                </div>
                 {/* <img src="itimlogo.png" className="logo" /> */}
             </div>
 
