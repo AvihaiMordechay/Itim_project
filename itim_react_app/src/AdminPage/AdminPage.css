@@ -1,0 +1,30 @@
+.admin-page {
+    margin: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.return-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.return-button:hover {
+    background-color: #0056b3;
+}
+
+.table-container {
+    /* Add styles for your table container */
+}
