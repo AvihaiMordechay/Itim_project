@@ -5,7 +5,6 @@ from firebase_admin import credentials, firestore
 
 # Google Maps Geocoding API key.
 with open("misc/google_api.txt", 'r') as file:
-    # קריאת כל התוכן של הקובץ
     API_KEY = file.read()
 
 
