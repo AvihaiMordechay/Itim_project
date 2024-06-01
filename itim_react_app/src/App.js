@@ -2,7 +2,7 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { LandingPage } from './LandingPage/LandingPage';
 import { AdminPage } from './AdminPage/AdminPage';
-import { AuthProvider } from './AuthContext';
+import { AuthProvider } from './Authentication/AuthContext';
 import ProtectedRoute from './ProtectedRoute';
 
 function App() {
