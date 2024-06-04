@@ -1,3 +1,5 @@
+import useAuth from '../Authentication/AdminAuth';
+
 const AdminHeader = () => {
     const { logout } = useAuth();
 
