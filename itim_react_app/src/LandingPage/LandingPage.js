@@ -9,7 +9,7 @@ const LandingPage = () => {
     return (
         <div className="landing-page">
             <UserHeader />
-            <div className="main-content">
+            <div className="user-main-content">
                 <UserSearchForm />
                 <div className="content">
                     <Map />

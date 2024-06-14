@@ -313,7 +313,7 @@ body {
   /* Adjust size as needed */
 }
 
-.main-content {
+.user-main-content {
   display: flex;
   flex-direction: column;
 }

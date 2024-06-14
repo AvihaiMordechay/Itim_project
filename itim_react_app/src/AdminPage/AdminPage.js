@@ -6,7 +6,7 @@ const AdminPage = () => {
   return (
     <div className="admin-page">
       <AdminHeader />
-      <div className="body">
+      <div className="user-main-content">
         <div className="table-container">
           <table className="table">
           </table>
