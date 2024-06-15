@@ -18,6 +18,8 @@ const AddMikve = () => {
         supervision: false,
         supervisionDate: "",
         notes: "",
+        ids: [],
+        newId: ""
     });
 
     const handleSupervisionChange = () => {
@@ -26,11 +28,41 @@ const AddMikve = () => {
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
+
+        if (name === "ids") {
+            // Handle IDs separately to append to the array only if value is not empty
+            if (value.trim() !== "") {
+                setMikveData((prevData) => ({
+                    ...prevData,
+                    ids: [...prevData.ids, value.trim()], // Append new ID to the array
+                    newId: ""  // Clear the newId field after adding
+                }));
+            }
+            // Clear the input field after adding or if value is empty
+            setMikveData((prevData) => ({
+                ...prevData,
+                newId: ""
+            }));
+        } else {
+            // For other fields, update as before
+            setMikveData((prevData) => ({
+                ...prevData,
+                [name]: type === "checkbox" ? checked : value,
+            }));
+        }
+    };
+
+    const handleDeleteId = (index) => {
+        // Create a copy of the ids array without the item at the specified index
+        const updatedIds = mikveData.ids.filter((_, i) => i !== index);
+
+        // Update the state with the new array of ids
         setMikveData((prevData) => ({
             ...prevData,
-            [name]: type === "checkbox" ? checked : value,
+            ids: updatedIds
         }));
     };
+
 
     const isValidPhoneNumber = (phone) => {
         const regexMobile = /^05\d([-]{0,1})\d{3}([-]{0,1})\d{4}$/;
@@ -38,6 +70,24 @@ const AddMikve = () => {
 
         return regexMobile.test(phone) || regexPhone.test(phone);
     };
+
+    const handleClosePopup = () => {
+        // Clear form or close popup
+        setIsAddMikvePopupOpen(false);
+        setMikveData({
+            name: "",
+            city: "",
+            address: "",
+            phone: "",
+            shelter: "",
+            accessibility: "",
+            supervision: false,
+            supervisionDate: "",
+            notes: "",
+            ids: [],
+            newId: "",
+        });
+    }
 
 
     const handleAddMikve = async () => {
@@ -61,6 +111,7 @@ const AddMikve = () => {
 
             // Prepare data to upload to Firestore or perform other actions
             const mikveToAdd = {
+                ID: mikveData.ids,
                 name: mikveData.name,
                 city: mikveData.city,
                 address: mikveData.address,
@@ -85,21 +136,8 @@ const AddMikve = () => {
             }
             console.log("Mikve data to add:", mikveToAdd);
 
-
-
-            // Clear form or close popup
-            setIsAddMikvePopupOpen(false);
-            setMikveData({
-                name: "",
-                city: "",
-                address: "",
-                phone: "",
-                shelter: "",
-                accessibility: "",
-                supervision: false,
-                supervisionDate: "",
-                notes: "",
-            });
+            //Close and clear the popup.
+            handleClosePopup();
         } else {
             alert("אנא מלא את כל השדות.");
         }
@@ -221,10 +259,12 @@ const AddMikve = () => {
                                     checked={isSupervisionChecked}
                                     onChange={handleSupervisionChange}
                                 />
-                                <label htmlFor="mikve-supervision">
+                                <label htmlFor="mikve-supervision" className="supervision-label">
                                     :השגחה
                                 </label>
                             </div>
+
+
 
                             {isSupervisionChecked && (
                                 <div className="form-group">
@@ -241,6 +281,50 @@ const AddMikve = () => {
 
                                 </div>
                             )}
+
+                            <div className="form-group">
+                                <button
+                                    className="add-id"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        handleInputChange({ target: { name: "ids", value: mikveData.newId } });
+                                    }}
+                                >
+                                    הוסף
+                                </button>
+                                <input
+                                    type="text"
+                                    id="mikve-ids-input"
+                                    name="newId"
+                                    value={mikveData.newId}
+                                    onChange={handleInputChange}
+                                />
+                                <label htmlFor="mikve-ids">:לבור מים ID הוסף</label>
+
+                                <div className="form-group">
+
+
+                                </div>
+
+                            </div>
+
+                            <div className="added-ids">
+                                {mikveData.ids.map((id, index) => (
+                                    <div key={index} className="added-id">
+                                        <span>{id}</span>
+                                        <button
+                                            onClick={() => handleDeleteId(index)}
+                                            type="button"
+                                        >
+                                            X
+                                        </button>
+                                    </div>
+                                ))}
+
+                            </div>
+
+
+
 
                             <div className="form-group">
                                 <textarea
@@ -264,7 +348,9 @@ const AddMikve = () => {
                         </button>
                         <button
                             className="exit-button-add-mikve"
-                            onClick={() => setIsAddMikvePopupOpen(false)}
+                            onClick={() =>
+                                handleClosePopup()
+                            }
                         >
                             צא ללא שינויים
                         </button>

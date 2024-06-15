@@ -16,7 +16,6 @@
     padding: 20px;
     border-radius: 8px;
     width: 400px;
-    /* Adjusted width */
     max-width: 90%;
     max-height: 80%;
     overflow-y: auto;
@@ -61,22 +60,8 @@
     text-align: right;
 }
 
-.supervision-group input {
-    margin-left: 5px;
-    margin-right: 5px;
-}
 
 
-.supervision-group label {
-    margin-left: 5px;
-    margin-right: 0;
-    /* Remove right margin */
-}
-
-.supervision-group input {
-    margin-left: 5px;
-    /* Add left margin */
-}
 
 .required {
     color: red;
@@ -90,7 +75,8 @@
 }
 
 .confirm-add-mikve-button,
-.exit-button-add-mikve {
+.exit-button-add-mikve,
+.add-id {
     margin-top: 10px;
     padding: 10px 20px;
     border: none;
@@ -98,7 +84,37 @@
     cursor: pointer;
 }
 
-.confirm-add-mikve-button {
+.supervision-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+
+.add-id {
+    margin-right: 10px;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #4caf50;
+    color: white;
+}
+
+#mikve-ids-input {
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: right;
+    flex: 2;
+}
+
+
+
+.confirm-add-mikve-button,
+.add-id {
     background-color: #4caf50;
     color: white;
 }
@@ -107,4 +123,52 @@
     background-color: #f44336;
     color: white;
     margin-left: 10px;
+}
+
+.added-ids {
+    margin-top: 5px;
+}
+
+.added-id {
+    display: inline-block;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.added-id span {
+    margin-right: 5px;
+}
+
+.added-id button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 3px 5px;
+    border-radius: 50%;
+    font-size: 12px;
+}
+
+.supervision-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.supervision-group label {
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: right;
+    min-width: 100px;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.supervision-group input {
+    margin-left: 250px;
 }
