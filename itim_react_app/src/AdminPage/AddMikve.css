@@ -13,8 +13,98 @@
 
 .add-mikve-content {
     background-color: white;
-    padding: 30px;
+    padding: 20px;
     border-radius: 8px;
     width: 400px;
+    /* Adjusted width */
     max-width: 90%;
+    max-height: 80%;
+    overflow-y: auto;
+}
+
+.add-mikve-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    margin-right: 10px;
+    margin-left: 10px;
+    text-align: left;
+    min-width: 100px;
+}
+
+.form-group textarea {
+    flex: 2;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: right;
+    resize: vertical;
+    max-height: 150px;
+    min-height: 80px;
+}
+
+
+.form-group input,
+.form-group textarea {
+    flex: 2;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: right;
+}
+
+.supervision-group input {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+
+.supervision-group label {
+    margin-left: 5px;
+    margin-right: 0;
+    /* Remove right margin */
+}
+
+.supervision-group input {
+    margin-left: 5px;
+    /* Add left margin */
+}
+
+.required {
+    color: red;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+    margin-top: -5px;
+    margin-bottom: 5px;
+}
+
+.confirm-add-mikve-button,
+.exit-button-add-mikve {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.confirm-add-mikve-button {
+    background-color: #4caf50;
+    color: white;
+}
+
+.exit-button-add-mikve {
+    background-color: #f44336;
+    color: white;
+    margin-left: 10px;
 }

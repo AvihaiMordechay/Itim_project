@@ -4,7 +4,7 @@ from firebase_admin import credentials, firestore
 import requests
 
 # Google Maps Geocoding API key.
-with open("misc/google_api.txt", 'r') as file:
+with open("google_api.txt", 'r') as file:
     API_KEY = file.read()
 
 
@@ -38,7 +38,7 @@ def get_coordinates(address):
 def init_database():
     # Initialize Firestore connection
     cred = credentials.Certificate(
-        'misc/itim-project-firebase-adminsdk-p6q9k-9ae897ad40.json')
+        'itim-project-firebase-adminsdk-p6q9k-9ae897ad40.json')
     firebase_admin.initialize_app(cred)
     return firestore.client()
 
@@ -60,7 +60,7 @@ def upload_data_to_firestore(df, db):
         # Prepare document data
         doc_data = {
             'ID': ids,
-            'position': firestore.GeoPoint(lat, lng) if lat and lng else None,
+            'position': {'latitude': lat, 'longitude': lng} if lat is not None and lng is not None else None,
         }
 
         # Add other fields as strings
@@ -78,7 +78,7 @@ if __name__ == "__main__":
     db = init_database()
 
     # Read Excel file
-    df = pd.read_excel('misc/MikvesTest.xlsx', header=0)
+    df = pd.read_excel('MikvesTest.xlsx', header=0)
 
     # Convert all columns to string
     df = df.astype(str)
