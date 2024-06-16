@@ -1,18 +1,3 @@
-.admin-page {
-    margin: 20px;
-}
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-h1 {
-    text-align: center;
-}
-
 .return-button {
     background-color: #007bff;
     color: #fff;
