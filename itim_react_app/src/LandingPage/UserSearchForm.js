@@ -75,7 +75,7 @@ const UserSearchForm = () => {
                     <option value="">רמת ניקיון</option>
                 </select>
                 <label className="checkbox-container">
-                    בלענית
+                    האם ניתן לטבול לבד
                     <input
                         type="checkbox"
                         checked={hasBalanit}
