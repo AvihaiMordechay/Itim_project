@@ -60,8 +60,8 @@ const AdminMikvesList = () => {
                             <td>{mikve.city}</td>
                             <td>{mikve.name}</td>
                             <td>{mikve.phone}</td>
-                            <td>{mikve.latitude}</td>
-                            <td>{mikve.longitude}</td>
+                            <td>{mikve.position?.latitude}</td>
+                            <td>{mikve.position?.longitude}</td>
                             <td>{mikve.shelter}</td>
                             <td>{mikve.supervision}</td>
                             <td>{mikve.supervisionDate}</td>
