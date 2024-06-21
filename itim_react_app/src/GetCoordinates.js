@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 // Replace with your actual Google Maps Geocoding API key
-const API_KEY = 'AIzaSyD4DQ8W_FnvX8ZZI9nIAZlgUtASyuEH8Gs';
-
+const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API;
 /**
  * Function to get coordinates (latitude and longitude) for a given address
  * @param {string} address - The address to geocode

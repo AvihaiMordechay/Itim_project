@@ -134,7 +134,7 @@ const AddMikve = () => {
             } catch (e) {
                 console.error('Error adding document: ', e);
             }
-            console.log("Mikve data to add:", mikveToAdd);
+            console.log("Mikve data to add: ", mikveToAdd);
 
             //Close and clear the popup.
             handleClosePopup();
