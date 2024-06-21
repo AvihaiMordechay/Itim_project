@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
-<<<<<<< HEAD
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API;
-=======
-//const GOOGLE_MAPS_API_KEY =  // replace with your actual API key
->>>>>>> 43a48f3eae8c2bfa0790bf6c0759d74b2e51f5c8
 
 const defaultCenter = {
     lat: 31.7683,
