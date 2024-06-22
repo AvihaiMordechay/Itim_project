@@ -1,16 +1,64 @@
 import React, { useState } from 'react';
+import { db } from "../Firebase";
+import { collection, getDocs } from "firebase/firestore";
+import { useLocation } from '../hooks/useLocation'; 
+import { calculateDistance } from '../utils/distance'; 
+import { geocodeAddress } from '../utils/geocode'; 
 
-const UserSearchForm = () => {
+const UserSearchForm = ({ setMikves }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [accessibility, setAccessibility] = useState([]);
     const [cleanliness, setCleanliness] = useState('');
     const [hasBalanit, setHasBalanit] = useState(false);
     const [hasMamad, setHasMamad] = useState(false);
     const [isAccessibilityOpen, setIsAccessibilityOpen] = useState(false);
+    const [location, error] = useLocation();
 
-    const handleSearch = (e) => {
+    const handleSearch = async (e) => {
         e.preventDefault();
-        console.log({ searchQuery, accessibility, cleanliness, hasBalanit, hasMamad });
+
+        // Fetch mikveh data from Firestore
+        const mikvesCollection = collection(db, "Mikves");
+        const mikvesSnapshot = await getDocs(mikvesCollection);
+        const mikvesList = mikvesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        // Filter mikveh list based on user criteria
+        const filteredMikves = mikvesList.filter(mikve => {
+            return (!accessibility.length || accessibility.includes(mikve.accessibility)) &&
+                   (!cleanliness || mikve.cleanliness === cleanliness) &&
+                   (!hasBalanit || mikve.hasBalanit) &&
+                   (!hasMamad || mikve.hasMamad);
+        });
+
+        let sortedMikves = [];
+        try {
+            if (searchQuery) {
+                // Geocode the address to get its latitude and longitude
+                const geocodedLocation = await geocodeAddress(searchQuery);
+                console.log("Geocoded location:", geocodedLocation);
+
+                // Sort mikvehs based on distance from the geocoded location
+                sortedMikves = filteredMikves.sort((a, b) => 
+                    calculateDistance(geocodedLocation, a.position) - calculateDistance(geocodedLocation, b.position)
+                );
+            } else if (location) {
+                console.log("User's location:", location);
+
+                // Sort mikvehs based on distance from the user's location
+                sortedMikves = filteredMikves.sort((a, b) => 
+                    calculateDistance(location, a.position) - calculateDistance(location, b.position)
+                );
+            } else {
+                console.warn("No location provided; displaying unsorted list.");
+                sortedMikves = filteredMikves; // Fallback to unsorted if no location is available
+            }
+        } catch (error) {
+            console.error("Error during geocoding or sorting:", error);
+            sortedMikves = filteredMikves; // Fallback to unsorted if an error occurs
+        }
+
+        console.log("Sorted mikvehs:", sortedMikves);
+        setMikves(sortedMikves);
     };
 
     const toggleAccessibility = () => {
