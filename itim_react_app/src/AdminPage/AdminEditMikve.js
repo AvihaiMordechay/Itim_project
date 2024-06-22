@@ -1,5 +1,8 @@
 import "./AdminEditMikve.css";
 import React, { useState } from "react";
+import { db } from "../Firebase"
+import { doc, updateDoc } from "firebase/firestore";
+
 
 const AdminEditMikve = ({ mikve, onClose }) => {
     const [mikveData, setMikveData] = useState(mikve);
@@ -19,21 +22,25 @@ const AdminEditMikve = ({ mikve, onClose }) => {
     const handleSave = async () => {
         // Check if all required fields are filled
         if (
-            mikveData.name &&
-            mikveData.city &&
-            mikveData.address &&
-            mikveData.phone &&
-            mikveData.shelter &&
-            mikveData.accessibility
+            tempData.name &&
+            tempData.city &&
+            tempData.address &&
+            tempData.phone &&
+            tempData.shelter &&
+            tempData.accessibility
         ) {
-            if (!isValidPhoneNumber(mikveData.phone)) {
-                console.log("Invalid phone number.");
+            if (!isValidPhoneNumber(tempData.phone)) {
+                alert("אנא הכנס טלפון חוקי");
                 // Handle invalid phone number case (can show an alert or any other UI indication)
                 return;
             }
 
             try {
-                console.log("Updated mikve:", mikveData);
+                // Create a copy of tempData without the id field
+                const { id, ...tempDataWithoutId } = tempData;
+
+                const mikveRef = doc(db, "Mikves", mikve.id);
+                await updateDoc(mikveRef, tempDataWithoutId);
                 onClose();
             } catch (error) {
                 console.error("Error updating mikve: ", error);
@@ -44,9 +51,15 @@ const AdminEditMikve = ({ mikve, onClose }) => {
     };
 
 
+
     const handleFieldEdit = (field) => {
-        setTempData(mikveData);
-        setEditField(field);
+        if (field === "levad") {
+            setTempData(tempData);
+            setEditField(field);
+        } else {
+            setTempData(mikveData);
+            setEditField(field);
+        }
     };
 
     const handleFieldSave = (field) => {
@@ -58,7 +71,6 @@ const AdminEditMikve = ({ mikve, onClose }) => {
             setIsLevadChecked(tempData[field]);
         }
         setEditField(null);
-
     };
 
     const handleInputChange = (e) => {
@@ -163,7 +175,7 @@ const AdminEditMikve = ({ mikve, onClose }) => {
                                 type="date"
                                 id="edit-mikve-levad-date"
                                 name="when_levad"
-                                value={editField === "levad" ? tempData.when_levad : mikveData.when_levad}
+                                value={tempData.when_levad}
                                 onChange={handleInputChange}
                                 disabled={editField !== "levad"}
                             />
@@ -198,13 +210,19 @@ const AdminEditMikve = ({ mikve, onClose }) => {
                     </div>
 
                     <div className="adds-id">
-                        {editField === "ids" && (
+                        {editField === "ids" ? (
                             tempData.ids.map((id, index) => (
                                 <div key={index} className="added-id">
                                     <span>{id}</span>
                                     <button onClick={() => handleDeleteId(index)} type="button">
                                         X
                                     </button>
+                                </div>
+                            ))
+                        ) : (
+                            tempData.ids.map((id, index) => (
+                                <div key={index} className="added-id">
+                                    <span>{id}</span>
                                 </div>
                             ))
                         )}
