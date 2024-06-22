@@ -1,11 +1,10 @@
-import "./AddMikve.css";
+import "./AdminAddMikve.css";
 import React, { useState } from "react";
 import { getCoordinates } from "../GetCoordinates";
 import { db } from "../Firebase";
 import { collection, addDoc } from 'firebase/firestore';
 
-
-const AddMikve = () => {
+const AdminAddMikve = () => {
     const [isAddMikvePopupOpen, setIsAddMikvePopupOpen] = useState(false); // Add pop-up state
     const [isSupervisionChecked, setIsSupervisionChecked] = useState(false);
     const [mikveData, setMikveData] = useState({
@@ -24,6 +23,10 @@ const AddMikve = () => {
 
     const handleSupervisionChange = () => {
         setIsSupervisionChecked(!isSupervisionChecked);
+        setMikveData((prevData) => ({
+            ...prevData,
+            supervision: !isSupervisionChecked,
+        }));
     };
 
     const handleInputChange = (e) => {
@@ -63,7 +66,6 @@ const AddMikve = () => {
         }));
     };
 
-
     const isValidPhoneNumber = (phone) => {
         const regexMobile = /^05\d([-]{0,1})\d{3}([-]{0,1})\d{4}$/;
         const regexPhone = /^0\d([-]{0,1})\d{7}$/;
@@ -87,8 +89,8 @@ const AddMikve = () => {
             ids: [],
             newId: "",
         });
+        setIsSupervisionChecked(false); // Reset supervision checkbox state
     }
-
 
     const handleAddMikve = async () => {
         // Check if all required fields are filled
@@ -118,8 +120,8 @@ const AddMikve = () => {
                 phone: mikveData.phone,
                 shelter: mikveData.shelter,
                 accessibility: mikveData.accessibility,
-                supervision: mikveData.supervision,
-                supervisionDate: mikveData.supervisionDate,
+                levad: mikveData.supervision,
+                when_levad: mikveData.supervisionDate,
                 notes: mikveData.notes,
                 position: coordinates
                     ? { latitude: coordinates.lat, longitude: coordinates.lng }
@@ -169,7 +171,6 @@ const AddMikve = () => {
                                     <span className="required">*</span>
                                     :שם המקווה
                                 </label>
-
                             </div>
 
                             <div className="form-group">
@@ -185,8 +186,8 @@ const AddMikve = () => {
                                     <span className="required">*</span>
                                     :עיר
                                 </label>
-
                             </div>
+
                             <div className="form-group">
                                 <input
                                     type="text"
@@ -200,7 +201,6 @@ const AddMikve = () => {
                                     <span className="required">*</span>
                                     :כתובת
                                 </label>
-
                             </div>
 
                             <div className="form-group">
@@ -216,7 +216,6 @@ const AddMikve = () => {
                                     <span className="required">*</span>
                                     :טלפון
                                 </label>
-
                             </div>
 
                             <div className="form-group">
@@ -232,7 +231,6 @@ const AddMikve = () => {
                                     <span className="required">*</span>
                                     :מיגון
                                 </label>
-
                             </div>
 
                             <div className="form-group">
@@ -248,7 +246,6 @@ const AddMikve = () => {
                                     <span className="required">*</span>
                                     :נגישות
                                 </label>
-
                             </div>
 
                             <div className="form-group supervision-group">
@@ -264,8 +261,6 @@ const AddMikve = () => {
                                 </label>
                             </div>
 
-
-
                             {isSupervisionChecked && (
                                 <div className="form-group">
                                     <input
@@ -278,7 +273,6 @@ const AddMikve = () => {
                                     <label htmlFor="mikve-supervision-date">
                                         :מתי השגחה
                                     </label>
-
                                 </div>
                             )}
 
@@ -301,11 +295,7 @@ const AddMikve = () => {
                                 />
                                 <label htmlFor="mikve-ids">:לבור מים ID הוסף</label>
 
-                                <div className="form-group">
-
-
-                                </div>
-
+                                <div className="form-group"></div>
                             </div>
 
                             <div className="added-ids">
@@ -320,11 +310,7 @@ const AddMikve = () => {
                                         </button>
                                     </div>
                                 ))}
-
                             </div>
-
-
-
 
                             <div className="form-group">
                                 <textarea
@@ -337,7 +323,6 @@ const AddMikve = () => {
                                     onChange={handleInputChange}
                                 />
                                 <label htmlFor="mikve-notes">:הערות</label>
-
                             </div>
                         </form>
                         <button
@@ -348,9 +333,7 @@ const AddMikve = () => {
                         </button>
                         <button
                             className="exit-button-add-mikve"
-                            onClick={() =>
-                                handleClosePopup()
-                            }
+                            onClick={handleClosePopup}
                         >
                             צא ללא שינויים
                         </button>
@@ -361,4 +344,4 @@ const AddMikve = () => {
     );
 };
 
-export { AddMikve };
+export { AdminAddMikve };

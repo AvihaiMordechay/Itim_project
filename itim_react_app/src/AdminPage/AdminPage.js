@@ -1,6 +1,6 @@
 import "./AdminPage.css"; // Import CSS file
 import { AdminHeader } from "./AdminHeader";
-import { AddMikve } from "./AddMikve"
+import { AdminAddMikve } from "./AdminAddMikve"
 import { AdminMikvesList } from "./AdminMikvesList";
 const AdminPage = () => {
 
@@ -8,7 +8,7 @@ const AdminPage = () => {
     <div className="admin-page">
       < AdminHeader />
       <div className="admin-main-content">
-        <AddMikve />
+        <AdminAddMikve />
         <AdminMikvesList />
       </div>
     </div>

@@ -57,20 +57,28 @@ def upload_data_to_firestore(df, db):
         # Get coordinates
         lat, lng = get_coordinates(full_address)
 
+        # Determine the boolean value for 'levad'
+        # Replace this with your actual logic to determine the boolean value
+        levad = True if row['levad'] == 'True' else False
+
         # Prepare document data
         doc_data = {
             'ID': ids,
             'position': {'latitude': lat, 'longitude': lng} if lat is not None and lng is not None else None,
+            'levad': levad  # Add the boolean field here
         }
+
+        if ids[0][0] == "T":
+            doc_data['ID'] = []
 
         # Add other fields as strings
         for col in df.columns:
-            if col not in ['ID', 'position']:
+            if col not in ['ID', 'position', 'levad']:
                 doc_data[col] = row[col]
 
         # Set document in Firestore
-        doc_ref = db.collection('Mikves').document(
-            ids[0])  # Use the first ID as document name
+        # Use the first ID as document name
+        doc_ref = db.collection('Mikves').document(ids[0])
         doc_ref.set(doc_data)
 
 
@@ -83,6 +91,9 @@ if __name__ == "__main__":
 
     # Convert all columns to string
     df = df.astype(str)
+
+    # Replace 'nan' with an empty string
+    df = df.replace('nan', '')
 
     # Set column names
     column_names = df.iloc[0]
