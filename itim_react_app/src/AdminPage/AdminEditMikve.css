@@ -1,0 +1,128 @@
+.edit-mikve-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.edit-mikve-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    max-height: 80%;
+    overflow-y: auto;
+}
+
+.edit-mikve-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    margin-right: 10px;
+    margin-left: 10px;
+    text-align: left;
+    min-width: 100px;
+}
+
+.form-group textarea {
+    flex: 2;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: right;
+    resize: vertical;
+    max-height: 150px;
+    min-height: 80px;
+}
+
+.form-group input,
+.form-group textarea {
+    flex: 2;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: right;
+}
+
+.supervision-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.supervision-group label {
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: right;
+    min-width: 100px;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.supervision-group input {
+    margin-left: 250px;
+}
+
+.edit-mikve-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.edit-mikve-buttons button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.save-button {
+    background-color: #4caf50;
+    color: white;
+}
+
+.cancel-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.adds-id {
+    margin-top: 10px;
+    /* Adjust margin as needed */
+}
+
+.added-id {
+    display: inline-flex;
+    /* Adjusted to inline-flex */
+    align-items: center;
+    margin-top: 5px;
+    /* Adjust margin as needed */
+}
+
+.added-id span {
+    margin-right: 5px;
+    /* Adjust margin as needed, or remove it */
+}
+
+.added-id button {
+    margin-left: 5px;
+    /* Adjust margin as needed, or remove it */
+}

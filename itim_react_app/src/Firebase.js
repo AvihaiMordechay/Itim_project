@@ -2,16 +2,15 @@ import { getAuth } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
-const firebaseConfig = {
-    apiKey: "AIzaSyB16sybcpKqs-7vc_BnoH6Y7eMk4GH10H8",
-    authDomain: "itim-project.firebaseapp.com",
-    projectId: "itim-project",
-    storageBucket: "itim-project.appspot.com",
-    messagingSenderId: "201989656695",
-    appId: "1:201989656695:web:f36ae6503e3263233b3672",
-    measurementId: "G-PDMVLGYM68"
-  };
 
+const firebaseConfig = {
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID
+};
 const app = initializeApp(firebaseConfig);
 
 const myAuth = getAuth(app); // for Authentication uysage
