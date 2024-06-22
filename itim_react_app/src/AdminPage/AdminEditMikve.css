@@ -78,7 +78,6 @@
 
 .supervision-group input {
     margin-left: 250px;
-    /* Adjust as needed */
 }
 
 .edit-mikve-buttons {
@@ -103,4 +102,27 @@
 .cancel-button {
     background-color: #f44336;
     color: white;
+}
+
+.adds-id {
+    margin-top: 10px;
+    /* Adjust margin as needed */
+}
+
+.added-id {
+    display: inline-flex;
+    /* Adjusted to inline-flex */
+    align-items: center;
+    margin-top: 5px;
+    /* Adjust margin as needed */
+}
+
+.added-id span {
+    margin-right: 5px;
+    /* Adjust margin as needed, or remove it */
+}
+
+.added-id button {
+    margin-left: 5px;
+    /* Adjust margin as needed, or remove it */
 }

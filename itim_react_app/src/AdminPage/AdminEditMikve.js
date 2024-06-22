@@ -2,20 +2,47 @@ import "./AdminEditMikve.css";
 import React, { useState } from "react";
 
 const AdminEditMikve = ({ mikve, onClose }) => {
-    console.log(mikve)
     const [mikveData, setMikveData] = useState(mikve);
     const [editField, setEditField] = useState(null);
     const [tempData, setTempData] = useState(mikve);
     const [isLevadChecked, setIsLevadChecked] = useState(mikve.levad);
+    const [newId, setNewId] = useState("");
+
+
+    const isValidPhoneNumber = (phone) => {
+        const regexMobile = /^05\d([-]{0,1})\d{3}([-]{0,1})\d{4}$/;
+        const regexPhone = /^0\d([-]{0,1})\d{7}$/;
+
+        return regexMobile.test(phone) || regexPhone.test(phone);
+    };
 
     const handleSave = async () => {
-        try {
-            console.log("Updated mikve:", mikveData);
-            onClose();
-        } catch (error) {
-            console.error("Error updating mikve: ", error);
+        // Check if all required fields are filled
+        if (
+            mikveData.name &&
+            mikveData.city &&
+            mikveData.address &&
+            mikveData.phone &&
+            mikveData.shelter &&
+            mikveData.accessibility
+        ) {
+            if (!isValidPhoneNumber(mikveData.phone)) {
+                console.log("Invalid phone number.");
+                // Handle invalid phone number case (can show an alert or any other UI indication)
+                return;
+            }
+
+            try {
+                console.log("Updated mikve:", mikveData);
+                onClose();
+            } catch (error) {
+                console.error("Error updating mikve: ", error);
+            }
+        } else {
+            alert(".אנא מלא את כל שדות החובה");
         }
     };
+
 
     const handleFieldEdit = (field) => {
         setTempData(mikveData);
@@ -31,6 +58,7 @@ const AdminEditMikve = ({ mikve, onClose }) => {
             setIsLevadChecked(tempData[field]);
         }
         setEditField(null);
+
     };
 
     const handleInputChange = (e) => {
@@ -47,8 +75,32 @@ const AdminEditMikve = ({ mikve, onClose }) => {
         }
     };
 
+    const handleAddId = () => {
+        if (newId.trim() !== "") {
+            setTempData((prevData) => ({
+                ...prevData,
+                ids: [...prevData.ids, newId.trim()],
+            }));
+            setNewId("");
+        }
+    };
+
+
+    const handleDeleteId = (index) => {
+        // Create a copy of the ids array without the item at the specified index
+        const updatedIds = tempData.ids.filter((_, i) => i !== index);
+
+        // Update the state with the new array of ids
+        setTempData((prevData) => ({
+            ...prevData,
+            ids: updatedIds
+        }));
+    };
+
+
     const handleCancel = () => {
         onClose();
+
     };
 
     return (
@@ -120,6 +172,44 @@ const AdminEditMikve = ({ mikve, onClose }) => {
                             </label>
                         </div>
                     )}
+
+                    <div className="form-group">
+                        {editField === "ids" ? (
+                            <button type="button" onClick={() => handleFieldSave("ids")}>שמור</button>
+                        ) : (
+                            <button type="button" onClick={() => handleFieldEdit("ids")}>ערוך</button>
+                        )}
+
+                        {editField === "ids" && (
+                            <button id="add-mikve-id" type="button" onClick={handleAddId}>
+                                הוסף
+                            </button>
+                        )}
+
+                        <input
+                            type="text"
+                            id="edit-mikve-id"
+                            name="ids"
+                            value={newId}
+                            disabled={editField !== "ids"}
+                            placeholder="הוסף לבור מקווה ID"
+                            onChange={(e) => setNewId(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="adds-id">
+                        {editField === "ids" && (
+                            tempData.ids.map((id, index) => (
+                                <div key={index} className="added-id">
+                                    <span>{id}</span>
+                                    <button onClick={() => handleDeleteId(index)} type="button">
+                                        X
+                                    </button>
+                                </div>
+                            ))
+                        )}
+                    </div>
+
 
                     <div className="form-group">
                         {editField === "notes" ? (

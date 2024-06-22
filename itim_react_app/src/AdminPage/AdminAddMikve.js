@@ -113,7 +113,7 @@ const AdminAddMikve = () => {
 
             // Prepare data to upload to Firestore or perform other actions
             const mikveToAdd = {
-                ID: mikveData.ids,
+                ids: mikveData.ids,
                 name: mikveData.name,
                 city: mikveData.city,
                 address: mikveData.address,

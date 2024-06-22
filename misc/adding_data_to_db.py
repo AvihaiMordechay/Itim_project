@@ -63,13 +63,13 @@ def upload_data_to_firestore(df, db):
 
         # Prepare document data
         doc_data = {
-            'ID': ids,
+            'ids': ids,
             'position': {'latitude': lat, 'longitude': lng} if lat is not None and lng is not None else None,
             'levad': levad  # Add the boolean field here
         }
 
         if ids[0][0] == "T":
-            doc_data['ID'] = []
+            doc_data['ids'] = []
 
         # Add other fields as strings
         for col in df.columns:
