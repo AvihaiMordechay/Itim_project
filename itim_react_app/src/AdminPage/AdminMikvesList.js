@@ -9,30 +9,33 @@ const AdminMikvesList = () => {
     const [selectedMikve, setSelectedMikve] = useState(null);
     const [isEditMikvePopupOpen, setIsEditMikvePopupOpen] = useState(false);
 
-    useEffect(() => {
-        const fetchMikves = async () => {
-            try {
-                const mikvesCollection = collection(db, "Mikves");
-                const mikvesSnapshot = await getDocs(mikvesCollection);
-                const mikvesList = mikvesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                setMikves(mikvesList);
-            } catch (error) {
-                console.error("Error fetching mikves: ", error);
-            }
-        };
+    const fetchMikves = async () => {
+        const querySnapshot = await getDocs(collection(db, "Mikves"));
+        const mikvesData = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+        setMikves(mikvesData);
+    };
 
+    useEffect(() => {
         fetchMikves();
     }, []);
 
-    const handleEdit = (id) => {
-        const clickedMikve = mikves.find(mikve => mikve.id === id);
-        setSelectedMikve(clickedMikve);
-        setIsEditMikvePopupOpen(true); // Open edit popup
+    const handleEditMikve = (mikve) => {
+        setSelectedMikve(mikve);
+        setIsEditMikvePopupOpen(true);
     };
 
-    const handleCloseEdit = () => {
+    const handleClosePopup = () => {
+        setIsEditMikvePopupOpen(false);
         setSelectedMikve(null);
-        setIsEditMikvePopupOpen(false); // Close edit popup
+    };
+
+    const handleSaveMikve = (updatedMikve) => {
+        setMikves((prevMikves) =>
+            prevMikves.map((mikve) => (mikve.id === updatedMikve.id ? updatedMikve : mikve))
+        );
     };
 
     return (
@@ -74,7 +77,7 @@ const AdminMikvesList = () => {
                                 <td>{mikve.water_sampling}</td>
                                 <td>{mikve.when_sampling}</td>
                                 <td>
-                                    <button onClick={() => handleEdit(mikve.id)}>עריכה</button>
+                                    <button onClick={() => handleEditMikve(mikve)}>עריכה</button>
                                 </td> {/* Button to trigger edit */}
                             </tr>
                         </React.Fragment>
@@ -82,7 +85,11 @@ const AdminMikvesList = () => {
                 </tbody>
             </table>
             {isEditMikvePopupOpen && (
-                <AdminEditMikve mikve={selectedMikve} onClose={() => handleCloseEdit()} />
+                <AdminEditMikve
+                    mikve={selectedMikve}
+                    onClose={handleClosePopup}
+                    onSave={handleSaveMikve}
+                />
             )}
         </div>
     );

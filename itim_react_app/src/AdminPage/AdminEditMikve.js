@@ -4,7 +4,7 @@ import { db } from "../Firebase"
 import { doc, updateDoc } from "firebase/firestore";
 
 
-const AdminEditMikve = ({ mikve, onClose }) => {
+const AdminEditMikve = ({ mikve, onClose, onSave }) => {
     const [mikveData, setMikveData] = useState(mikve);
     const [editField, setEditField] = useState(null);
     const [tempData, setTempData] = useState(mikve);
@@ -38,6 +38,7 @@ const AdminEditMikve = ({ mikve, onClose }) => {
                 const { id, ...mikveDataWithoutId } = mikveData;
                 const mikveRef = doc(db, "Mikves", mikve.id);
                 await updateDoc(mikveRef, mikveDataWithoutId);
+                onSave(mikveData);
                 onClose();
             } catch (error) {
                 console.error("Error updating mikve: ", error);
@@ -138,7 +139,6 @@ const AdminEditMikve = ({ mikve, onClose }) => {
 
     const handleCancel = () => {
         onClose();
-
     };
 
     return (
