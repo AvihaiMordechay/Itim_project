@@ -1,3 +1,8 @@
+.add-mikve-container {
+    direction: rtl;
+    text-align: right;
+}
+
 .add-mikve-popup {
     position: fixed;
     top: 0;
@@ -37,6 +42,8 @@
     margin-left: 10px;
     text-align: left;
     min-width: 100px;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .form-group textarea {
@@ -50,7 +57,6 @@
     min-height: 80px;
 }
 
-
 .form-group input,
 .form-group textarea {
     flex: 2;
@@ -59,9 +65,6 @@
     border-radius: 4px;
     text-align: right;
 }
-
-
-
 
 .required {
     color: red;
@@ -90,6 +93,13 @@
     gap: 5px;
 }
 
+.buttons-container {
+    display: flex;
+    justify-content: flex-end;
+    /* Align buttons to the right */
+    gap: 10px;
+    /* Add some space between the buttons */
+}
 
 .add-id {
     margin-right: 10px;
@@ -110,8 +120,6 @@
     text-align: right;
     flex: 2;
 }
-
-
 
 .confirm-add-mikve-button,
 .add-id {
@@ -171,4 +179,23 @@
 
 .supervision-group input {
     margin-left: 250px;
+}
+
+/* Select boxes styling */
+.form-group select {
+    flex: 2;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: right;
+    background-color: white;
+}
+
+/* Options styling */
+.form-group option {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: right;
+    background-color: white;
 }
