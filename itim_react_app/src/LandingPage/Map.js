@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyCvIJYnnAZrhhIpP-LaizRToTInrU6K8fc'; // replace with your actual API key
+const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API; // replace with your actual API key
 
 const defaultCenter = {
     lat: 31.7683,
     lng: 35.2137, // Jerusalem coordinates
 };
-
 const Map = () => {
     const [location, setLocation] = useState(null);
     const [isLocationError, setIsLocationError] = useState(false);
