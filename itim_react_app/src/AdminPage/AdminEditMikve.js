@@ -50,22 +50,36 @@ const AdminEditMikve = ({ mikve, onClose }) => {
 
 
     const handleFieldEdit = (field) => {
-        if (field === "levad") {
-            setTempData(tempData);
-            setEditField(field);
-        } else {
-            setTempData(mikveData);
-            setEditField(field);
-        }
+
+        setEditField(field);
     };
 
     const handleFieldSave = (field) => {
-        setMikveData((prevData) => ({
-            ...prevData,
-            [field]: tempData[field],
-        }));
         if (field === "levad") {
             setIsLevadChecked(tempData[field]);
+            setMikveData((prevData) => ({
+                ...prevData,
+                [field]: tempData[field],
+                ["when_levad"]: tempData.when_levad,
+            }));
+
+        } else if (field == "general_shelter") {
+            setMikveData((prevData) => ({
+                ...prevData,
+                [field]: tempData[field],
+                ["shelter"]: tempData.shelter,
+            }));
+        } else if (field == "general_accessibility") {
+            setMikveData((prevData) => ({
+                ...prevData,
+                [field]: tempData[field],
+                ["accessibility"]: tempData.accessibility,
+            }));
+        } else {
+            setMikveData((prevData) => ({
+                ...prevData,
+                [field]: tempData[field],
+            }));
         }
         setEditField(null);
     };
@@ -139,11 +153,11 @@ const AdminEditMikve = ({ mikve, onClose }) => {
                         { id: "phone", label: "טלפון", type: "tel" },
                     ].map((field) => (
                         <div className="form-group" key={field.id}>
-                            {editField === field.id ? (
-                                <button type="button" onClick={() => handleFieldSave(field.id)}>שמור</button>
-                            ) : (
-                                <button type="button" onClick={() => handleFieldEdit(field.id)}>ערוך</button>
-                            )}
+                            <label htmlFor={`edit-mikve-${field.id}`}>
+                                {`${field.label}:`}
+                                <span className="required">*</span>
+                            </label>
+
                             <input
                                 type={field.type}
                                 id={`edit-mikve-${field.id}`}
@@ -153,18 +167,16 @@ const AdminEditMikve = ({ mikve, onClose }) => {
                                 disabled={editField !== field.id}
                                 required
                             />
-                            <label htmlFor={`edit-mikve-${field.id}`}>
-                                <span className="required">*</span>
-                                {`:${field.label}`}
-                            </label>
+                            {editField === field.id ? (
+                                <button type="button" onClick={() => handleFieldSave(field.id)}>שמור</button>
+                            ) : (
+                                <button type="button" onClick={() => handleFieldEdit(field.id)}>ערוך</button>
+                            )}
+
+
                         </div>
                     ))}
                     <div className="form-group">
-                        {editField === "general_shelter" ? (
-                            <button type="button" onClick={() => handleFieldSave("general_shelter")}>שמור</button>
-                        ) : (
-                            <button type="button" onClick={() => handleFieldEdit("general_shelter")}>ערוך</button>
-                        )}
                         <label htmlFor="edit-select-box-shelter">
                             רמת מיגון:
                             <span className="required">*</span>
@@ -181,6 +193,17 @@ const AdminEditMikve = ({ mikve, onClose }) => {
                             <option value="1">מיגון חלקי </option>
                             <option value="2">מיגון מלא</option>
                         </select>
+
+                        {editField === "general_shelter" ? (
+                            <button type="button" onClick={() => handleFieldSave("general_shelter")}>שמור</button>
+                        ) : (
+                            <button type="button" onClick={() => handleFieldEdit("general_shelter")}>ערוך</button>
+                        )}
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor={`edit-mikve-accessibility`}>
+                            תיאור מיגון:
+                        </label>
                         <input
                             type="text"
                             id="edit-mikve-shelter"
@@ -190,17 +213,10 @@ const AdminEditMikve = ({ mikve, onClose }) => {
                             disabled={editField !== "general_shelter"}
 
                         />
-                        <label htmlFor={`edit-mikve-accessibility`}>
-                            תיאור מיגון:
-                        </label>
                     </div>
 
+
                     <div className="form-group">
-                        {editField === "general_accessibility" ? (
-                            <button type="button" onClick={() => handleFieldSave("general_accessibility")}>שמור</button>
-                        ) : (
-                            <button type="button" onClick={() => handleFieldEdit("general_accessibility")}>ערוך</button>
-                        )}
                         <label htmlFor="edit-select-box-accessibility">
                             רמת נגישות:
                             <span className="required">*</span>
@@ -211,12 +227,24 @@ const AdminEditMikve = ({ mikve, onClose }) => {
                             value={editField === "general_accessibility" ? tempData.general_accessibility : mikveData.general_accessibility}
                             onChange={handleInputChange}
                             disabled={editField !== "general_accessibility"}
-                            required>
+                            required
+                        >
                             <option value="">--בחר רמת נגישות--</option>
                             <option value="0">אין נגישות</option>
-                            <option value="1">נגישות חלקית </option>
+                            <option value="1">נגישות חלקית</option>
                             <option value="2">נגישות מלאה</option>
                         </select>
+                        {editField === "general_accessibility" ? (
+                            <button type="button" onClick={() => handleFieldSave("general_accessibility")}>שמור</button>
+                        ) : (
+                            <button type="button" onClick={() => handleFieldEdit("general_accessibility")}>ערוך</button>
+                        )}
+
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor={`edit-mikve-accessibility`}>
+                            תיאור נגישות:
+                        </label>
                         <input
                             type="text"
                             id="edit-mikve-accessibility"
@@ -224,60 +252,47 @@ const AdminEditMikve = ({ mikve, onClose }) => {
                             value={editField === "general_accessibility" ? tempData.accessibility : mikveData.accessibility}
                             onChange={handleInputChange}
                             disabled={editField !== "general_accessibility"}
-
                         />
-                        <label htmlFor={`edit-mikve-accessibility`}>
-                            תיאור נגישות:
-                        </label>
                     </div>
 
+
                     <div className="form-group levad-group">
+                        <label htmlFor="edit-mikve-levad" className="levad-label">
+                            השגחה:
+                        </label>
+                        <input
+                            type="checkbox"
+                            id="edit-mikve-levad"
+                            name="levad"
+                            checked={editField === "levad" ? tempData.levad : mikveData.levad}
+                            onChange={handleInputChange}
+                            disabled={editField !== "levad"}
+                        />
                         {editField === "levad" ? (
                             <button type="button" onClick={() => handleFieldSave("levad")}>שמור</button>
                         ) : (
                             <button type="button" onClick={() => handleFieldEdit("levad")}>ערוך</button>
                         )}
-                        <input
-                            type="checkbox"
-                            id="edit-mikve-levad"
-                            name="levad"
-                            checked={tempData.levad}
-                            onChange={handleInputChange}
-                            disabled={editField !== "levad"}
-                        />
-                        <label htmlFor="edit-mikve-levad" className="levad-label">
-                            :השגחה
-                        </label>
                     </div>
 
                     {isLevadChecked && (
                         <div className="form-group">
+                            <label htmlFor="edit-mikve-levad-date">
+                                תאריך בדיקת השגחה:
+                            </label>
                             <input
                                 type="date"
                                 id="edit-mikve-levad-date"
                                 name="when_levad"
-                                value={tempData.when_levad}
+                                value={editField === "levad" ? tempData.when_levad : mikveData.when_levad}
                                 onChange={handleInputChange}
                                 disabled={editField !== "levad"}
                             />
-                            <label htmlFor="edit-mikve-levad-date">
-                                :תאריך בדיקת השגחה
-                            </label>
+
                         </div>
                     )}
 
                     <div className="form-group">
-                        {editField === "ids" ? (
-                            <button type="button" onClick={() => handleFieldSave("ids")}>שמור</button>
-                        ) : (
-                            <button type="button" onClick={() => handleFieldEdit("ids")}>ערוך</button>
-                        )}
-
-                        {editField === "ids" && (
-                            <button id="add-mikve-id" type="button" onClick={handleAddId}>
-                                הוסף
-                            </button>
-                        )}
 
                         <input
                             type="text"
@@ -288,6 +303,19 @@ const AdminEditMikve = ({ mikve, onClose }) => {
                             placeholder="הוסף לבור מקווה ID"
                             onChange={(e) => setNewId(e.target.value)}
                         />
+                        {editField === "ids" && (
+                            <button id="add-mikve-id" type="button" onClick={handleAddId}>
+                                הוסף
+                            </button>
+                        )}
+                        {editField === "ids" ? (
+                            <button type="button" onClick={() => handleFieldSave("ids")}>שמור</button>
+                        ) : (
+                            <button type="button" onClick={() => handleFieldEdit("ids")}>ערוך</button>
+                        )}
+
+
+
                     </div>
 
                     <div className="adds-id">
@@ -311,11 +339,7 @@ const AdminEditMikve = ({ mikve, onClose }) => {
 
 
                     <div className="form-group">
-                        {editField === "notes" ? (
-                            <button type="button" onClick={() => handleFieldSave("notes")}>שמור</button>
-                        ) : (
-                            <button type="button" onClick={() => handleFieldEdit("notes")}>ערוך</button>
-                        )}
+                        <label htmlFor="edit-mikve-notes">:הערות</label>
                         <textarea
                             id="edit-mikve-notes"
                             name="notes"
@@ -326,7 +350,12 @@ const AdminEditMikve = ({ mikve, onClose }) => {
                             onChange={handleInputChange}
                             disabled={editField !== "notes"}
                         />
-                        <label htmlFor="edit-mikve-notes">:הערות</label>
+                        {editField === "notes" ? (
+                            <button type="button" onClick={() => handleFieldSave("notes")}>שמור</button>
+                        ) : (
+                            <button type="button" onClick={() => handleFieldEdit("notes")}>ערוך</button>
+                        )}
+
                     </div>
 
                     <div className="edit-mikve-buttons">

@@ -6,7 +6,7 @@ import { collection, addDoc } from 'firebase/firestore';
 
 const AdminAddMikve = () => {
     const [isAddMikvePopupOpen, setIsAddMikvePopupOpen] = useState(false);
-    const [isSupervisionChecked, setIsSupervisionChecked] = useState(false);
+    const [isLevadChecked, setIsLevadChecked] = useState(false);
     const [generalAccessibilityOption, setAccessibilitySelectedOption] = useState('');
     const [generalShelterOption, setShelterSelectedOption] = useState('');
 
@@ -16,21 +16,21 @@ const AdminAddMikve = () => {
         address: "",
         phone: "",
         shelter: "",
-        generalShelter: "",
+        general_shelter: "",
         accessibility: "",
-        generalAccessibility: "",
+        general_accessibility: "",
         levad: false,
-        whenLevad: "",
+        when_levad: "",
         notes: "",
         ids: [],
         newId: ""
     });
 
-    const handleSupervisionChange = () => {
-        setIsSupervisionChecked(!isSupervisionChecked);
+    const handleLevadChange = () => {
+        setIsLevadChecked(!isLevadChecked);
         setMikveData((prevData) => ({
             ...prevData,
-            levad: !isSupervisionChecked,
+            levad: !isLevadChecked,
         }));
     };
 
@@ -51,18 +51,18 @@ const AdminAddMikve = () => {
                 ...prevData,
                 newId: ""
             }));
-        } else if (name === "generalAccessibility") {
+        } else if (name === "general_accessibility") {
             setAccessibilitySelectedOption(value); // Update the selected option
             setMikveData((prevData) => ({
                 ...prevData,
-                generalAccessibility: value,
+                general_accessibility: value,
             }));
         }
-        else if (name === "generalShelter") {
+        else if (name === "general_shelter") {
             setShelterSelectedOption(value); // Update the selected option
             setMikveData((prevData) => ({
                 ...prevData,
-                generalShelter: value,
+                general_shelter: value,
             }));
         } else {
             // For other fields, update as before
@@ -71,6 +71,7 @@ const AdminAddMikve = () => {
                 [name]: type === "checkbox" ? checked : value,
             }));
         }
+
     };
 
     const handleDeleteId = (index) => {
@@ -99,16 +100,16 @@ const AdminAddMikve = () => {
             address: "",
             phone: "",
             shelter: "",
-            generalShelter: "",
+            general_shelter: "",
             accessibility: "",
-            generalAccessibility: "",
+            general_accessibility: "",
             levad: false,
-            whenLevad: "",
+            when_levad: "",
             notes: "",
             ids: [],
             newId: "",
         });
-        setIsSupervisionChecked(false); // Reset supervision checkbox state
+        setIsLevadChecked(false); // Reset supervision checkbox state
         setAccessibilitySelectedOption("");
         setShelterSelectedOption("");
     }
@@ -120,8 +121,8 @@ const AdminAddMikve = () => {
             mikveData.city &&
             mikveData.address &&
             mikveData.phone &&
-            mikveData.generalShelter &&
-            mikveData.generalAccessibility
+            mikveData.general_shelter &&
+            mikveData.general_accessibility
         ) {
             if (!isValidPhoneNumber(mikveData.phone)) {
                 alert("אנא הכנס מספר טלפון חוקי.");
@@ -140,11 +141,11 @@ const AdminAddMikve = () => {
                 address: mikveData.address,
                 phone: mikveData.phone,
                 shelter: mikveData.shelter,
-                general_shelter: mikveData.generalShelter,
+                general_shelter: mikveData.general_shelter,
                 accessibility: mikveData.accessibility,
-                general_accessibility: mikveData.generalAccessibility,
+                general_accessibility: mikveData.general_accessibility,
                 levad: mikveData.levad,
-                when_levad: mikveData.whenLevad,
+                when_levad: mikveData.when_levad,
                 notes: mikveData.notes,
                 position: coordinates
                     ? { latitude: coordinates.lat, longitude: coordinates.lng }
@@ -243,13 +244,13 @@ const AdminAddMikve = () => {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="mikve-general-accessibility">
+                                <label htmlFor="mikve-general-shelter">
                                     רמת מיגון:
                                     <span className="required">*</span>
                                 </label>
                                 <select
-                                    id="mikve-general-accessibility"
-                                    name="generalShelter"
+                                    id="mikve-general-shelter"
+                                    name="general_shelter"
                                     value={generalShelterOption}
                                     onChange={handleInputChange}
                                     required>
@@ -281,7 +282,7 @@ const AdminAddMikve = () => {
                                 </label>
                                 <select
                                     id="select-box-accessibility"
-                                    name="generalAccessibility"
+                                    name="general_accessibility"
                                     value={generalAccessibilityOption}
                                     onChange={handleInputChange}
                                     required>
@@ -312,13 +313,13 @@ const AdminAddMikve = () => {
                                 <input
                                     type="checkbox"
                                     id="mikve-supervision"
-                                    name="supervision"
-                                    checked={isSupervisionChecked}
-                                    onChange={handleSupervisionChange}
+                                    name="levad"
+                                    checked={isLevadChecked}
+                                    onChange={handleLevadChange}
                                 />
                             </div>
 
-                            {isSupervisionChecked && (
+                            {isLevadChecked && (
                                 <div className="form-group">
                                     <label htmlFor="mikve-supervision-date">
                                         מתי השגחה:
@@ -326,8 +327,8 @@ const AdminAddMikve = () => {
                                     <input
                                         type="date"
                                         id="mikve-supervision-date"
-                                        name="supervisionDate"
-                                        value={mikveData.whenLevad}
+                                        name="when_levad"
+                                        value={mikveData.when_levad}
                                         onChange={handleInputChange}
                                     />
                                 </div>
