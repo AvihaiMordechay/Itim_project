@@ -1,15 +1,16 @@
 import "./AdminEditMikve.css";
 import React, { useState } from "react";
 import { db } from "../Firebase"
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 
 
-const AdminEditMikve = ({ mikve, onClose, onSave }) => {
+const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
     const [mikveData, setMikveData] = useState(mikve);
     const [editField, setEditField] = useState(null);
     const [tempData, setTempData] = useState(mikve);
     const [isLevadChecked, setIsLevadChecked] = useState(mikve.levad);
     const [newId, setNewId] = useState("");
+    const [mikveDeletePopup, setMikveDeletePopup] = useState(false);
 
     const isValidPhoneNumber = (phone) => {
         const regexMobile = /^05\d([-]{0,1})\d{3}([-]{0,1})\d{4}$/;
@@ -134,6 +135,16 @@ const AdminEditMikve = ({ mikve, onClose, onSave }) => {
             ...prevData,
             ids: updatedIds
         }));
+    };
+
+    const handleDeleteMikve = async () => {
+        try {
+            await deleteDoc(doc(db, "Mikves", mikve.id));
+            onDelete(mikve.id);
+            onClose();
+        } catch (error) {
+            console.error("Error deleting mikve: ", error);
+        }
     };
 
 
@@ -339,7 +350,7 @@ const AdminEditMikve = ({ mikve, onClose, onSave }) => {
 
 
                     <div className="form-group">
-                        <label htmlFor="edit-mikve-notes">:הערות</label>
+                        <label htmlFor="edit-mikve-notes">הערות:</label>
                         <textarea
                             id="edit-mikve-notes"
                             name="notes"
@@ -359,12 +370,33 @@ const AdminEditMikve = ({ mikve, onClose, onSave }) => {
                     </div>
 
                     <div className="edit-mikve-buttons">
-                        <button type="button" className="save-button" onClick={handleSave}>
-                            שמור
-                        </button>
-                        <button type="button" className="cancel-button" onClick={handleCancel}>
-                            ביטול
-                        </button>
+                        <div className="left-buttons">
+
+                            <button type="button" className="save-button" onClick={handleSave}>
+                                שמור
+                            </button>
+                            <button type="button" className="cancel-button" onClick={handleCancel}>
+                                בטל שינויים
+                            </button>
+                        </div>
+                        <div className="right-buttons">
+                            <button type="button" className="delete-button" onClick={() => setMikveDeletePopup(true)}>מחק מקווה</button>
+                        </div>
+
+                        {mikveDeletePopup && (
+                            <div className="delete-mikve-popup">
+                                <div className="delete-mikve-content">
+                                    <h2>אישור מחיקה</h2>
+                                    <p>האם אתה בטוח שברצונך למחוק?</p>
+                                    <button type="button" className="save-button" onClick={handleDeleteMikve}>אישור</button>
+                                    <button type="button" className="cancel-button" onClick={() => setMikveDeletePopup(false)}>בטל</button>
+                                </div>
+                            </div>
+
+                        )}
+
+
+
                     </div>
                 </form>
             </div>

@@ -38,6 +38,10 @@ const AdminMikvesList = () => {
         );
     };
 
+    const handleDeleteMikve = (deletedMikveId) => {
+        setMikves((prevMikves) => prevMikves.filter((mikve) => mikve.id !== deletedMikveId));
+    };
+
     return (
         <div className="admin-mikves-list">
             <table>
@@ -89,6 +93,7 @@ const AdminMikvesList = () => {
                     mikve={selectedMikve}
                     onClose={handleClosePopup}
                     onSave={handleSaveMikve}
+                    onDelete={handleDeleteMikve}
                 />
             )}
         </div>
