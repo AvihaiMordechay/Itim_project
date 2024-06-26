@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { db } from "../Firebase";
-import { collection, getDocs } from "firebase/firestore";
-import { useLocation } from '../hooks/useLocation'; 
-import { calculateDistance } from '../utils/distance'; 
-import { geocodeAddress } from '../utils/geocode'; 
+import { useLocation } from '../hooks/useLocation';
+import { calculateDistance } from '../utils/distance';
+import { geocodeAddress } from '../utils/geocode';
 
-const UserSearchForm = ({ setMikves }) => {
-    const [searchQuery, setSearchQuery] = useState('');
+const UserSearchForm = ({ setMikves, mikves }) => {
+    const [city, setCity] = useState('');
+    const [street, setStreet] = useState('');
+    const [name, setName] = useState('');
     const [accessibility, setAccessibility] = useState([]);
     const [cleanliness, setCleanliness] = useState('');
     const [hasBalanit, setHasBalanit] = useState(false);
@@ -17,43 +17,51 @@ const UserSearchForm = ({ setMikves }) => {
     const handleSearch = async (e) => {
         e.preventDefault();
 
-        // Fetch mikveh data from Firestore
-        const mikvesCollection = collection(db, "Mikves");
-        const mikvesSnapshot = await getDocs(mikvesCollection);
-        const mikvesList = mikvesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        // Construct search query based on user input
+        const searchCity = city.trim().toLowerCase();
+        const searchStreet = street.trim().toLowerCase();
 
-        // Filter mikveh list based on user criteria
-        const filteredMikves = mikvesList.filter(mikve => {
+        const filteredMikves = mikves.filter(mikve => {
+            const mikveAddress = mikve.address;
+
+            // Check if the city matches
+            const cityMatches = mikve.city.toLowerCase().includes(searchCity);
+
+            // Check if the street matches (only if city is provided)
+            const streetMatches = searchCity && mikveAddress.toLowerCase().includes(searchStreet);
+
+            // Check if the name matches
+            const nameMatches = mikve.name.toLowerCase().includes(name.toLowerCase());
+
             return (!accessibility.length || accessibility.includes(mikve.accessibility)) &&
-                   (!cleanliness || mikve.cleanliness === cleanliness) &&
-                   (!hasBalanit || mikve.hasBalanit) &&
-                   (!hasMamad || mikve.hasMamad);
+                (!cleanliness || mikve.cleanliness === cleanliness) &&
+                (!hasBalanit || mikve.hasBalanit) &&
+                (!hasMamad || mikve.hasMamad) &&
+                (name === '' || nameMatches) &&
+                (city === '' || cityMatches) &&
+                (street === '' || streetMatches);
         });
 
         let sortedMikves = [];
         try {
-            if (searchQuery) {
-                // Geocode the address to get its latitude and longitude
-                const geocodedLocation = await geocodeAddress(searchQuery);
-                console.log("Geocoded location:", geocodedLocation);
+            if (searchCity && searchStreet && location) {
+                // Calculate distances for mikvehs in the specified city
+                const cityMikves = filteredMikves.filter(mikve => mikve.city.toLowerCase() === searchCity);
 
-                // Sort mikvehs based on distance from the geocoded location
-                sortedMikves = filteredMikves.sort((a, b) => 
-                    calculateDistance(geocodedLocation, a.position) - calculateDistance(geocodedLocation, b.position)
-                );
-            } else if (location) {
-                console.log("User's location:", location);
+                // Calculate distances from input location to each mikve in the city
+                const mikveDistances = cityMikves.map(mikve => ({
+                    ...mikve,
+                    distance: calculateDistance(location, mikve.position)
+                }));
 
-                // Sort mikvehs based on distance from the user's location
-                sortedMikves = filteredMikves.sort((a, b) => 
-                    calculateDistance(location, a.position) - calculateDistance(location, b.position)
-                );
+                // Sort mikvehs based on distance from the input location
+                sortedMikves = mikveDistances.sort((a, b) => a.distance - b.distance);
             } else {
-                console.warn("No location provided; displaying unsorted list.");
-                sortedMikves = filteredMikves; // Fallback to unsorted if no location is available
+                console.warn("Missing required inputs for sorting by distance.");
+                sortedMikves = filteredMikves; // Fallback to unsorted if missing inputs
             }
         } catch (error) {
-            console.error("Error during geocoding or sorting:", error);
+            console.error("Error during sorting:", error);
             sortedMikves = filteredMikves; // Fallback to unsorted if an error occurs
         }
 
@@ -80,9 +88,23 @@ const UserSearchForm = ({ setMikves }) => {
             <div className="search-bar-container">
                 <input
                     type="text"
-                    placeholder="כתובת / עיר / אזור"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="עיר"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    className="search-bar"
+                />
+                <input
+                    type="text"
+                    placeholder="רחוב"
+                    value={street}
+                    onChange={(e) => setStreet(e.target.value)}
+                    className="search-bar"
+                />
+                <input
+                    type="text"
+                    placeholder="שם המקווה"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className="search-bar"
                 />
                 <button type="submit" className="search-button">Search</button>
@@ -143,4 +165,4 @@ const UserSearchForm = ({ setMikves }) => {
     );
 };
 
-export { UserSearchForm };
+export default UserSearchForm;
