@@ -4,7 +4,7 @@ from firebase_admin import credentials, firestore
 import requests
 
 # Google Maps Geocoding API key.
-with open("/Users/avihaimor/Desktop/Itim_project/google_api.txt", 'r') as file:
+with open("misc/google_api.txt", 'r') as file:
     API_KEY = file.read()
 
 
@@ -59,7 +59,7 @@ def upload_data_to_firestore(df, db):
 
         # Determine the boolean value for 'levad'
         # Replace this with your actual logic to determine the boolean value
-        levad = True if row['levad'] == 'True' else False
+        levad = True if row['levad'] == 'true' else False
 
         # Prepare document data
         doc_data = {
@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
     # Read Excel file
     df = pd.read_excel(
-        '/Users/avihaimor/Desktop/Itim_project/misc/MikvesTest.xlsx', header=0)
+        '/Users/avihaimor/Desktop/Itim_project/misc/MikvesNewTest.xlsx', header=0)
 
     # Convert all columns to string
     df = df.astype(str)

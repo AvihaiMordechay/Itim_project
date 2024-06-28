@@ -52,7 +52,6 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
 
 
     const handleFieldEdit = (field) => {
-
         setEditField(field);
     };
 
@@ -91,6 +90,9 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
         const newValue = type === "checkbox" ? checked : value;
 
         if (name === "generalShelter") {
+            if (newValue === "0") {
+
+            }
             // Handle special case for generalShelter
             setTempData((prevData) => ({
                 ...prevData,
@@ -112,6 +114,12 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
 
         if (name === "levad") {
             setIsLevadChecked(checked);
+            if (checked == false) {
+                setTempData((prevData) => ({
+                    ...prevData,
+                    when_levad: "",
+                }));
+            }
         }
     };
 

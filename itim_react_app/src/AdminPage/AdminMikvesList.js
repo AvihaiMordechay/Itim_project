@@ -1,47 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { db } from "../Firebase";
-import { collection, getDocs } from "firebase/firestore";
-import { AdminEditMikve } from "./AdminEditMikve";
 import "./AdminMikvesList.css"
+import React from "react";
 
-const AdminMikvesList = () => {
-    const [mikves, setMikves] = useState([]);
-    const [selectedMikve, setSelectedMikve] = useState(null);
-    const [isEditMikvePopupOpen, setIsEditMikvePopupOpen] = useState(false);
-
-    const fetchMikves = async () => {
-        const querySnapshot = await getDocs(collection(db, "Mikves"));
-        const mikvesData = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data()
-        }));
-        setMikves(mikvesData);
-    };
-
-    useEffect(() => {
-        fetchMikves();
-    }, []);
-
-    const handleEditMikve = (mikve) => {
-        setSelectedMikve(mikve);
-        setIsEditMikvePopupOpen(true);
-    };
-
-    const handleClosePopup = () => {
-        setIsEditMikvePopupOpen(false);
-        setSelectedMikve(null);
-    };
-
-    const handleSaveMikve = (updatedMikve) => {
-        setMikves((prevMikves) =>
-            prevMikves.map((mikve) => (mikve.id === updatedMikve.id ? updatedMikve : mikve))
-        );
-    };
-
-    const handleDeleteMikve = (deletedMikveId) => {
-        setMikves((prevMikves) => prevMikves.filter((mikve) => mikve.id !== deletedMikveId));
-    };
-
+const AdminMikvesList = ({ presentationMikves, handleEditMikve }) => {
     return (
         <div className="admin-mikves-list">
             <table>
@@ -64,7 +24,7 @@ const AdminMikvesList = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {mikves.map((mikve) => (
+                    {presentationMikves.map((mikve) => (
                         <React.Fragment key={mikve.id}>
                             <tr>
                                 <td>{mikve.id}</td>
@@ -82,20 +42,12 @@ const AdminMikvesList = () => {
                                 <td>{mikve.when_sampling}</td>
                                 <td>
                                     <button onClick={() => handleEditMikve(mikve)}>עריכה</button>
-                                </td> {/* Button to trigger edit */}
+                                </td>
                             </tr>
                         </React.Fragment>
                     ))}
                 </tbody>
             </table>
-            {isEditMikvePopupOpen && (
-                <AdminEditMikve
-                    mikve={selectedMikve}
-                    onClose={handleClosePopup}
-                    onSave={handleSaveMikve}
-                    onDelete={handleDeleteMikve}
-                />
-            )}
         </div>
     );
 };
