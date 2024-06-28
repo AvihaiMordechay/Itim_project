@@ -1,0 +1,44 @@
+.map-container {
+    width: 100%;
+    height: calc(100vh - 200px); /* Adjust based on your header/footer height */
+    float: left;
+    position: relative;
+}
+
+.map {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+
+}
+
+.location-error-message {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.reset-map-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+@media (max-width: 768px) {
+    .map-container {
+        width: 100%;
+        float: none;
+        height: 50vh;
+    }
+}

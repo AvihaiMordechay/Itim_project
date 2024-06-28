@@ -1,9 +1,9 @@
 import './LandingPage.css';
 import { useState } from 'react';
-import { UserSearchForm } from './UserSearchForm';
 import UserMikvesList from './UserMikvesList';
 import { Map } from './Map';
 import { UserHeader } from './UserHeader';
+import UserSearchForm from './UserSearchForm';
 
 const LandingPage = () => {
     const [mikves, setMikves] = useState([]);
@@ -12,10 +12,11 @@ const LandingPage = () => {
         <div className="landing-page">
             <UserHeader />
             <div className="user-main-content">
-                <div className="content">
-                    <Map />
-                    <UserMikvesList mikves={mikves} />
-                </div>
+                <UserSearchForm /> 
+                    <div className="map-and-list">
+                        <Map />
+                        <UserMikvesList mikves={mikves} />
+                    </div>
             </div>
         </div>
     );

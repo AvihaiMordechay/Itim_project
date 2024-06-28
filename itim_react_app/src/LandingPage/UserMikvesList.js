@@ -1,3 +1,4 @@
+import './UserMikvesList.css';
 import React, { useEffect, useState } from 'react';
 import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
@@ -30,8 +31,6 @@ const UserMikvesList = () => {
     };
 
     return (
-        <div>
-            <UserSearchForm setMikves={handleFilteredMikves} mikves={mikves} /> {/* Passing mikves as prop */}
             <div className="list">
                 <h3>מקוואות קרובים אלייך</h3>
                 {filteredMikves.map(mikve => (
@@ -43,7 +42,6 @@ const UserMikvesList = () => {
                     </div>
                 ))}
             </div>
-        </div>
     );
 };
 

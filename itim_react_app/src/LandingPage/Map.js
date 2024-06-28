@@ -1,3 +1,4 @@
+import './Map.css';
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
@@ -6,6 +7,7 @@ const defaultCenter = {
     lat: 31.7683,
     lng: 35.2137, // Jerusalem coordinates
 };
+
 const Map = () => {
     const [location, setLocation] = useState(null);
     const [isLocationError, setIsLocationError] = useState(false);
