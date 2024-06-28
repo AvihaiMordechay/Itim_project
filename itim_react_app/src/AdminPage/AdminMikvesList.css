@@ -1,6 +1,9 @@
 .admin-mikves-list {
     width: 100%;
     padding: 20px;
+    direction: rtl;
+    text-align: right;
+
 }
 
 table {

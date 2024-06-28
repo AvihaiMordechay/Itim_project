@@ -156,14 +156,13 @@ const AdminAddMikve = () => {
 
             try {
                 const docRef = await addDoc(collection(db, 'Mikves'), mikveToAdd);
-                console.log('Document written with ID: ', docRef.id);
+                handleClosePopup();
+                window.location.reload();
             } catch (e) {
                 console.error('Error adding document: ', e);
+                handleClosePopup();
             }
-            console.log("Mikve data to add: ", mikveToAdd);
-
             //Close and clear the popup.
-            handleClosePopup();
         } else {
             alert("אנא מלא את כל השדות.");
         }

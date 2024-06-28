@@ -5,6 +5,7 @@ import { AdminEditMikve } from "./AdminEditMikve";
 import { AdminMikveSearch } from "./AdminMikveSearch.js"
 import { AdminMikvesList } from "./AdminMikvesList";
 import { AdminAddMikve } from "./AdminAddMikve"
+import { AdminUploadSamplingXL } from "./AdminUploadSamplingXL"
 
 const AdminContent = () => {
     const [allMikves, setAllMikves] = useState([]);
@@ -19,7 +20,7 @@ const AdminContent = () => {
             ...doc.data()
         }));
         setAllMikves(mikvesData);
-        setPresentationMikves(allMikves);
+        setPresentationMikves(mikvesData);
     };
 
     useEffect(() => {
@@ -27,9 +28,8 @@ const AdminContent = () => {
     }, []);
 
 
-
-    const handleEditMikve = (mikve) => {
-        setSelectedMikve(mikve);
+    const handleEditMikve = (updatedMikve) => {
+        setSelectedMikve(updatedMikve);
         setIsEditMikvePopupOpen(true);
     };
 
@@ -42,18 +42,27 @@ const AdminContent = () => {
         setAllMikves((prevMikves) =>
             prevMikves.map((mikve) => (mikve.id === updatedMikve.id ? updatedMikve : mikve))
         );
+        setPresentationMikves((prevMikves) =>
+            prevMikves.map((mikve) => (mikve.id === updatedMikve.id ? updatedMikve : mikve))
+        );
     };
 
     const handleDeleteMikve = (deletedMikveId) => {
         setAllMikves((prevMikves) => prevMikves.filter((mikve) => mikve.id !== deletedMikveId));
+        setPresentationMikves((prevMikves) => prevMikves.filter((mikve) => mikve.id !== deletedMikveId));
     };
 
 
     return (
         <div className="admin-main-content">
             <AdminAddMikve />
+            <AdminUploadSamplingXL />
+            <AdminMikveSearch
+                allMikves={allMikves}
+                setPresentationMikves={setPresentationMikves}
+            />
             <AdminMikvesList
-                presentationMikves={allMikves}
+                presentationMikves={presentationMikves}
                 handleEditMikve={handleEditMikve}
             />
             {isEditMikvePopupOpen && (
