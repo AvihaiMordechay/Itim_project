@@ -4,71 +4,61 @@ import { calculateDistance } from '../utils/distance';
 import geocodeAddress from '../utils/geocode';
 import './UserSearchForm.css';
 
-const UserSearchForm = ({ setMikves, mikves }) => {
+const UserSearchForm = ({ setFilteredMikves, allMikves }) => {
     const [cityStreet, setCityStreet] = useState('');
     const [name, setName] = useState('');
     const [accessibility, setAccessibility] = useState('');
-    const [cleanliness, setCleanliness] = useState(false);
-    const [balanit, setBalanit] = useState('');
-    const [mamad, setMamad] = useState('');
-    const [location, error] = useLocation();
+    const [waterSampling, setWaterSampling] = useState(false);
+    const [levad, setLevad] = useState('');
+    const [shelter, setShelter] = useState('');
+    const [userLocation, error] = useLocation();
 
     const handleSearch = async (e) => {
         e.preventDefault();
-
-        // Construct search query based on user input
+    
         const searchCityStreet = cityStreet.trim().toLowerCase();
         const searchName = name.trim().toLowerCase();
-
-        const filteredMikves = mikves.filter(mikve => {
-            // Check if the name matches
-            const nameMatches = mikve.name.toLowerCase().includes(searchName);
-
-            return (!accessibility || mikve.accessibility === accessibility) &&
-                (!cleanliness || mikve.cleanliness) &&
-                (!balanit || mikve.balanit === balanit) &&
-                (!mamad || mikve.mamad === mamad) &&
-                (searchName === '' || nameMatches);
-        });
-
-        let sortedMikves = [];
-        try {
-            if (searchName) {
-                sortedMikves = filteredMikves;
-            } else if (searchCityStreet) {
-                const locationResult = await geocodeAddress(searchCityStreet);
-                if (locationResult) {
-                    sortedMikves = filteredMikves.map(mikve => ({
-                        ...mikve,
-                        distance: calculateDistance(locationResult, mikve.position)
-                    })).sort((a, b) => a.distance - b.distance);
-                } else {
-                    console.warn("Could not parse the location.");
-                }
-            } else if (location) {
-                sortedMikves = filteredMikves.map(mikve => ({
-                    ...mikve,
-                    distance: calculateDistance(location, mikve.position)
-                })).sort((a, b) => a.distance - b.distance);
-            } else {
-                console.warn("Could not get user location. Sorting by default location.");
-                const defaultLocation = { lat: 31.7683, lng: 35.2137 }; // Jerusalem coordinates
-                sortedMikves = filteredMikves.map(mikve => ({
-                    ...mikve,
-                    distance: calculateDistance(defaultLocation, mikve.position)
-                })).sort((a, b) => a.distance - b.distance);
-            }
-        } catch (error) {
-            console.error("Error during sorting:", error);
-            sortedMikves = filteredMikves; // Fallback to unsorted if an error occurs
-        }
-
-        if (sortedMikves.length === 0) {
-            console.warn("No matching mikvehs found.");
+    
+        let searchLocation;
+        if (searchCityStreet) {
+            searchLocation = await geocodeAddress(searchCityStreet);
+        } else if (userLocation) {
+            searchLocation = userLocation;
         } else {
-            console.log("Sorted mikvehs:", sortedMikves);
+            searchLocation = { lat: 31.7683, lng: 35.2137 }; // Jerusalem coordinates
         }
-        setMikves(sortedMikves);
+    
+        const sortedMikves = allMikves
+            .filter(mikve => mikve.position && mikve.position.latitude && mikve.position.longitude)
+            .map(mikve => ({
+                ...mikve,
+                distance: calculateDistance(searchLocation, { lat: mikve.position.latitude, lng: mikve.position.longitude })
+            }))
+            .sort((a, b) => a.distance - b.distance);
+    
+        const filteredMikves = sortedMikves.filter(mikve => {
+            const nameMatches = mikve.name.toLowerCase().includes(searchName);
+            const accessibilityMatches = 
+                accessibility === '' ||
+                (accessibility === '0') ||
+                (accessibility === '1' && Number(mikve.general_accessibility) >= 1) ||
+                (accessibility === '2' && Number(mikve.general_accessibility) === 2);
+            const levadMatches = 
+                levad === '' ||
+                (levad === 'true' && mikve.levad === true) ||
+                (levad === 'false' && mikve.levad === false);
+            const shelterMatches = 
+                shelter === '' ||
+                (shelter === '0') ||
+                (shelter === '1' && Number(mikve.general_shelter) >= 1) ||
+                (shelter === '2' && Number(mikve.general_shelter) === 2);
+            const waterSamplingMatches = 
+                !waterSampling || mikve.water_sampling === '2';
+    
+            return nameMatches && accessibilityMatches && levadMatches && shelterMatches && waterSamplingMatches;
+        });
+    
+        setFilteredMikves(filteredMikves);
     };
 
     return (
@@ -99,35 +89,35 @@ const UserSearchForm = ({ setMikves, mikves }) => {
                     <label className="select-header">נגישות</label>
                     <select value={accessibility} onChange={(e) => setAccessibility(e.target.value)} className="select-input">
                         <option value="">בחר</option>
-                        <option value="none">אין נגישות</option>
-                        <option value="partial">נגישות חלקית</option>
-                        <option value="full">נגישות מלאה</option>
+                        <option value="0">אין נגישות</option>
+                        <option value="1">נגישות חלקית</option>
+                        <option value="2">נגישות מלאה</option>
                     </select>
                 </div>
                 <div className="select-box">
-                    <label className="select-header">רמת נקיון גבוהה</label>
+                    <label className="select-header">בדיקת מים</label>
                     <input
                         type="checkbox"
-                        checked={cleanliness}
-                        onChange={(e) => setCleanliness(e.target.checked)}
+                        checked={waterSampling}
+                        onChange={(e) => setWaterSampling(e.target.checked)}
                         className="select-input"
                     />
                 </div>
                 <div className="select-box">
-                    <label className="select-header">ממד</label>
-                    <select value={mamad} onChange={(e) => setMamad(e.target.value)} className="select-input">
+                    <label className="select-header">מיגון</label>
+                    <select value={shelter} onChange={(e) => setShelter(e.target.value)} className="select-input">
                         <option value="">בחר</option>
-                        <option value="none">ללא מיגון</option>
-                        <option value="partial">מיגון חלקי</option>
-                        <option value="full">מיגון מלא</option>
+                        <option value="0">ללא מיגון</option>
+                        <option value="1">מיגון חלקי</option>
+                        <option value="2">מיגון מלא</option>
                     </select>
                 </div>
                 <div className="select-box">
-                    <label className="select-header">בלנית</label>
-                    <select value={balanit} onChange={(e) => setBalanit(e.target.value)} className="select-input">
+                    <label className="select-header">טבילה לבד</label>
+                    <select value={levad} onChange={(e) => setLevad(e.target.value)} className="select-input">
                         <option value="">בחר</option>
-                        <option value="allowed">מותר לרחוץ לבד</option>
-                        <option value="not-allowed">אסור לרחוץ לבד</option>
+                        <option value="true">מותר לרחוץ לבד</option>
+                        <option value="false">אסור לרחוץ לבד</option>
                     </select>
                 </div>
             </div>

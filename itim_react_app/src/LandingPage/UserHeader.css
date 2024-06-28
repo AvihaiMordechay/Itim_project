@@ -10,6 +10,8 @@
     justify-content: space-between;
     align-items: center;
     height: 100px; /* Adjust the height as needed */
+    flex-direction: row-reverse;
+
   }
   
   .header img {

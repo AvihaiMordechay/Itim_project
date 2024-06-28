@@ -1,6 +1,6 @@
 .map-container {
     width: 100%;
-    height: calc(100vh - 200px); /* Adjust based on your header/footer height */
+    height: calc(100vh - 250px); /* Adjust based on your header/footer height */
     float: left;
     position: relative;
 }
@@ -14,7 +14,7 @@
 
 .location-error-message {
     position: absolute;
-    bottom: 20px;
+    bottom: 0px;
     left: 20px;
     background-color: rgba(255, 255, 255, 0.8);
     padding: 10px;
@@ -24,15 +24,16 @@
 
 .reset-map-button {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    bottom: 20px;
+    left: 20px;
     padding: 10px 15px;
-    background-color: #fff;
+    color: white;
+    background-color: #605371;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 @media (max-width: 768px) {
