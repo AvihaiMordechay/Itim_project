@@ -1,0 +1,19 @@
+.admin-upload-xl {
+    direction: rtl;
+    text-align: right;
+}
+
+.admin-upload-xl input[type="file"] {
+    display: none;
+    /* הסתרת קלט הקובץ */
+}
+
+.clear-file-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 4px;
+    cursor: pointer;
+    margin-left: 5px;
+}

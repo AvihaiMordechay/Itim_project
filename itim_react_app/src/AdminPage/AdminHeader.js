@@ -1,3 +1,4 @@
+import "./AdminHeader.css"
 import useAuth from '../Authentication/AdminAuth';
 
 const AdminHeader = () => {

@@ -1,4 +1,0 @@
-const AddMikve = () => {
-}
-
-export { AddMikve }
