@@ -7,9 +7,11 @@ const AdminUploadSamplingXL = () => {
     const [fileName, setFileName] = useState('');
 
     const handleFileChange = (e) => {
+        console.log("asd")
         const selectedFile = e.target.files[0];
         setFile(selectedFile);
-        setFileName(selectedFile.name);
+        setFileName(selectedFile ? selectedFile.name : '');
+        document.getElementById('input-xl-file').key = Date.now();
     };
 
     const handleClearFile = () => {
@@ -24,6 +26,7 @@ const AdminUploadSamplingXL = () => {
             const workbook = XLSX.read(data, { type: 'array' });
             const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
             const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+            handleClearFile();
         };
         reader.readAsArrayBuffer(file);
     };
