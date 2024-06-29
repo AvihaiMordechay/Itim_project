@@ -1,3 +1,4 @@
+import './AdminContent.css';
 import { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
@@ -55,12 +56,14 @@ const AdminContent = () => {
 
     return (
         <div className="admin-main-content">
-            <AdminAddMikve />
-            <AdminUploadSamplingXL />
-            <AdminMikveSearch
-                allMikves={allMikves}
-                setPresentationMikves={setPresentationMikves}
-            />
+            <div className="admin-operations">
+                <AdminAddMikve />
+                <AdminUploadSamplingXL />
+                <AdminMikveSearch
+                    allMikves={allMikves}
+                    setPresentationMikves={setPresentationMikves}
+                />
+            </div>
             <AdminMikvesList
                 presentationMikves={presentationMikves}
                 handleEditMikve={handleEditMikve}

@@ -1,11 +1,18 @@
+.header h1 {
+    font-size: 42px;
+    text-align: center;
+    flex-grow: 1;
+    color: white;
+}
+
 .return-button {
-    background-color: #007bff;
-    color: #fff;
+    background-color: white;
+    color: #605371;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
 }
 
 .return-button:hover {
-    background-color: #0056b3;
+    background-color: #a1c5db;
 }

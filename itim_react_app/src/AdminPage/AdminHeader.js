@@ -6,8 +6,8 @@ const AdminHeader = () => {
 
     return (
         <div className="header">
-            <h1>Admin Page</h1>
-            <button className="return-button" onClick={logout}>Return</button>
+            <h1>דף אדמין</h1>
+            <button className="return-button" onClick={logout}>חזרה</button>
         </div>
     )
 }
