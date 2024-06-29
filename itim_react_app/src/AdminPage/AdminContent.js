@@ -59,10 +59,10 @@ const AdminContent = () => {
     return (
         <div className="admin-main-content">
             <div className="admin-operations">
+                <AdminAddMikve />
                 <AdminDownloadData
                     allMikves={allMikves}
                 />
-                <AdminAddMikve />
                 <AdminUploadSamplingXL />
                 <AdminMikveSearch
                     allMikves={allMikves}

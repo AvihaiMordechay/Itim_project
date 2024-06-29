@@ -20,7 +20,10 @@
     margin-right: 10px;
     transition: background-color 0.3s ease;
 }
-
+#mikve-button-search {
+    margin-right: 10px;
+    height: 28px;
+}
 .mikve-button:hover {
     background-color: #4a3f5a;
 }
