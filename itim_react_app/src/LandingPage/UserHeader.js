@@ -35,8 +35,8 @@ const UserHeader = () => {
                             </button>
                         </div>
                         <div className="admin-popup-body">
-                            <input className="admin-input" id="email_login" placeholder="Email..." onChange={(e) => setEmail(e.target.value)}></input>
-                            <input className="admin-input" id="password_login" type="password" placeholder="Password..." onChange={(e) => setPassword(e.target.value)}></input>
+                            <input className="admin-input" id="email_login" placeholder="Email..." onChange={(e) => setEmail(e.target.value)} dir="ltr"></input>
+                            <input className="admin-input" id="password_login" type="password" placeholder="Password..." onChange={(e) => setPassword(e.target.value)} dir="ltr"></input>
                             <button className="admin-button" id="button_login" onClick={handleLogin}>SIGN IN</button>
                         </div>
                     </div>

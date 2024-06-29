@@ -6,15 +6,16 @@ const useAuth = () => {
     const navigate = useNavigate(); // Initialize useNavigate hook
 
     const login = async (email, password) => {
+        if (email === "" || password === "") {
+            alert("אנא מלא את כל השדות")
+            return;
+        }
         try {
             await signInWithEmailAndPassword(myAuth, email, password);
             navigate('/Admin');
         }
         catch (error) {
-            //TODO: add popup; login failed
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.error(errorCode, errorMessage);
+            alert("אחד מהשדות שהכנסת אינם נכונים")
         }
     };
 
