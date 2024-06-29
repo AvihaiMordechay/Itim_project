@@ -1,45 +1,44 @@
 import "./AdminMikvesList.css"
-import React from "react";
+import React, { useState } from "react";
 
 const AdminMikvesList = ({ presentationMikves, handleEditMikve }) => {
+    const numOfRows = 20;
+    const [visibleCount, setVisibleCount] = useState(numOfRows);
+    const handleShowMore = () => {
+        setVisibleCount((prevCount) => prevCount + numOfRows);
+    };
     return (
         <div className="admin-mikves-list">
             <table>
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>נגישות</th>
-                        <th>כתובת</th>
-                        <th>עיר</th>
                         <th>שם המקווה</th>
+                        <th>עיר</th>
+                        <th>כתובת</th>
                         <th>טלפון</th>
-                        <th>קו רוחב</th>
-                        <th>קו אורך</th>
-                        <th>מיגון</th>
+                        <th>רמת מיגון</th>
+                        <th>רמת נגישות</th>
                         <th>השגחה</th>
-                        <th>תאריך בדיקת השגחה</th>
-                        <th>דגימת מים</th>
-                        <th>תאריך בדיקת מים</th>
+                        <th>מצב תבאורה</th>
+                        <th>הערות</th>
                         <th>עריכה</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {presentationMikves.map((mikve) => (
+                    {presentationMikves.slice(0, visibleCount).map((mikve) => (
                         <React.Fragment key={mikve.id}>
                             <tr>
                                 <td>{mikve.id}</td>
-                                <td>{mikve.accessibility}</td>
-                                <td>{mikve.address}</td>
-                                <td>{mikve.city}</td>
                                 <td>{mikve.name}</td>
+                                <td>{mikve.city}</td>
+                                <td>{mikve.address}</td>
                                 <td>{mikve.phone}</td>
-                                <td>{mikve.position?.latitude}</td>
-                                <td>{mikve.position?.longitude}</td>
-                                <td>{mikve.shelter}</td>
-                                <td>{mikve.supervision}</td>
-                                <td>{mikve.supervisionDate}</td>
+                                <td>{mikve.general_shelter}</td>
+                                <td>{mikve.general_accessibility}</td>
+                                <td>{mikve.levad}</td>
                                 <td>{mikve.water_sampling}</td>
-                                <td>{mikve.when_sampling}</td>
+                                <td>{mikve.notes}</td>
                                 <td>
                                     <button onClick={() => handleEditMikve(mikve)}>עריכה</button>
                                 </td>
@@ -48,6 +47,9 @@ const AdminMikvesList = ({ presentationMikves, handleEditMikve }) => {
                     ))}
                 </tbody>
             </table>
+            {visibleCount < presentationMikves.length && (
+                <button onClick={handleShowMore}>הצג עוד</button>
+            )}
         </div>
     );
 };

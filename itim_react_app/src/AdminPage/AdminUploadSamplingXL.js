@@ -1,6 +1,7 @@
 import "./AdminUploadSamplingXL.css"
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
+import { MdOutlineFileUpload } from "react-icons/md";
 
 const AdminUploadSamplingXL = () => {
     const [file, setFile] = useState(null);
@@ -45,7 +46,7 @@ const AdminUploadSamplingXL = () => {
                 className="upload-btn"
                 onClick={() => document.getElementById('input-xl-file').click()}
             >
-                בחר קובץ
+                <MdOutlineFileUpload />
             </button>
             <button onClick={handleFileUpload}>העלה</button>
             {fileName && (
