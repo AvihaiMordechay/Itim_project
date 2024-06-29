@@ -3,10 +3,11 @@ import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 import { MdOutlineFileUpload } from "react-icons/md";
 
-const AdminUploadSamplingXL = () => {
+const AdminUploadSamplingXL = ({ allMikves }) => {
     const [file, setFile] = useState(null);
     const [fileName, setFileName] = useState('');
     const [mikveUploadPopup, setMikveUploadPopup] = useState(false);
+    const [sanitationData, setSanitationData] = useState([]);
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -30,10 +31,94 @@ const AdminUploadSamplingXL = () => {
             const workbook = XLSX.read(data, { type: 'array' });
             const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
             const jsonData = XLSX.utils.sheet_to_json(firstSheet);
-            console.log(jsonData);
+            initSanitationData(jsonData);
             handleCancelUploadPopup();
         };
         reader.readAsArrayBuffer(file);
+    };
+
+    const initSanitationData = (jsonData) => {
+        const result = [];
+        let updatedDate;
+        let mikveID = "";
+        let values;
+        let mikveData;
+
+        jsonData.forEach(row => {
+            if (row['__EMPTY_5'] && row['__EMPTY_5'].includes('NP') && typeof row['__EMPTY_7'] === 'number') {
+                if (row['__EMPTY_5'] !== mikveID) {
+                    mikveID = row['__EMPTY_5'];
+                    updatedDate = XLSX.SSF.format('yyyy-mm-dd', row['__EMPTY_7']);
+                    values = {
+                        'קוליפורמים': row['__EMPTY_9'],
+                        'פסאודומונס': row['__EMPTY_10'],
+                        'סטפילוקוקוס': row['__EMPTY_11'],
+                        'עכירות': row['__EMPTY_12'],
+                        'הגבה': row['__EMPTY_13'],
+                        'כלור חופשי': row['__EMPTY_14'],
+                        'ברום חופשי': row['__EMPTY_15']
+                    };
+                    //TODO: CAST THE VALUES TO INT; 
+                    if (checkValues(values) === true) { // TODO: CHECK IF NEED TO CHECK ״לא נבדק״ AND NOT JUST TRUE/FALSE
+                        mikveData = {
+                            'isClean': true,
+                            'date': updatedDate
+                        };
+                    } else {
+                        mikveData = {
+                            'isClean': false
+                        };
+                    }
+                    result.push({ mikveID, mikveData });
+                } else {
+                    const date = XLSX.SSF.format('yyyy-mm-dd', row['__EMPTY_7']);
+                    if (date > updatedDate) {
+                        updatedDate = date;
+                        values = {
+                            'קוליפורמים': row['__EMPTY_9'],
+                            'פסאודומונס': row['__EMPTY_10'],
+                            'סטפילוקוקוס': row['__EMPTY_11'],
+                            'עכירות': row['__EMPTY_12'],
+                            'הגבה': row['__EMPTY_13'],
+                            'כלור חופשי': row['__EMPTY_14'],
+                            'ברום חופשי': row['__EMPTY_15']
+                        };
+                        //TODO: CAST THE VALUES TO INT; 
+                        if (checkValues(values) === true) { // TODO: CHECK IF NEED TO CHECK ״לא נבדק״ AND NOT JUST TRUE/FALSE
+                            mikveData = {
+                                'isClean': true,
+                                'date': updatedDate
+                            };
+                        } else {
+                            mikveData = {
+                                'isClean': false
+                            };
+                        }
+                        const index = result.findIndex(item => item.mikveID === mikveID);
+                        if (index !== -1) {
+                            result[index].mikveData = mikveData;
+                        }
+                    }
+                }
+            }
+        });
+        setSanitationData(result);
+    };
+
+    const checkValues = (values) => {
+        if (
+            values['קוליפורמים'] > 10 ||
+            values['פסאודומונס'] > 1 ||
+            values['סטפילוקוקוס'] > 2 ||
+            values['עכירות'] > 1 ||
+            values['הגבה'] < 7 || values['הגבה'] > 8 ||
+            values['כלור חופשי'] < 1.5 || values['כלור חופשי'] > 3 ||
+            values['ברום חופשי'] < 3 || values['ברום חופשי'] > 6
+        ) {
+            return false;
+        } else {
+            return true;
+        }
     };
 
     return (

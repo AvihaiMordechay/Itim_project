@@ -63,7 +63,9 @@ const AdminContent = () => {
                     allMikves={allMikves}
                 />
                 <AdminAddMikve />
-                <AdminUploadSamplingXL />
+                <AdminUploadSamplingXL
+                    allMikves={allMikves}
+                />
                 <AdminMikveSearch
                     allMikves={allMikves}
                     setPresentationMikves={setPresentationMikves}
