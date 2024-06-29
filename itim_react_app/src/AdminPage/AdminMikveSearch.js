@@ -81,7 +81,7 @@ const AdminMikveSearch = ({ allMikves, setPresentationMikves, setVisibleCount, n
     className="mikve-button"
     onClick={handleSearchMikves}
 >
-    חפש
+    <ImSearch />
 </button>
 <button
     type="button"
