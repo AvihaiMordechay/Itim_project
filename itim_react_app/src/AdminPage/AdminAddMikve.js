@@ -157,7 +157,7 @@ const AdminAddMikve = () => {
             try {
                 await addDoc(collection(db, 'Mikves'), mikveToAdd);
                 handleClosePopup();
-                window.location.reload();
+                window.location.reload(); // reload the screen.
             } catch (e) {
                 console.error('Error adding document: ', e);
                 handleClosePopup();

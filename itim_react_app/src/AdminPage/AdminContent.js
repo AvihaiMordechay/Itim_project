@@ -7,7 +7,7 @@ import { AdminMikveSearch } from "./AdminMikveSearch.js"
 import { AdminMikvesList } from "./AdminMikvesList";
 import { AdminAddMikve } from "./AdminAddMikve"
 import { AdminUploadSamplingXL } from "./AdminUploadSamplingXL"
-
+import { AdminDownloadData } from "./AdminDownloadData.js"
 const AdminContent = () => {
     const numOfRows = 20;
     const [allMikves, setAllMikves] = useState([]);
@@ -31,7 +31,7 @@ const AdminContent = () => {
     }, []);
 
 
-    const handleEditMikve = (updatedMikve) => {
+    const handleEditMikvePopup = (updatedMikve) => {
         setSelectedMikve(updatedMikve);
         setIsEditMikvePopupOpen(true);
     };
@@ -41,7 +41,7 @@ const AdminContent = () => {
         setSelectedMikve(null);
     };
 
-    const handleSaveMikve = (updatedMikve) => {
+    const handleEditSaveMikve = (updatedMikve) => {
         setAllMikves((prevMikves) =>
             prevMikves.map((mikve) => (mikve.id === updatedMikve.id ? updatedMikve : mikve))
         );
@@ -59,18 +59,21 @@ const AdminContent = () => {
     return (
         <div className="admin-main-content">
             <div className="admin-operations">
-            <AdminAddMikve />
-            <AdminUploadSamplingXL />
-            <AdminMikveSearch
-                allMikves={allMikves}
-                setPresentationMikves={setPresentationMikves}
-                setVisibleCount={setVisibleCount}
-                numOfRows={numOfRows}
-            />
+                <AdminDownloadData
+                    allMikves={allMikves}
+                />
+                <AdminAddMikve />
+                <AdminUploadSamplingXL />
+                <AdminMikveSearch
+                    allMikves={allMikves}
+                    setPresentationMikves={setPresentationMikves}
+                    setVisibleCount={setVisibleCount}
+                    numOfRows={numOfRows}
+                />
             </div>
             <AdminMikvesList
                 presentationMikves={presentationMikves}
-                handleEditMikve={handleEditMikve}
+                handleEditMikve={handleEditMikvePopup}
                 visibleCount={visibleCount}
                 setVisibleCount={setVisibleCount}
                 numOfRows={numOfRows}
@@ -79,7 +82,7 @@ const AdminContent = () => {
                 <AdminEditMikve
                     mikve={selectedMikve}
                     onClose={handleClosePopup}
-                    onSave={handleSaveMikve}
+                    onSave={handleEditSaveMikve}
                     onDelete={handleDeleteMikve}
                 />
             )}
