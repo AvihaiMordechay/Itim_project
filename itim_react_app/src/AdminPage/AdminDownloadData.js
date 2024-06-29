@@ -1,3 +1,4 @@
+import "./AdminDownloadData.css";
 import React from 'react';
 import * as XLSX from 'xlsx';
 import { FaFileDownload } from "react-icons/fa";
@@ -31,8 +32,8 @@ const AdminDownloadData = ({ allMikves }) => {
 
     return (
         <div>
-            <label>הורד קובץ נתוני מקוואות</label>
-            <button onClick={handleDownload}>
+            <button className="download-button" onClick={handleDownload}>
+                הורד קובץ נתוני מקוואות
                 <FaFileDownload />
             </button>
         </div>

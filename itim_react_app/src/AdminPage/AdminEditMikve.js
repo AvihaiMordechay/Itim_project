@@ -190,11 +190,11 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                                 required
                             />
                             {editField === field.id ? (
-                                <button type="button" onClick={() => handleFieldSave(field.id)}>
+                                <button className="edit-button" type="button" onClick={() => handleFieldSave(field.id)}>
                                     <IoIosSave />
                                 </button>
                             ) : (
-                                <button type="button" onClick={() => handleFieldEdit(field.id)}>
+                                <button className="edit-button" type="button" onClick={() => handleFieldEdit(field.id)}>
                                     <TbEdit />
                                 </button>
                             )}
@@ -221,11 +221,11 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                         </select>
 
                         {editField === "general_shelter" ? (
-                            <button type="button" onClick={() => handleFieldSave("general_shelter")}>
+                            <button className="edit-button" type="button" onClick={() => handleFieldSave("general_shelter")}>
                                 <IoIosSave />
                             </button>
                         ) : (
-                            <button type="button" onClick={() => handleFieldEdit("general_shelter")}>
+                            <button className="edit-button" type="button" onClick={() => handleFieldEdit("general_shelter")}>
                                 <TbEdit />
                             </button>
                         )}
@@ -265,11 +265,11 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                             <option value="2">נגישות מלאה</option>
                         </select>
                         {editField === "general_accessibility" ? (
-                            <button type="button" onClick={() => handleFieldSave("general_accessibility")}>
+                            <button className="edit-button" type="button" onClick={() => handleFieldSave("general_accessibility")}>
                                 <IoIosSave />
                             </button>
                         ) : (
-                            <button type="button" onClick={() => handleFieldEdit("general_accessibility")}>
+                            <button className="edit-button" type="button" onClick={() => handleFieldEdit("general_accessibility")}>
                                 <TbEdit />
                             </button>
                         )}
@@ -303,11 +303,11 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                             disabled={editField !== "levad"}
                         />
                         {editField === "levad" ? (
-                            <button type="button" onClick={() => handleFieldSave("levad")}>
+                            <button className="edit-button" type="button" onClick={() => handleFieldSave("levad")}>
                                 <IoIosSave />
                             </button>
                         ) : (
-                            <button type="button" onClick={() => handleFieldEdit("levad")}>
+                            <button className="edit-button" type="button" onClick={() => handleFieldEdit("levad")}>
                                 <TbEdit />
                             </button>
                         )}
@@ -347,11 +347,11 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                             </button>
                         )}
                         {editField === "ids" ? (
-                            <button type="button" onClick={() => handleFieldSave("ids")}>
+                            <button className="edit-button" type="button" onClick={() => handleFieldSave("ids")}>
                                 <IoIosSave />
                             </button>
                         ) : (
-                            <button type="button" onClick={() => handleFieldEdit("ids")}>
+                            <button className="edit-button" type="button" onClick={() => handleFieldEdit("ids")}>
                                 <TbEdit />
                             </button>
                         )}
@@ -393,11 +393,11 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                             disabled={editField !== "notes"}
                         />
                         {editField === "notes" ? (
-                            <button type="button" onClick={() => handleFieldSave("notes")}>
+                            <button className="edit-button" type="button" onClick={() => handleFieldSave("notes")}>
                                 <IoIosSave />
                             </button>
                         ) : (
-                            <button type="button" onClick={() => handleFieldEdit("notes")}>
+                            <button className="edit-button" type="button" onClick={() => handleFieldEdit("notes")}>
                                 <TbEdit />
                             </button>
                         )}

@@ -124,7 +124,6 @@ const AdminUploadSamplingXL = ({ allMikves }) => {
 
     return (
         <div className="admin-upload-xl">
-            <label>עדכן קובץ נתוני תבאורה</label>
             <input
                 type="file"
                 accept=".xlsx, .xls"
@@ -136,6 +135,7 @@ const AdminUploadSamplingXL = ({ allMikves }) => {
                 className="mikve-upload-button"
                 onClick={() => document.getElementById('input-xl-file').click()}
             >
+                עדכן קובץ נתוני תבאורה
                 <MdOutlineFileUpload />
             </button>
             {mikveUploadPopup && (

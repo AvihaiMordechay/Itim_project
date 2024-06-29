@@ -29,17 +29,18 @@
     font-size: 16px;
     cursor: pointer;
     margin-right: 10px;
-    height: 25px;
+    /* height: 25px; */
     transition: background-color 0.3s ease;
     align-items: center;
 }
+
 
 .mikve-button:hover, .mikve-upload-button:hover {
     background-color: #4a3f5a;
 }
 
 .mikve-upload-button {
-    padding: 10px;
+    /* padding: 10px; */
     display: inline-flex;
     align-items: center;
     justify-content: center;
