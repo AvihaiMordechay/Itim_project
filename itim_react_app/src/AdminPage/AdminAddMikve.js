@@ -5,27 +5,32 @@ import { db } from "../Firebase";
 import { collection, addDoc } from 'firebase/firestore';
 
 const AdminAddMikve = () => {
-    const [isAddMikvePopupOpen, setIsAddMikvePopupOpen] = useState(false); // Add pop-up state
-    const [isSupervisionChecked, setIsSupervisionChecked] = useState(false);
+    const [isAddMikvePopupOpen, setIsAddMikvePopupOpen] = useState(false);
+    const [isLevadChecked, setIsLevadChecked] = useState(false);
+    const [generalAccessibilityOption, setAccessibilitySelectedOption] = useState('');
+    const [generalShelterOption, setShelterSelectedOption] = useState('');
+
     const [mikveData, setMikveData] = useState({
         name: "",
         city: "",
         address: "",
         phone: "",
         shelter: "",
+        general_shelter: "",
         accessibility: "",
-        supervision: false,
-        supervisionDate: "",
+        general_accessibility: "",
+        levad: false,
+        when_levad: "",
         notes: "",
         ids: [],
         newId: ""
     });
 
-    const handleSupervisionChange = () => {
-        setIsSupervisionChecked(!isSupervisionChecked);
+    const handleLevadChange = () => {
+        setIsLevadChecked(!isLevadChecked);
         setMikveData((prevData) => ({
             ...prevData,
-            supervision: !isSupervisionChecked,
+            levad: !isLevadChecked,
         }));
     };
 
@@ -46,6 +51,19 @@ const AdminAddMikve = () => {
                 ...prevData,
                 newId: ""
             }));
+        } else if (name === "general_accessibility") {
+            setAccessibilitySelectedOption(value); // Update the selected option
+            setMikveData((prevData) => ({
+                ...prevData,
+                general_accessibility: value,
+            }));
+        }
+        else if (name === "general_shelter") {
+            setShelterSelectedOption(value); // Update the selected option
+            setMikveData((prevData) => ({
+                ...prevData,
+                general_shelter: value,
+            }));
         } else {
             // For other fields, update as before
             setMikveData((prevData) => ({
@@ -53,6 +71,7 @@ const AdminAddMikve = () => {
                 [name]: type === "checkbox" ? checked : value,
             }));
         }
+
     };
 
     const handleDeleteId = (index) => {
@@ -69,7 +88,6 @@ const AdminAddMikve = () => {
     const isValidPhoneNumber = (phone) => {
         const regexMobile = /^05\d([-]{0,1})\d{3}([-]{0,1})\d{4}$/;
         const regexPhone = /^0\d([-]{0,1})\d{7}$/;
-
         return regexMobile.test(phone) || regexPhone.test(phone);
     };
 
@@ -82,14 +100,18 @@ const AdminAddMikve = () => {
             address: "",
             phone: "",
             shelter: "",
+            general_shelter: "",
             accessibility: "",
-            supervision: false,
-            supervisionDate: "",
+            general_accessibility: "",
+            levad: false,
+            when_levad: "",
             notes: "",
             ids: [],
             newId: "",
         });
-        setIsSupervisionChecked(false); // Reset supervision checkbox state
+        setIsLevadChecked(false); // Reset supervision checkbox state
+        setAccessibilitySelectedOption("");
+        setShelterSelectedOption("");
     }
 
     const handleAddMikve = async () => {
@@ -99,8 +121,8 @@ const AdminAddMikve = () => {
             mikveData.city &&
             mikveData.address &&
             mikveData.phone &&
-            mikveData.shelter &&
-            mikveData.accessibility
+            mikveData.general_shelter &&
+            mikveData.general_accessibility
         ) {
             if (!isValidPhoneNumber(mikveData.phone)) {
                 alert("אנא הכנס מספר טלפון חוקי.");
@@ -119,9 +141,11 @@ const AdminAddMikve = () => {
                 address: mikveData.address,
                 phone: mikveData.phone,
                 shelter: mikveData.shelter,
+                general_shelter: mikveData.general_shelter,
                 accessibility: mikveData.accessibility,
-                levad: mikveData.supervision,
-                when_levad: mikveData.supervisionDate,
+                general_accessibility: mikveData.general_accessibility,
+                levad: mikveData.levad,
+                when_levad: mikveData.when_levad,
                 notes: mikveData.notes,
                 position: coordinates
                     ? { latitude: coordinates.lat, longitude: coordinates.lng }
@@ -132,14 +156,13 @@ const AdminAddMikve = () => {
 
             try {
                 const docRef = await addDoc(collection(db, 'Mikves'), mikveToAdd);
-                console.log('Document written with ID: ', docRef.id);
+                handleClosePopup();
+                window.location.reload();
             } catch (e) {
                 console.error('Error adding document: ', e);
+                handleClosePopup();
             }
-            console.log("Mikve data to add: ", mikveToAdd);
-
             //Close and clear the popup.
-            handleClosePopup();
         } else {
             alert("אנא מלא את כל השדות.");
         }
@@ -157,8 +180,13 @@ const AdminAddMikve = () => {
             {isAddMikvePopupOpen && (
                 <div className="add-mikve-popup">
                     <div className="add-mikve-content">
+                        <h2>הוספת מקווה:</h2>
                         <form className="add-mikve-form">
                             <div className="form-group">
+                                <label htmlFor="mikve-name">
+                                    שם המקווה:
+                                    <span className="required">*</span>
+                                </label>
                                 <input
                                     type="text"
                                     id="mikve-name"
@@ -167,13 +195,13 @@ const AdminAddMikve = () => {
                                     onChange={handleInputChange}
                                     required
                                 />
-                                <label htmlFor="mikve-name">
-                                    <span className="required">*</span>
-                                    :שם המקווה
-                                </label>
                             </div>
 
                             <div className="form-group">
+                                <label htmlFor="mikve-city">
+                                    עיר:
+                                    <span className="required">*</span>
+                                </label>
                                 <input
                                     type="text"
                                     id="mikve-city"
@@ -182,13 +210,13 @@ const AdminAddMikve = () => {
                                     onChange={handleInputChange}
                                     required
                                 />
-                                <label htmlFor="mikve-city">
-                                    <span className="required">*</span>
-                                    :עיר
-                                </label>
                             </div>
 
                             <div className="form-group">
+                                <label htmlFor="mikve-address">
+                                    כתובת:
+                                    <span className="required">*</span>
+                                </label>
                                 <input
                                     type="text"
                                     id="mikve-address"
@@ -197,13 +225,13 @@ const AdminAddMikve = () => {
                                     onChange={handleInputChange}
                                     required
                                 />
-                                <label htmlFor="mikve-address">
-                                    <span className="required">*</span>
-                                    :כתובת
-                                </label>
                             </div>
 
                             <div className="form-group">
+                                <label htmlFor="mikve-phone">
+                                    טלפון:
+                                    <span className="required">*</span>
+                                </label>
                                 <input
                                     type="tel"
                                     id="mikve-phone"
@@ -212,71 +240,108 @@ const AdminAddMikve = () => {
                                     onChange={handleInputChange}
                                     required
                                 />
-                                <label htmlFor="mikve-phone">
-                                    <span className="required">*</span>
-                                    :טלפון
-                                </label>
                             </div>
 
                             <div className="form-group">
+                                <label htmlFor="mikve-general-shelter">
+                                    רמת מיגון:
+                                    <span className="required">*</span>
+                                </label>
+                                <select
+                                    id="mikve-general-shelter"
+                                    name="general_shelter"
+                                    value={generalShelterOption}
+                                    onChange={handleInputChange}
+                                    required>
+                                    <option value="">--בחר רמת מיגון--</option>
+                                    <option value="0">אין מיגון</option>
+                                    <option value="1">מיגון חלקי</option>
+                                    <option value="2">מיגון מלא</option>
+                                </select>
+
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="mikve-shelter">
+                                    תיאור המיגון:
+                                </label>
                                 <input
                                     type="text"
                                     id="mikve-shelter"
                                     name="shelter"
                                     value={mikveData.shelter}
                                     onChange={handleInputChange}
-                                    required
                                 />
-                                <label htmlFor="mikve-shelter">
-                                    <span className="required">*</span>
-                                    :מיגון
-                                </label>
                             </div>
 
                             <div className="form-group">
+                                <label htmlFor="select-box-accessibility">
+                                    רמת נגישות:
+                                    <span className="required">*</span>
+                                </label>
+                                <select
+                                    id="select-box-accessibility"
+                                    name="general_accessibility"
+                                    value={generalAccessibilityOption}
+                                    onChange={handleInputChange}
+                                    required>
+                                    <option value="">--בחר רמת נגישות--</option>
+                                    <option value="0">אין נגישות</option>
+                                    <option value="1">נגישות חלקית </option>
+                                    <option value="2">נגישות מלאה</option>
+                                </select>
+
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="mikve-accessibility">
+                                    תיאור נגישות:
+                                </label>
                                 <input
                                     type="text"
                                     id="mikve-accessibility"
                                     name="accessibility"
                                     value={mikveData.accessibility}
                                     onChange={handleInputChange}
-                                    required
                                 />
-                                <label htmlFor="mikve-accessibility">
-                                    <span className="required">*</span>
-                                    :נגישות
-                                </label>
                             </div>
 
                             <div className="form-group supervision-group">
+                                <label htmlFor="mikve-supervision" className="supervision-label">
+                                    השגחה:
+                                </label>
                                 <input
                                     type="checkbox"
                                     id="mikve-supervision"
-                                    name="supervision"
-                                    checked={isSupervisionChecked}
-                                    onChange={handleSupervisionChange}
+                                    name="levad"
+                                    checked={isLevadChecked}
+                                    onChange={handleLevadChange}
                                 />
-                                <label htmlFor="mikve-supervision" className="supervision-label">
-                                    :השגחה
-                                </label>
                             </div>
 
-                            {isSupervisionChecked && (
+                            {isLevadChecked && (
                                 <div className="form-group">
+                                    <label htmlFor="mikve-supervision-date">
+                                        מתי השגחה:
+                                    </label>
                                     <input
                                         type="date"
                                         id="mikve-supervision-date"
-                                        name="supervisionDate"
-                                        value={mikveData.supervisionDate}
+                                        name="when_levad"
+                                        value={mikveData.when_levad}
                                         onChange={handleInputChange}
                                     />
-                                    <label htmlFor="mikve-supervision-date">
-                                        :מתי השגחה
-                                    </label>
                                 </div>
                             )}
 
                             <div className="form-group">
+                                <label htmlFor="mikve-ids">הוסף ID לבור מים:</label>
+                                <input
+                                    type="text"
+                                    id="mikve-ids-input"
+                                    name="newId"
+                                    value={mikveData.newId}
+                                    onChange={handleInputChange}
+                                />
                                 <button
                                     className="add-id"
                                     onClick={(e) => {
@@ -286,33 +351,25 @@ const AdminAddMikve = () => {
                                 >
                                     הוסף
                                 </button>
-                                <input
-                                    type="text"
-                                    id="mikve-ids-input"
-                                    name="newId"
-                                    value={mikveData.newId}
-                                    onChange={handleInputChange}
-                                />
-                                <label htmlFor="mikve-ids">:לבור מים ID הוסף</label>
-
                                 <div className="form-group"></div>
                             </div>
 
                             <div className="added-ids">
                                 {mikveData.ids.map((id, index) => (
                                     <div key={index} className="added-id">
-                                        <span>{id}</span>
                                         <button
                                             onClick={() => handleDeleteId(index)}
                                             type="button"
                                         >
                                             X
                                         </button>
+                                        <span>{id}</span>
                                     </div>
                                 ))}
                             </div>
 
                             <div className="form-group">
+                                <label htmlFor="mikve-notes">הערות:</label>
                                 <textarea
                                     id="mikve-notes"
                                     name="notes"
@@ -322,21 +379,22 @@ const AdminAddMikve = () => {
                                     value={mikveData.notes}
                                     onChange={handleInputChange}
                                 />
-                                <label htmlFor="mikve-notes">:הערות</label>
                             </div>
                         </form>
-                        <button
-                            className="confirm-add-mikve-button"
-                            onClick={handleAddMikve}
-                        >
-                            הוסף מקווה
-                        </button>
-                        <button
-                            className="exit-button-add-mikve"
-                            onClick={handleClosePopup}
-                        >
-                            צא ללא שינויים
-                        </button>
+                        <div className="buttons-container">
+                            <button
+                                className="confirm-add-mikve-button"
+                                onClick={handleAddMikve}
+                            >
+                                הוסף מקווה
+                            </button>
+                            <button
+                                className="exit-button-add-mikve"
+                                onClick={handleClosePopup}
+                            >
+                                צא ללא שינויים
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

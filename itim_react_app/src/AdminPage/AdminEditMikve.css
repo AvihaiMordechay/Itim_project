@@ -19,6 +19,10 @@
     max-width: 90%;
     max-height: 80%;
     overflow-y: auto;
+    direction: rtl;
+    /* Set direction to RTL for Hebrew */
+    text-align: right;
+    /* Align text to the right */
 }
 
 .edit-mikve-form {
@@ -30,12 +34,15 @@
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    justify-content: flex-end;
+    /* Align form elements to the right */
 }
 
 .form-group label {
     margin-right: 10px;
     margin-left: 10px;
-    text-align: left;
+    text-align: right;
+    /* Align text to the right */
     min-width: 100px;
 }
 
@@ -45,6 +52,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     text-align: right;
+    /* Align text to the right */
     resize: vertical;
     max-height: 150px;
     min-height: 80px;
@@ -57,37 +65,38 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     text-align: right;
+    /* Align text to the right */
 }
 
-.supervision-group {
+.levad-group {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-}
-
-.supervision-group label {
-    margin-left: 10px;
-    margin-right: 10px;
-    text-align: right;
-    min-width: 100px;
-    display: flex;
-    flex-direction: row-reverse;
     justify-content: flex-end;
-    align-items: center;
-}
-
-.supervision-group input {
-    margin-left: 250px;
+    /* Align form elements to the right */
 }
 
 .edit-mikve-buttons {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     margin-top: 20px;
 }
 
-.edit-mikve-buttons button {
+.edit-mikve-buttons .left-buttons {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.edit-mikve-buttons .right-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.edit-mikve-buttons .right-buttons button {
     margin-left: 10px;
+}
+
+.edit-mikve-buttons button {
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
@@ -104,25 +113,55 @@
     color: white;
 }
 
+.delete-button {
+    background-color: #f44336;
+    color: white;
+}
+
 .adds-id {
     margin-top: 10px;
-    /* Adjust margin as needed */
+    direction: ltr;
+    /* Make the direction left-to-right for this section */
+    text-align: left;
+    /* Align text to the left */
 }
 
 .added-id {
     display: inline-flex;
-    /* Adjusted to inline-flex */
     align-items: center;
+
     margin-top: 5px;
-    /* Adjust margin as needed */
 }
 
 .added-id span {
     margin-right: 5px;
-    /* Adjust margin as needed, or remove it */
 }
 
 .added-id button {
     margin-left: 5px;
-    /* Adjust margin as needed, or remove it */
+}
+
+.delete-mikve-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.delete-mikve-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.edit-mikve-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
