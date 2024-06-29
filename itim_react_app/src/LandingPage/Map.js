@@ -81,7 +81,7 @@ const Map = () => {
                 </div>
             )}
             <button className="reset-map-button" onClick={handleResetMap}>
-                Reset Map
+                איפוס המפה
             </button>
         </div>
     );

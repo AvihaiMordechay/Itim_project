@@ -56,13 +56,20 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-  }
+    flex-direction: row-reverse;
+}
+
+.admin-popup-header h2{
+    color: black;
+}
   
-  .close-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
+.close-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  background-color: #605371;
+}
   
   .admin-popup-body {
     display: flex;
@@ -81,7 +88,7 @@
     padding: 12px;
     font-size: 16px;
     border-radius: 4px;
-    background-color: #007bff;
+    background-color: #00aec6;
     color: white;
     border: none;
     cursor: pointer;

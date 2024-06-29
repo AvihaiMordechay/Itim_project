@@ -22,6 +22,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves }) => {
         let searchLocation;
         if (searchCityStreet) {
             searchLocation = await geocodeAddress(searchCityStreet);
+            
         } else if (userLocation) {
             searchLocation = userLocation;
         } else {
