@@ -122,6 +122,10 @@ const AdminUploadSamplingXL = ({ allMikves }) => {
         }
     };
 
+    const updateMikvesSanitation = () => {
+
+    }
+
     return (
         <div className="admin-upload-xl">
             <input

@@ -63,7 +63,6 @@ const AdminContent = () => {
                 <AdminDownloadData
                     allMikves={allMikves}
                 />
-                <AdminAddMikve />
                 <AdminUploadSamplingXL
                     allMikves={allMikves}
                 />
