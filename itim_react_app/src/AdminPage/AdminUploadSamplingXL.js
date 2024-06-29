@@ -31,6 +31,7 @@ const AdminUploadSamplingXL = ({ allMikves }) => {
             const workbook = XLSX.read(data, { type: 'array' });
             const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
             const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+            // TODO: CHECK IF THE jsonData is sanitation data!!!
             initSanitationData(jsonData);
             handleCancelUploadPopup();
         };
