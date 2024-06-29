@@ -46,6 +46,7 @@ const AdminMikveSearch = ({ allMikves, setPresentationMikves }) => {
                 id="mikve-input-search"
                 name="input-search"
                 value={searchInput}
+                placeholder="הקלד..."
                 onChange={(e) => setSearchInput(e.target.value)}
             />
             <select
