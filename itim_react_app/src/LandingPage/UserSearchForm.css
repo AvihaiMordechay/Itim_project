@@ -37,7 +37,9 @@
     width: 40px;
     border-radius: 40px;
 }
-
+.search-button:hover{
+    background-color: #4a3f5a;
+}
 .filters {
     display: flex;
     gap: 10px;

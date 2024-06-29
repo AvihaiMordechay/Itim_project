@@ -150,6 +150,9 @@
     color: white;
     margin-left: 10px;
 }
+.exit-button-add-mikve:hover {
+    background-color: #da3b2f;
+}
 
 .added-ids {
     margin-top: 5px;

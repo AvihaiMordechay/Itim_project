@@ -72,6 +72,10 @@
   color: white;
   background-color: #605371;
 }
+.close-button:hover{
+  background-color: #4a3f5a;
+
+}
 
 .admin-popup-body {
   display: flex;
@@ -95,6 +99,10 @@
   color: white;
   border: none;
   cursor: pointer;
+}
+
+.admin-button:hover {
+  background-color: #008fa3;
 }
 
 @media (max-width: 768px) {
