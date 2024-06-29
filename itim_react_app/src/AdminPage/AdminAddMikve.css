@@ -1,8 +1,23 @@
 .add-mikve-container {
     direction: rtl;
     text-align: right;
+    margin-left: 10px;
 }
+.add-mikve-button {
+    background-color: #605371;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    /* padding: 10px 20px; */
+    font-size: 16px;
+    cursor: pointer;
+    /* margin: 5px; */
+    transition: background-color 0.3s ease;
+}
+.add-mikve-button:hover{
+    background-color: #4a3f5a;
 
+}
 .add-mikve-popup {
     position: fixed;
     top: 0;

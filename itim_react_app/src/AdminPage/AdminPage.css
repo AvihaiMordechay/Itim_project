@@ -1,16 +1,11 @@
 
-.header {
+.admin-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
     background-color: #605371;
-}
-.header h1 {
-    font-size: 42px;
-    text-align: center;
-    flex-grow: 1;
-    color: white;
+    padding: 0 10px;
+    flex-direction: row-reverse;
 }
 
 h1 {

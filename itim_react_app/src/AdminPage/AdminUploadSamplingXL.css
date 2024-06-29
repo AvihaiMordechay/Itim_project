@@ -1,6 +1,8 @@
 .admin-upload-xl {
+    display: flex;
     direction: rtl;
     text-align: right;
+    align-items: flex-end;
 }
 
 .admin-upload-xl input[type="file"] {
@@ -16,4 +18,38 @@
     padding: 4px;
     cursor: pointer;
     margin-left: 5px;
+}
+.mikve-button, .mikve-upload-button {
+    display: flex;
+    background-color: #605371;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    /* padding: 10px 20px; */
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px;
+    height: 25px;
+    transition: background-color 0.3s ease;
+    align-items: center;
+}
+
+.mikve-button:hover, .mikve-upload-button:hover {
+    background-color: #4a3f5a;
+}
+
+.mikve-upload-button {
+    padding: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#input-xl-file {
+    display: none;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
 }

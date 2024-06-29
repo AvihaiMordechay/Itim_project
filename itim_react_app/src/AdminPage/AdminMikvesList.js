@@ -40,7 +40,12 @@ const AdminMikvesList = ({ presentationMikves, handleEditMikve }) => {
                                 <td>{mikve.water_sampling}</td>
                                 <td>{mikve.notes}</td>
                                 <td>
-                                    <button onClick={() => handleEditMikve(mikve)}>עריכה</button>
+                                    <button 
+                                        className="admin-mikve-edit-button"
+                                        onClick={() => handleEditMikve(mikve)}
+                                    >
+                                        עריכה
+                                    </button>
                                 </td>
                             </tr>
                         </React.Fragment>
@@ -48,7 +53,12 @@ const AdminMikvesList = ({ presentationMikves, handleEditMikve }) => {
                 </tbody>
             </table>
             {visibleCount < presentationMikves.length && (
-                <button onClick={handleShowMore}>הצג עוד</button>
+                <button 
+                    className="admin-mikve-show-more-button"
+                    onClick={handleShowMore}
+                >
+                    הצג עוד
+                </button>
             )}
         </div>
     );

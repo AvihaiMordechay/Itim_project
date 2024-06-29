@@ -43,12 +43,12 @@ const AdminUploadSamplingXL = () => {
             />
             <button
                 type="button"
-                className="upload-btn"
+                className="mikve-upload-button"
                 onClick={() => document.getElementById('input-xl-file').click()}
             >
                 <MdOutlineFileUpload />
             </button>
-            <button onClick={handleFileUpload}>העלה</button>
+            <button className="mikve-button" onClick={handleFileUpload}>העלה</button>
             {fileName && (
                 <div >
                     <span className="file-name">{fileName}</span>
