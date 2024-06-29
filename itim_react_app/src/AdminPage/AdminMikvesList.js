@@ -31,7 +31,7 @@ const AdminMikvesList = ({ presentationMikves, handleEditMikve, visibleCount, se
                                 <td>{mikve.notes}</td>
                                 <td>
                                     <button className="admin-mikve-edit-button"
-onClick={() => handleEditMikve(mikve)}><MdModeEdit /></button>
+                                    onClick={() => handleEditMikve(mikve)}><MdModeEdit /></button>
                                 </td>
                             </tr>
                         </React.Fragment>
