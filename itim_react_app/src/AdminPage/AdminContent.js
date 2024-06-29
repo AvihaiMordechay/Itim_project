@@ -58,6 +58,7 @@ const AdminContent = () => {
 
     return (
         <div className="admin-main-content">
+            <div className="admin-operations">
             <AdminAddMikve />
             <AdminUploadSamplingXL />
             <AdminMikveSearch
@@ -66,6 +67,7 @@ const AdminContent = () => {
                 setVisibleCount={setVisibleCount}
                 numOfRows={numOfRows}
             />
+            </div>
             <AdminMikvesList
                 presentationMikves={presentationMikves}
                 handleEditMikve={handleEditMikve}
