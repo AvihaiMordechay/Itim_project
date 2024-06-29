@@ -8,7 +8,6 @@ const AdminUploadSamplingXL = () => {
     const [fileName, setFileName] = useState('');
 
     const handleFileChange = (e) => {
-        console.log("asd")
         const selectedFile = e.target.files[0];
         setFile(selectedFile);
         setFileName(selectedFile ? selectedFile.name : '');

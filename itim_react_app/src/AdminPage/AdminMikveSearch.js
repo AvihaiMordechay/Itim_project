@@ -1,7 +1,7 @@
 import "./AdminMikveSearch.css";
 import { useState } from "react";
 
-const AdminMikveSearch = ({ allMikves, setPresentationMikves }) => {
+const AdminMikveSearch = ({ allMikves, setPresentationMikves, setVisibleCount, numOfRows }) => {
     const [searchInput, setSearchInput] = useState("");
     const [searchType, setSearchType] = useState("name");
 
@@ -31,10 +31,12 @@ const AdminMikveSearch = ({ allMikves, setPresentationMikves }) => {
             default:
                 filteredMikves = allMikves;
         }
+        setVisibleCount(numOfRows);
         setPresentationMikves(filteredMikves);
     };
 
     const handleClearSearch = () => {
+        setVisibleCount(numOfRows);
         setSearchInput("");
         setPresentationMikves(allMikves);
     };

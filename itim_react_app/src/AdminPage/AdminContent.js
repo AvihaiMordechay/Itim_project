@@ -8,10 +8,12 @@ import { AdminAddMikve } from "./AdminAddMikve"
 import { AdminUploadSamplingXL } from "./AdminUploadSamplingXL"
 
 const AdminContent = () => {
+    const numOfRows = 20;
     const [allMikves, setAllMikves] = useState([]);
     const [presentationMikves, setPresentationMikves] = useState([]);
     const [selectedMikve, setSelectedMikve] = useState(null);
     const [isEditMikvePopupOpen, setIsEditMikvePopupOpen] = useState(false);
+    const [visibleCount, setVisibleCount] = useState(numOfRows);
 
     const fetchMikves = async () => {
         const querySnapshot = await getDocs(collection(db, "Mikves"));
@@ -60,10 +62,15 @@ const AdminContent = () => {
             <AdminMikveSearch
                 allMikves={allMikves}
                 setPresentationMikves={setPresentationMikves}
+                setVisibleCount={setVisibleCount}
+                numOfRows={numOfRows}
             />
             <AdminMikvesList
                 presentationMikves={presentationMikves}
                 handleEditMikve={handleEditMikve}
+                visibleCount={visibleCount}
+                setVisibleCount={setVisibleCount}
+                numOfRows={numOfRows}
             />
             {isEditMikvePopupOpen && (
                 <AdminEditMikve
