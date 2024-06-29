@@ -155,7 +155,7 @@ const AdminAddMikve = () => {
             };
 
             try {
-                const docRef = await addDoc(collection(db, 'Mikves'), mikveToAdd);
+                await addDoc(collection(db, 'Mikves'), mikveToAdd);
                 handleClosePopup();
                 window.location.reload();
             } catch (e) {
