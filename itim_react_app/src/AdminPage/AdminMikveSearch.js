@@ -1,7 +1,8 @@
 import "./AdminMikveSearch.css";
 import { useState } from "react";
+import { ImSearch } from "react-icons/im";
 
-const AdminMikveSearch = ({ allMikves, setPresentationMikves }) => {
+const AdminMikveSearch = ({ allMikves, setPresentationMikves, setVisibleCount, numOfRows }) => {
     const [searchInput, setSearchInput] = useState("");
     const [searchType, setSearchType] = useState("name");
 
@@ -31,10 +32,12 @@ const AdminMikveSearch = ({ allMikves, setPresentationMikves }) => {
             default:
                 filteredMikves = allMikves;
         }
+        setVisibleCount(numOfRows);
         setPresentationMikves(filteredMikves);
     };
 
     const handleClearSearch = () => {
+        setVisibleCount(numOfRows);
         setSearchInput("");
         setPresentationMikves(allMikves);
     };
@@ -69,7 +72,7 @@ const AdminMikveSearch = ({ allMikves, setPresentationMikves }) => {
                 <option value="name">חיפוש לפי שם</option>
                 <option value="city">חיפוש לפי עיר</option>
                 <option value="address">חיפוש לפי כתובת</option>
-                <option value="id">חיפוש לפי id</option>
+                <option value="id">חיפוש לפי ID</option>
             </select>
             </div>
             <button

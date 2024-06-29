@@ -2,6 +2,9 @@ import "./AdminEditMikve.css";
 import React, { useState } from "react";
 import { db } from "../Firebase"
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { TbEdit } from "react-icons/tb";
+import { IoIosSave } from "react-icons/io";
+
 
 
 const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
@@ -187,9 +190,13 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                                 required
                             />
                             {editField === field.id ? (
-                                <button type="button" onClick={() => handleFieldSave(field.id)}>שמור</button>
+                                <button type="button" onClick={() => handleFieldSave(field.id)}>
+                                    <IoIosSave />
+                                </button>
                             ) : (
-                                <button type="button" onClick={() => handleFieldEdit(field.id)}>ערוך</button>
+                                <button type="button" onClick={() => handleFieldEdit(field.id)}>
+                                    <TbEdit />
+                                </button>
                             )}
 
 
@@ -214,9 +221,13 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                         </select>
 
                         {editField === "general_shelter" ? (
-                            <button type="button" onClick={() => handleFieldSave("general_shelter")}>שמור</button>
+                            <button type="button" onClick={() => handleFieldSave("general_shelter")}>
+                                <IoIosSave />
+                            </button>
                         ) : (
-                            <button type="button" onClick={() => handleFieldEdit("general_shelter")}>ערוך</button>
+                            <button type="button" onClick={() => handleFieldEdit("general_shelter")}>
+                                <TbEdit />
+                            </button>
                         )}
                     </div>
                     <div className="form-group">
@@ -254,9 +265,13 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                             <option value="2">נגישות מלאה</option>
                         </select>
                         {editField === "general_accessibility" ? (
-                            <button type="button" onClick={() => handleFieldSave("general_accessibility")}>שמור</button>
+                            <button type="button" onClick={() => handleFieldSave("general_accessibility")}>
+                                <IoIosSave />
+                            </button>
                         ) : (
-                            <button type="button" onClick={() => handleFieldEdit("general_accessibility")}>ערוך</button>
+                            <button type="button" onClick={() => handleFieldEdit("general_accessibility")}>
+                                <TbEdit />
+                            </button>
                         )}
 
                     </div>
@@ -288,9 +303,13 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                             disabled={editField !== "levad"}
                         />
                         {editField === "levad" ? (
-                            <button type="button" onClick={() => handleFieldSave("levad")}>שמור</button>
+                            <button type="button" onClick={() => handleFieldSave("levad")}>
+                                <IoIosSave />
+                            </button>
                         ) : (
-                            <button type="button" onClick={() => handleFieldEdit("levad")}>ערוך</button>
+                            <button type="button" onClick={() => handleFieldEdit("levad")}>
+                                <TbEdit />
+                            </button>
                         )}
                     </div>
 
@@ -328,9 +347,13 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                             </button>
                         )}
                         {editField === "ids" ? (
-                            <button type="button" onClick={() => handleFieldSave("ids")}>שמור</button>
+                            <button type="button" onClick={() => handleFieldSave("ids")}>
+                                <IoIosSave />
+                            </button>
                         ) : (
-                            <button type="button" onClick={() => handleFieldEdit("ids")}>ערוך</button>
+                            <button type="button" onClick={() => handleFieldEdit("ids")}>
+                                <TbEdit />
+                            </button>
                         )}
 
 
@@ -370,9 +393,13 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                             disabled={editField !== "notes"}
                         />
                         {editField === "notes" ? (
-                            <button type="button" onClick={() => handleFieldSave("notes")}>שמור</button>
+                            <button type="button" onClick={() => handleFieldSave("notes")}>
+                                <IoIosSave />
+                            </button>
                         ) : (
-                            <button type="button" onClick={() => handleFieldEdit("notes")}>ערוך</button>
+                            <button type="button" onClick={() => handleFieldEdit("notes")}>
+                                <TbEdit />
+                            </button>
                         )}
 
                     </div>
