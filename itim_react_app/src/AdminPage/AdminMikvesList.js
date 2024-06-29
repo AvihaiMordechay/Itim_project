@@ -1,6 +1,6 @@
 import "./AdminMikvesList.css"
 import React, { useState } from "react";
-
+import { MdModeEdit } from "react-icons/md";
 const AdminMikvesList = ({ presentationMikves, handleEditMikve, visibleCount, setVisibleCount, numOfRows }) => {
     const handleShowMore = () => {
         setVisibleCount((prevCount) => prevCount + numOfRows);
@@ -30,7 +30,9 @@ const AdminMikvesList = ({ presentationMikves, handleEditMikve, visibleCount, se
                                 <td>{mikve.phone}</td>
                                 <td>{mikve.notes}</td>
                                 <td>
-                                    <button onClick={() => handleEditMikve(mikve)}>עריכה</button>
+                                    <button onClick={() => handleEditMikve(mikve)}>
+                                        <MdModeEdit />
+                                    </button>
                                 </td>
                             </tr>
                         </React.Fragment>

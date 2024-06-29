@@ -1,5 +1,6 @@
 import "./AdminMikveSearch.css";
 import { useState } from "react";
+import { ImSearch } from "react-icons/im";
 
 const AdminMikveSearch = ({ allMikves, setPresentationMikves, setVisibleCount, numOfRows }) => {
     const [searchInput, setSearchInput] = useState("");
@@ -59,14 +60,14 @@ const AdminMikveSearch = ({ allMikves, setPresentationMikves, setVisibleCount, n
                 <option value="name">חיפוש לפי שם</option>
                 <option value="city">חיפוש לפי עיר</option>
                 <option value="address">חיפוש לפי כתובת</option>
-                <option value="id">חיפוש לפי id</option>
+                <option value="id">חיפוש לפי ID</option>
             </select>
             <button
                 type="button"
                 id="mikve-button-search"
                 onClick={handleSearchMikves}
             >
-                חפש
+                <ImSearch />
             </button>
             <button
                 type="button"
