@@ -17,9 +17,9 @@
 
 .header img {
   width: 200px;
-  /* Adjust size as needed */
   height: auto;
   border-radius: 35px;
+  margin-right: 10px;
 }
 
 .header h1 {
@@ -30,6 +30,7 @@
 
 .admin-icon {
   cursor: pointer;
+  margin-left: 10px;
 }
 
 .admin-popup {
