@@ -2,8 +2,10 @@ import "./AdminUploadSamplingXL.css";
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 import { MdOutlineFileUpload } from "react-icons/md";
+import { db } from '../Firebase'; // Import your Firebase configuration
+import { collection, doc, updateDoc, writeBatch } from "firebase/firestore";
 
-const AdminUploadSamplingXL = ({ allMikves }) => {
+const AdminUploadSamplingXL = ({ allMikves, setAllMikves }) => {
     const [file, setFile] = useState(null);
     const [fileName, setFileName] = useState('');
     const [mikveUploadPopup, setMikveUploadPopup] = useState(false);
@@ -22,6 +24,7 @@ const AdminUploadSamplingXL = ({ allMikves }) => {
         setMikveUploadPopup(false);
         const inputElement = document.getElementById('input-xl-file');
         inputElement.value = ''; // Reset the input value
+        console.log(allMikves);
     };
 
     const handleFileUpload = () => {
@@ -31,8 +34,8 @@ const AdminUploadSamplingXL = ({ allMikves }) => {
             const workbook = XLSX.read(data, { type: 'array' });
             const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
             const jsonData = XLSX.utils.sheet_to_json(firstSheet);
-            // TODO: CHECK IF THE jsonData is sanitation data!!!
             initSanitationData(jsonData);
+            updateMikvesSanitation();
             handleCancelUploadPopup();
         };
         reader.readAsArrayBuffer(file);
@@ -51,23 +54,22 @@ const AdminUploadSamplingXL = ({ allMikves }) => {
                     mikveID = row['__EMPTY_5'];
                     updatedDate = XLSX.SSF.format('yyyy-mm-dd', row['__EMPTY_7']);
                     values = {
-                        'קוליפורמים': row['__EMPTY_9'],
-                        'פסאודומונס': row['__EMPTY_10'],
-                        'סטפילוקוקוס': row['__EMPTY_11'],
-                        'עכירות': row['__EMPTY_12'],
-                        'הגבה': row['__EMPTY_13'],
-                        'כלור חופשי': row['__EMPTY_14'],
-                        'ברום חופשי': row['__EMPTY_15']
+                        'קוליפורמים': parseInt(row['__EMPTY_9']),
+                        'פסאודומונס': parseInt(row['__EMPTY_10']),
+                        'סטפילוקוקוס': parseInt(row['__EMPTY_11']),
+                        'עכירות': parseInt(row['__EMPTY_12']),
+                        'הגבה': parseFloat(row['__EMPTY_13']),
+                        'כלור חופשי': parseFloat(row['__EMPTY_14']),
+                        'ברום חופשי': parseFloat(row['__EMPTY_15'])
                     };
-                    //TODO: CAST THE VALUES TO INT; 
-                    if (checkValues(values) === true) { // TODO: CHECK IF NEED TO CHECK ״לא נבדק״ AND NOT JUST TRUE/FALSE
+                    if (isNaN(new Date(updatedDate))) {
                         mikveData = {
-                            'isClean': true,
-                            'date': updatedDate
-                        };
+                            'isClean': checkValues(values),
+                        }
                     } else {
                         mikveData = {
-                            'isClean': false
+                            'isClean': checkValues(values),
+                            'date': updatedDate
                         };
                     }
                     result.push({ mikveID, mikveData });
@@ -76,23 +78,22 @@ const AdminUploadSamplingXL = ({ allMikves }) => {
                     if (date > updatedDate) {
                         updatedDate = date;
                         values = {
-                            'קוליפורמים': row['__EMPTY_9'],
-                            'פסאודומונס': row['__EMPTY_10'],
-                            'סטפילוקוקוס': row['__EMPTY_11'],
-                            'עכירות': row['__EMPTY_12'],
-                            'הגבה': row['__EMPTY_13'],
-                            'כלור חופשי': row['__EMPTY_14'],
-                            'ברום חופשי': row['__EMPTY_15']
+                            'קוליפורמים': parseInt(row['__EMPTY_9']),
+                            'פסאודומונס': parseInt(row['__EMPTY_10']),
+                            'סטפילוקוקוס': parseInt(row['__EMPTY_11']),
+                            'עכירות': parseInt(row['__EMPTY_12']),
+                            'הגבה': parseFloat(row['__EMPTY_13']),
+                            'כלור חופשי': parseFloat(row['__EMPTY_14']),
+                            'ברום חופשי': parseFloat(row['__EMPTY_15'])
                         };
-                        //TODO: CAST THE VALUES TO INT; 
-                        if (checkValues(values) === true) { // TODO: CHECK IF NEED TO CHECK ״לא נבדק״ AND NOT JUST TRUE/FALSE
+                        if (isNaN(new Date(updatedDate))) {
                             mikveData = {
-                                'isClean': true,
-                                'date': updatedDate
-                            };
+                                'isClean': checkValues(values),
+                            }
                         } else {
                             mikveData = {
-                                'isClean': false
+                                'isClean': checkValues(values),
+                                'date': updatedDate
                             };
                         }
                         const index = result.findIndex(item => item.mikveID === mikveID);
@@ -123,8 +124,81 @@ const AdminUploadSamplingXL = ({ allMikves }) => {
     };
 
     const updateMikvesSanitation = () => {
+        const MIKVE_NOT_CHECKED = "0";
+        const MIKVE_CHECKED_AND_PASSED = "1";
+        const MIKVE_CHECKED_AND_NOT_PASSED = "2";
 
-    }
+        const updatedMikves = allMikves.map(mikve => {
+            let mikveIsClean = MIKVE_NOT_CHECKED;
+            let mikveSanitationDate = "";
+
+            for (const id of mikve.ids) {
+                const foundSanitationData = sanitationData.find(data => data.mikveID === id);
+
+                if (foundSanitationData) {
+                    if (foundSanitationData.mikveData.date) {  // Check if the date exists
+                        mikveSanitationDate = foundSanitationData.mikveData.date;
+                    }
+
+                    if (foundSanitationData.mikveData.isClean) {
+                        mikveIsClean = MIKVE_CHECKED_AND_PASSED;
+                    } else {
+                        mikveIsClean = MIKVE_CHECKED_AND_NOT_PASSED;
+                        break;
+                    }
+                }
+            }
+
+            if (mikveIsClean === MIKVE_CHECKED_AND_NOT_PASSED) {
+                return {
+                    ...mikve,
+                    ...(mikveSanitationDate && { when_sampling: mikveSanitationDate }),
+                    water_sampling: MIKVE_CHECKED_AND_NOT_PASSED
+                };
+            } else if (mikveIsClean === MIKVE_CHECKED_AND_PASSED) {
+                return {
+                    ...mikve,
+                    ...(mikveSanitationDate && { when_sampling: mikveSanitationDate }),
+                    water_sampling: MIKVE_CHECKED_AND_PASSED
+                };
+            } else {
+                // Check if water_sampling is already checked
+                if (mikve.water_sampling !== MIKVE_CHECKED_AND_PASSED &&
+                    mikve.water_sampling !== MIKVE_CHECKED_AND_NOT_PASSED
+                ) {
+                    // If not checked, set to MIKVE_NOT_CHECKED
+                    return {
+                        ...mikve,
+                        water_sampling: MIKVE_NOT_CHECKED
+                    };
+                }
+                // If already checked, return the original mikve object
+                return mikve;
+            }
+        });
+        setAllMikves(updatedMikves);
+        updateFirebase(updatedMikves);
+    };
+
+    const updateFirebase = (updatedMikves) => {
+        const batch = writeBatch(db);
+
+        updatedMikves.forEach((mikve) => {
+            const mikveDocRef = doc(collection(db, 'Mikves'), mikve.id);
+            batch.update(mikveDocRef, {
+                water_sampling: mikve.water_sampling,
+                ...(mikve.when_sampling && { when_sampling: mikve.when_sampling })
+            });
+        });
+
+        batch.commit()
+            .then(() => {
+                console.log('Firebase updated successfully');
+            })
+            .catch((error) => {
+                console.error('Error updating Firebase: ', error);
+            });
+    };
 
     return (
         <div className="admin-upload-xl">

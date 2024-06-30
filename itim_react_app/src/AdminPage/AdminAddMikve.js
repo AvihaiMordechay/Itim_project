@@ -150,7 +150,7 @@ const AdminAddMikve = () => {
                 position: coordinates
                     ? { latitude: coordinates.lat, longitude: coordinates.lng }
                     : null,
-                water_sampling: "",
+                water_sampling: "0",
                 when_sampling: "",
             };
 

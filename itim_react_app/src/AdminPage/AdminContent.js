@@ -65,6 +65,7 @@ const AdminContent = () => {
                 />
                 <AdminUploadSamplingXL
                     allMikves={allMikves}
+                    setAllMikves={setAllMikves}
                 />
                 <AdminMikveSearch
                     allMikves={allMikves}
