@@ -12,6 +12,8 @@ const UserSearchForm = ({ setFilteredMikves, allMikves }) => {
     const [levad, setLevad] = useState('');
     const [shelter, setShelter] = useState('');
     const [userLocation, error] = useLocation();
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -24,6 +26,10 @@ const UserSearchForm = ({ setFilteredMikves, allMikves }) => {
             const geocodedLocation = await geocodeAddress(searchTerm);
             if (geocodedLocation) {
                 searchLocation = geocodedLocation;
+            } else {
+                setPopupMessage('לא הצלחנו למצוא את הכתובת. אנא נסי להכניס כתובת יותר מפורטת.');
+                setShowPopup(true);
+                return;
             }
         }
     
@@ -48,6 +54,12 @@ const UserSearchForm = ({ setFilteredMikves, allMikves }) => {
 
             return nameMatches && accessibilityMatches && waterSamplingMatches && levadMatches && shelterMatches;
         });
+
+        if (filteredMikves.length === 0 && searchType === 'name') {
+            setPopupMessage('לא הצלחנו למצוא מקוואות המתאימות לשם זה. אנא נסי שנית או חפשי לפי כתובת.');
+            setShowPopup(true);
+            return;
+        }
     
         const mikvesWithDistances = filteredMikves.map(mikve => ({
             ...mikve,
@@ -62,75 +74,90 @@ const UserSearchForm = ({ setFilteredMikves, allMikves }) => {
         setFilteredMikves(sortedMikves);
     };
 
+    const closePopup = () => {
+        setShowPopup(false);
+    };
+
     return (
-        <form className="search-form" onSubmit={handleSearch}>
-            <div className="search-bar-container">
-                <input
-                    type="text"
-                    placeholder={searchType === 'name' ? "שם המקווה" : "עיר או רחוב"}
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    className="search-bar"
-                />
-                <div className="select-box">
-                    <label className="select-header">סוג חיפוש</label>
-                    <select 
-                        value={searchType} 
-                        onChange={(e) => setSearchType(e.target.value)} 
-                        className="select-input"
-                    >
-                        <option value="address">חיפוש לפי כתובת</option>
-                        <option value="name">חיפוש לפי שם</option>
-                    </select>
+        <>
+            <form className="search-form" onSubmit={handleSearch}>
+                <div className="search-bar-container">
+                    <input
+                        type="text"
+                        placeholder={searchType === 'name' ? "שם המקווה" : "עיר או רחוב"}
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        className="search-bar"
+                    />
+                    <div className="select-box">
+                        <label className="select-header">סוג חיפוש</label>
+                        <select 
+                            value={searchType} 
+                            onChange={(e) => setSearchType(e.target.value)} 
+                            className="select-input"
+                        >
+                            <option value="address">חיפוש לפי כתובת</option>
+                            <option value="name">חיפוש לפי שם</option>
+                        </select>
+                    </div>
+                    <button type="submit" className="search-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                            <path d="M10 2a8 8 0 106.32 12.9l4.39 4.38a1 1 0 001.42-1.42l-4.38-4.39A8 8 0 0010 2zm0 2a6 6 0 11-4.24 10.24A6 6 0 0110 4z" />
+                        </svg>
+                    </button>
                 </div>
-                <button type="submit" className="search-button">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-                        <path d="M10 2a8 8 0 106.32 12.9l4.39 4.38a1 1 0 001.42-1.42l-4.38-4.39A8 8 0 0010 2zm0 2a6 6 0 11-4.24 10.24A6 6 0 0110 4z" />
-                    </svg>
-                </button>
-            </div>
-            <div className="filters">
-                <div className="select-box">
-                    <label className="select-header">נגישות</label>
-                    <select value={accessibility} onChange={(e) => setAccessibility(e.target.value)} className="select-input">
-                        <option value="">בחר</option>
-                        <option value="0">אין נגישות</option>
-                        <option value="1">נגישות חלקית</option>
-                        <option value="2">נגישות מלאה</option>
-                    </select>
+                <div className="filters">
+                    <div className="select-box">
+                        <label className="select-header">נגישות</label>
+                        <select value={accessibility} onChange={(e) => setAccessibility(e.target.value)} className="select-input">
+                            <option value="">בחר</option>
+                            <option value="0">אין נגישות</option>
+                            <option value="1">נגישות חלקית</option>
+                            <option value="2">נגישות מלאה</option>
+                        </select>
+                    </div>
+                    <div className="select-box">
+                        <label className="select-header">בדיקת מים</label>
+                        <select 
+                            value={waterSampling} 
+                            onChange={(e) => setWaterSampling(e.target.value)} 
+                            className="select-input"
+                        >
+                            <option value="">בחר</option>
+                            <option value="0">ללא בדיקה</option>
+                            <option value="1">בדיקה לא תקינה</option>
+                            <option value="2">בדיקה תקינה</option>
+                        </select>
+                    </div>
+                    <div className="select-box">
+                        <label className="select-header">מיגון</label>
+                        <select value={shelter} onChange={(e) => setShelter(e.target.value)} className="select-input">
+                            <option value="">בחר</option>
+                            <option value="0">ללא מיגון</option>
+                            <option value="1">מיגון חלקי</option>
+                            <option value="2">מיגון מלא</option>
+                        </select>
+                    </div>
+                    <div className="select-box">
+                        <label className="select-header">טבילה לבד</label>
+                        <select value={levad} onChange={(e) => setLevad(e.target.value)} className="select-input">
+                            <option value="">בחר</option>
+                            <option value="true">מותר לרחוץ לבד</option>
+                            <option value="false">אסור לרחוץ לבד</option>
+                        </select>
+                    </div>
                 </div>
-                <div className="select-box">
-                    <label className="select-header">בדיקת מים</label>
-                    <select 
-                        value={waterSampling} 
-                        onChange={(e) => setWaterSampling(e.target.value)} 
-                        className="select-input"
-                    >
-                        <option value="">בחר</option>
-                        <option value="0">ללא בדיקה</option>
-                        <option value="1">בדיקה לא תקינה</option>
-                        <option value="2">בדיקה תקינה</option>
-                    </select>
+            </form>
+
+            {showPopup && (
+                <div className="popup">
+                    <div className="popup-content">
+                        <p>{popupMessage}</p>
+                        <button onClick={closePopup}>סגור</button>
+                    </div>
                 </div>
-                <div className="select-box">
-                    <label className="select-header">מיגון</label>
-                    <select value={shelter} onChange={(e) => setShelter(e.target.value)} className="select-input">
-                        <option value="">בחר</option>
-                        <option value="0">ללא מיגון</option>
-                        <option value="1">מיגון חלקי</option>
-                        <option value="2">מיגון מלא</option>
-                    </select>
-                </div>
-                <div className="select-box">
-                    <label className="select-header">טבילה לבד</label>
-                    <select value={levad} onChange={(e) => setLevad(e.target.value)} className="select-input">
-                        <option value="">בחר</option>
-                        <option value="true">מותר לרחוץ לבד</option>
-                        <option value="false">אסור לרחוץ לבד</option>
-                    </select>
-                </div>
-            </div>
-        </form>
+            )}
+        </>
     );
 };
 
