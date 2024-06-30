@@ -6,7 +6,7 @@ import './UserSearchForm.css';
 
 const UserSearchForm = ({ setFilteredMikves, allMikves }) => {
     const [searchInput, setSearchInput] = useState('');
-    const [searchType, setSearchType] = useState('address'); // 'address' or 'name'
+    const [searchType, setSearchType] = useState('address');
     const [accessibility, setAccessibility] = useState('');
     const [waterSampling, setWaterSampling] = useState('');
     const [levad, setLevad] = useState('');
@@ -18,51 +18,48 @@ const UserSearchForm = ({ setFilteredMikves, allMikves }) => {
     
         const searchTerm = searchInput.trim().toLowerCase();
     
-        let searchLocation;
-        if (searchType === 'address') {
-            searchLocation = await geocodeAddress(searchTerm);
-            if (!searchLocation) {
-                searchLocation = userLocation || { lat: 31.7683, lng: 35.2137 }; // Jerusalem coordinates
+        let searchLocation = userLocation || { lat: 31.7683, lng: 35.2137 }; // Default to Jerusalem
+        
+        if (searchType === 'address' && searchTerm) {
+            const geocodedLocation = await geocodeAddress(searchTerm);
+            if (geocodedLocation) {
+                searchLocation = geocodedLocation;
             }
-        } else {
-            searchLocation = userLocation || { lat: 31.7683, lng: 35.2137 }; // Jerusalem coordinates
         }
     
-        const sortedMikves = allMikves
-            .filter(mikve => mikve.position && mikve.position.latitude && mikve.position.longitude)
-            .map(mikve => ({
-                ...mikve,
-                distance: calculateDistance(searchLocation, { lat: mikve.position.latitude, lng: mikve.position.longitude })
-            }))
-            .sort((a, b) => a.distance - b.distance);
-    
-        const filteredMikves = sortedMikves.filter(mikve => {
-            const nameMatches = searchType === 'name' ? mikve.name.toLowerCase().includes(searchTerm) : true;
-            const addressMatches = searchType === 'address' ? 
-                (mikve.address && mikve.address.toLowerCase().includes(searchTerm)) || 
-                (mikve.city && mikve.city.toLowerCase().includes(searchTerm)) : 
-                true;
+        const filteredMikves = allMikves.filter(mikve => {
+            const nameMatches = searchType === 'name' 
+                ? mikve.name.toLowerCase().includes(searchTerm) 
+                : true;
+            
             const accessibilityMatches = 
                 accessibility === '' ||
-                (accessibility === '0') ||
-                (accessibility === '1' && Number(mikve.general_accessibility) >= 1) ||
-                (accessibility === '2' && Number(mikve.general_accessibility) === 2);
-            const levadMatches = 
-                levad === '' ||
-                (levad === 'true' && mikve.levad === true) ||
-                (levad === 'false' && mikve.levad === false);
+                (accessibility === '0' && mikve.general_accessibility === '0') ||
+                (accessibility === '1' && ['1', '2'].includes(mikve.general_accessibility)) ||
+                (accessibility === '2' && mikve.general_accessibility === '2');
+            
+            const waterSamplingMatches = waterSampling === '' || mikve.water_sampling === waterSampling;
+            const levadMatches = levad === '' || mikve.levad.toString() === levad;
             const shelterMatches = 
                 shelter === '' ||
-                (shelter === '0') ||
-                (shelter === '1' && Number(mikve.general_shelter) >= 1) ||
-                (shelter === '2' && Number(mikve.general_shelter) === 2);
-            const waterSamplingMatches = 
-                waterSampling === '' || mikve.water_sampling === waterSampling;
-    
-            return (nameMatches || addressMatches) && accessibilityMatches && levadMatches && shelterMatches && waterSamplingMatches;
+                (shelter === '0' && mikve.general_shelter === '0') ||
+                (shelter === '1' && ['1', '2'].includes(mikve.general_shelter)) ||
+                (shelter === '2' && mikve.general_shelter === '2');
+
+            return nameMatches && accessibilityMatches && waterSamplingMatches && levadMatches && shelterMatches;
         });
     
-        setFilteredMikves(filteredMikves);
+        const mikvesWithDistances = filteredMikves.map(mikve => ({
+            ...mikve,
+            distance: calculateDistance(searchLocation, { 
+                lat: mikve.position?.latitude || 0, 
+                lng: mikve.position?.longitude || 0 
+            })
+        }));
+    
+        const sortedMikves = mikvesWithDistances.sort((a, b) => a.distance - b.distance);
+    
+        setFilteredMikves(sortedMikves);
     };
 
     return (
@@ -93,7 +90,6 @@ const UserSearchForm = ({ setFilteredMikves, allMikves }) => {
                 </button>
             </div>
             <div className="filters">
-                
                 <div className="select-box">
                     <label className="select-header">נגישות</label>
                     <select value={accessibility} onChange={(e) => setAccessibility(e.target.value)} className="select-input">
