@@ -10,9 +10,7 @@
   justify-content: space-between;
   align-items: center;
   height: 100px;
-  /* Adjust the height as needed */
   flex-direction: row-reverse;
-
 }
 
 .header img {
@@ -31,6 +29,17 @@
 .admin-icon {
   cursor: pointer;
   margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px; /* Adjusted size */
+  height: 40px; /* Adjusted size */
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+}
+
+.admin-icon:hover {
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 .admin-popup {
@@ -48,7 +57,7 @@
 
 .admin-popup-content {
   background-color: white;
-  padding: 30px;
+  padding: 20px 30px 30px 30px;
   border-radius: 8px;
   width: 400px;
   max-width: 90%;
@@ -72,10 +81,21 @@
   cursor: pointer;
   color: white;
   background-color: #605371;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10%;
+  width: 40px;
+  height: 40px;
 }
-.close-button:hover{
-  background-color: #4a3f5a;
 
+.close-button:hover {
+  background-color: #4a3f5a;
+}
+
+.close-button svg {
+  display: block;
 }
 
 .admin-popup-body {
@@ -115,7 +135,6 @@
 
   .header img {
     width: 80px;
-    /* Adjust size as needed */
   }
 
   .header h1 {

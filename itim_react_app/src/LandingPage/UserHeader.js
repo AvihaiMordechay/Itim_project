@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useAuth from '../Authentication/AdminAuth';
-import './UserHeader.css'; // Make sure to import the CSS file
+import './UserHeader.css';
 import { RiAdminLine } from "react-icons/ri";
 
 const UserHeader = () => {
@@ -17,10 +17,10 @@ const UserHeader = () => {
         <div className="header-container">
             <div className="header">
                 <div className="admin-icon" onClick={() => setIsAdminPopupOpen(true)}>
-                    <RiAdminLine />
+                    <RiAdminLine size={30} /> {/* Adjusted size */}
                 </div>
                 <h1>חיפוש מקוואות נשים</h1>
-                <img src={`${process.env.PUBLIC_URL}/logo.jpg`} alt="Logo" /> {/* Replace with your actual image path */}
+                <img src={`${process.env.PUBLIC_URL}/logo.jpg`} alt="Logo" />
             </div>
 
             {isAdminPopupOpen && (
@@ -46,4 +46,4 @@ const UserHeader = () => {
     );
 };
 
-export { UserHeader }
+export { UserHeader };
