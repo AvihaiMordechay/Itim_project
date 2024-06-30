@@ -150,8 +150,10 @@ const AdminUploadSamplingXL = ({ allMikves }) => {
                         <div>
                             <span className="file-name">{fileName}</span>
                         </div>
-                        <button type="button" className="confirm-upload-xl-button" onClick={handleFileUpload}>אישור</button>
-                        <button type="button" className="cancel-upload-xl-button" onClick={handleCancelUploadPopup}>בטל</button>
+                        <div className="upload-buttons">
+                            <button type="button" className="confirm-upload-xl-button" onClick={handleFileUpload}>אישור</button>
+                            <button type="button" className="cancel-upload-xl-button" onClick={handleCancelUploadPopup}>בטל</button>
+                        </div>
                     </div>
                 </div>
             )}

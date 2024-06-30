@@ -107,18 +107,25 @@
 }
 
 .save-button {
-    background-color: #4caf50;
+    background-color: #00aec6;
     color: white;
 }
-
+.save-button:hover{
+    background-color: #008fa3;
+}
 .cancel-button {
     background-color: #f44336;
     color: white;
 }
-
+.cancel-button:hover{
+    background-color: #da3b2f;
+}
 .delete-button {
     background-color: #f44336;
     color: white;
+}
+.delete-button:hover{
+    background-color: #da3b2f;
 }
 
 .adds-id {
