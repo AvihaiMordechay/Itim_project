@@ -57,7 +57,7 @@ const AdminUploadSamplingXL = () => {
                     <div className="mikve-upload-xl-popup-content">
                         <h2>אישור העלה</h2>
                         <p>האם אתה בטוח שברצונך לעלות את הקובץ:</p>
-                        <div>
+                        <div className="upload-file-name">
                             <span className="file-name">{fileName}</span>
                         </div>
                         <div className="upload-buttons">
