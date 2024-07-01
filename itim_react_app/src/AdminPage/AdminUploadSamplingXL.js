@@ -1,11 +1,11 @@
 import "./AdminUploadSamplingXL.css";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 import { MdOutlineFileUpload } from "react-icons/md";
 import { db } from '../Firebase'; // Import your Firebase configuration
-import { collection, doc, updateDoc, writeBatch } from "firebase/firestore";
+import { collection, doc, writeBatch } from "firebase/firestore";
 
-const AdminUploadSamplingXL = ({ allMikves, setAllMikves }) => {
+const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => {
     const [file, setFile] = useState(null);
     const [fileName, setFileName] = useState('');
     const [mikveUploadPopup, setMikveUploadPopup] = useState(false);
@@ -24,7 +24,6 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves }) => {
         setMikveUploadPopup(false);
         const inputElement = document.getElementById('input-xl-file');
         inputElement.value = ''; // Reset the input value
-        console.log(allMikves);
     };
 
     const handleFileUpload = () => {
@@ -35,7 +34,6 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves }) => {
             const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
             const jsonData = XLSX.utils.sheet_to_json(firstSheet);
             initSanitationData(jsonData);
-            updateMikvesSanitation();
             handleCancelUploadPopup();
         };
         reader.readAsArrayBuffer(file);
@@ -49,7 +47,10 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves }) => {
         let mikveData;
 
         jsonData.forEach(row => {
-            if (row['__EMPTY_5'] && row['__EMPTY_5'].includes('NP') && typeof row['__EMPTY_7'] === 'number') {
+            if (row['__EMPTY_5'] &&
+                typeof row['__EMPTY_5'] === 'string'
+                && row['__EMPTY_5'].includes('NP')
+                && typeof row['__EMPTY_7'] === 'number') {
                 if (row['__EMPTY_5'] !== mikveID) {
                     mikveID = row['__EMPTY_5'];
                     updatedDate = XLSX.SSF.format('yyyy-mm-dd', row['__EMPTY_7']);
@@ -107,6 +108,13 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves }) => {
         setSanitationData(result);
     };
 
+    useEffect(() => {
+        if (sanitationData.length > 0) {
+            updateMikvesSanitation();
+        }
+    }, [sanitationData]);
+
+
     const checkValues = (values) => {
         if (
             values['קוליפורמים'] > 10 ||
@@ -148,7 +156,6 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves }) => {
                     }
                 }
             }
-
             if (mikveIsClean === MIKVE_CHECKED_AND_NOT_PASSED) {
                 return {
                     ...mikve,
@@ -178,6 +185,7 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves }) => {
         });
         setAllMikves(updatedMikves);
         updateFirebase(updatedMikves);
+        onUploadSuccess(updatedMikves);
     };
 
     const updateFirebase = (updatedMikves) => {
@@ -191,13 +199,7 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves }) => {
             });
         });
 
-        batch.commit()
-            .then(() => {
-                console.log('Firebase updated successfully');
-            })
-            .catch((error) => {
-                console.error('Error updating Firebase: ', error);
-            });
+        batch.commit();
     };
 
     return (
