@@ -51,7 +51,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves }) => {
     
             return (nameMatches || addressMatches) && accessibilityMatches && levadMatches && shelterMatches && waterSamplingMatches;
         });
-        
+
         return filteredMikves.slice(0, MAX_RESULTS);
     }
 

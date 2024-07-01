@@ -1,6 +1,6 @@
 import './Map.css';
 import React, { useState, useEffect, useRef } from 'react';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API;
 
@@ -9,12 +9,13 @@ const defaultCenter = {
     lng: 35.2137, // Jerusalem coordinates
 };
 
-const Map = () => {
+const Map = ({ mikves }) => {
     const [location, setLocation] = useState(null);
     const [isLocationError, setIsLocationError] = useState(false);
     const [mapCenter, setMapCenter] = useState(defaultCenter);
     const [mapZoom, setMapZoom] = useState(10);
     const [mapKey, setMapKey] = useState(0); // unique key to force re-render
+    const [selectedMikve, setSelectedMikve] = useState(null);
     const mapRef = useRef(null);
 
     useEffect(() => {
@@ -59,6 +60,14 @@ const Map = () => {
         setMapKey((prevKey) => prevKey + 1); // increment key to force re-render
     };
 
+    const handleMarkerClick = (mikve) => {
+        setSelectedMikve(mikve);
+    };
+
+    const handleCloseInfoWindow = () => {
+        setSelectedMikve(null);
+    };
+
     return (
         <div className="map-container">
             <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY}>
@@ -73,7 +82,27 @@ const Map = () => {
                         zoomControl: true,
                     }}
                 >
+                    {mikves.map(mikve => (
+                        <Marker
+                            key={mikve.id}
+                            position={{ lat: mikve.position.latitude, lng: mikve.position.longitude }}
+                            onClick={() => handleMarkerClick(mikve)}
+                        />
+                    ))}
                     {location && <Marker position={location} />}
+                    {selectedMikve && (
+                        <InfoWindow
+                            position={{ lat: selectedMikve.position.latitude, lng: selectedMikve.position.longitude }}
+                            onCloseClick={handleCloseInfoWindow}
+                        >
+                            <div>
+                                <h3>כותרת מקווה</h3>
+                                <p>{selectedMikve.name}</p>
+                                <p>{selectedMikve.address}</p>
+                                <p>{selectedMikve.city}</p>
+                            </div>
+                        </InfoWindow>
+                    )}
                 </GoogleMap>
             </LoadScript>
             {isLocationError && (
