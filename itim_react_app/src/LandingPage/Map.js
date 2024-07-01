@@ -96,7 +96,7 @@ const Map = ({ mikves }) => {
                             onCloseClick={handleCloseInfoWindow}
                         >
                             <div>
-                                <h3>כותרת מקווה</h3>
+                                <h3> מקווה</h3>
                                 <p>{selectedMikve.name}</p>
                                 <p>{selectedMikve.address}</p>
                                 <p>{selectedMikve.city}</p>
