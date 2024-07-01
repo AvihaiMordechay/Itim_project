@@ -26,6 +26,19 @@
   flex-grow: 1;
 }
 
+form {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* Ensure the form takes the full width of its container */
+.admin-popup-body form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Keep the existing gap between form elements */
+}
+
 .admin-icon {
   cursor: pointer;
   margin-left: 10px;
@@ -105,21 +118,24 @@
 }
 
 .admin-input {
-  text-align: left;
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+  width: 100%; /* Ensure input fields take the full width */
+  padding: 12px; /* Existing padding */
+  font-size: 16px; /* Existing font size */
+  border-radius: 4px; /* Existing border radius */
+  border: 1px solid #ccc; /* Existing border */
+  box-sizing: border-box; /* Include padding in the element's total width and height */
 }
 
 .admin-button {
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 4px;
-  background-color: #00aec6;
-  color: white;
-  border: none;
-  cursor: pointer;
+  width: 100%; /* Ensure the button takes the full width */
+  padding: 12px; /* Existing padding */
+  font-size: 16px; /* Existing font size */
+  border-radius: 4px; /* Existing border radius */
+  background-color: #00aec6; /* Existing background color */
+  color: white; /* Existing text color */
+  border: none; /* Existing border */
+  cursor: pointer; /* Existing cursor style */
+  box-sizing: border-box; /* Include padding in the element's total width and height */
 }
 
 .admin-button:hover {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useAuth from '../Authentication/AdminAuth';
-import './UserHeader.css';
+import './UserHeader.css'; // Make sure to import the CSS file
 import { RiAdminLine } from "react-icons/ri";
 
 const UserHeader = () => {
@@ -9,18 +9,19 @@ const UserHeader = () => {
     const [password, setPassword] = useState("");
     const [isAdminPopupOpen, setIsAdminPopupOpen] = useState(false);
 
-    const handleLogin = () => {
+    const handleSubmit = (event) => {
+        event.preventDefault(); // Prevent the default form submission behavior
         login(email, password);
-    }
+    };
 
     return (
         <div className="header-container">
             <div className="header">
                 <div className="admin-icon" onClick={() => setIsAdminPopupOpen(true)}>
-                    <RiAdminLine size={30} /> {/* Adjusted size */}
+                    <RiAdminLine />
                 </div>
                 <h1>חיפוש מקוואות נשים</h1>
-                <img src={`${process.env.PUBLIC_URL}/logo.jpg`} alt="Logo" />
+                <img src={`${process.env.PUBLIC_URL}/logo.jpg`} alt="Logo" /> {/* Replace with your actual image path */}
             </div>
 
             {isAdminPopupOpen && (
@@ -35,9 +36,11 @@ const UserHeader = () => {
                             </button>
                         </div>
                         <div className="admin-popup-body">
-                            <input className="admin-input" id="email_login" placeholder="Email..." onChange={(e) => setEmail(e.target.value)} dir="ltr"></input>
-                            <input className="admin-input" id="password_login" type="password" placeholder="Password..." onChange={(e) => setPassword(e.target.value)} dir="ltr"></input>
-                            <button className="admin-button" id="button_login" onClick={handleLogin}>SIGN IN</button>
+                            <form onSubmit={handleSubmit}>
+                                <input className="admin-input" id="email_login" placeholder="Email..." onChange={(e) => setEmail(e.target.value)} dir="ltr" required />
+                                <input className="admin-input" id="password_login" type="password" placeholder="Password..." onChange={(e) => setPassword(e.target.value)} dir="ltr" required />
+                                <button className="admin-button" id="button_login" type="submit">SIGN IN</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -46,4 +49,4 @@ const UserHeader = () => {
     );
 };
 
-export { UserHeader };
+export { UserHeader }
