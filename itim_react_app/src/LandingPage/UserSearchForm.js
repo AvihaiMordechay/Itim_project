@@ -1,33 +1,59 @@
-import React, { useState } from 'react';
-import { useLocation } from '../hooks/useLocation';
+import React, { useState, useEffect, useRef } from 'react';
 import { calculateDistance } from '../utils/distance';
-import geocodeAddress from '../utils/geocode';
 import './UserSearchForm.css';
 
-const UserSearchForm = ({ setFilteredMikves, allMikves }) => {
+const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCount, onSearch }) => {
     const [searchInput, setSearchInput] = useState('');
     const [searchType, setSearchType] = useState('address');
     const [accessibility, setAccessibility] = useState('');
     const [waterSampling, setWaterSampling] = useState('');
     const [levad, setLevad] = useState('');
     const [shelter, setShelter] = useState('');
-    const [userLocation, error] = useLocation();
     const [showPopup, setShowPopup] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
+    const inputRef = useRef(null);
+    const autocompleteRef = useRef(null);
+
+    useEffect(() => {
+        if (window.google && window.google.maps && window.google.maps.places && !autocompleteRef.current) {
+            autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, {
+                types: ['geocode'],
+            });
+            autocompleteRef.current.addListener('place_changed', handlePlaceSelect);
+        }
+    }, []);
+
+    const handlePlaceSelect = () => {
+        if (autocompleteRef.current) {
+            const addressObject = autocompleteRef.current.getPlace();
+            if (addressObject && addressObject.formatted_address) {
+                setSearchInput(addressObject.formatted_address);
+            }
+        }
+    };
 
     const handleSearch = async (e) => {
         e.preventDefault();
     
         const searchTerm = searchInput.trim().toLowerCase();
     
-        let searchLocation = userLocation || { lat: 31.7683, lng: 35.2137 }; // Default to Jerusalem
+        let searchLocation = userLocation;
         
         if (searchType === 'address' && searchTerm) {
-            const geocodedLocation = await geocodeAddress(searchTerm);
-            if (geocodedLocation) {
-                searchLocation = geocodedLocation;
+            if (autocompleteRef.current) {
+                const addressObject = autocompleteRef.current.getPlace();
+                if (addressObject && addressObject.geometry) {
+                    searchLocation = {
+                        lat: addressObject.geometry.location.lat(),
+                        lng: addressObject.geometry.location.lng()
+                    };
+                } else {
+                    setPopupMessage('לא הצלחנו למצוא את הכתובת. אנא נסי להכניס כתובת יותר מפורטת.');
+                    setShowPopup(true);
+                    return;
+                }
             } else {
-                setPopupMessage('לא הצלחנו למצוא את הכתובת. אנא נסי להכניס כתובת יותר מפורטת.');
+                setPopupMessage('מערכת החיפוש לא זמינה כרגע. אנא נסי שוב מאוחר יותר.');
                 setShowPopup(true);
                 return;
             }
@@ -71,18 +97,21 @@ const UserSearchForm = ({ setFilteredMikves, allMikves }) => {
     
         const sortedMikves = mikvesWithDistances.sort((a, b) => a.distance - b.distance);
     
-        setFilteredMikves(sortedMikves);
+        setFilteredMikves(sortedMikves.slice(0, displayCount));
+        onSearch(searchTerm, searchLocation);
     };
 
     const closePopup = () => {
         setShowPopup(false);
     };
 
+
     return (
         <>
             <form className="search-form" onSubmit={handleSearch}>
                 <div className="search-bar-container">
                     <input
+                        ref={inputRef}
                         type="text"
                         placeholder={searchType === 'name' ? "שם המקווה" : "עיר או רחוב"}
                         value={searchInput}

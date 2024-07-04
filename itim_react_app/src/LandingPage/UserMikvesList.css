@@ -146,6 +146,23 @@
     opacity: 0.8;
 }
 
+.load-more-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #00aec6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.load-more-button:hover {
+    background-color: #008fa3;
+}
+
 @media (max-width: 768px) {
     .mikves-list-container {
         width: 100%;

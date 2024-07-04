@@ -1,89 +1,73 @@
 import './Map.css';
-import React, { useState, useEffect, useRef } from 'react';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { GoogleMap, InfoWindow } from '@react-google-maps/api';
 
-const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API;
-
-const defaultCenter = {
-    lat: 31.7683,
-    lng: 35.2137, // Jerusalem coordinates
+const mapContainerStyle = {
+    width: '100%',
+    height: '100%',
 };
 
-const Map = () => {
-    const [location, setLocation] = useState(null);
-    const [isLocationError, setIsLocationError] = useState(false);
-    const [mapCenter, setMapCenter] = useState(defaultCenter);
-    const [mapZoom, setMapZoom] = useState(10);
-    const [mapKey, setMapKey] = useState(0); // unique key to force re-render
+const Map = ({ mikves, userLocation, searchLocation, children }) => {
+    console.log('Map rendered');
+    console.log('Children:', children);
+
+    const [selectedMikve, setSelectedMikve] = useState(null);
     const mapRef = useRef(null);
 
-    useEffect(() => {
-        const getLocation = () => {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const { latitude, longitude } = position.coords;
-                        setLocation({ lat: latitude, lng: longitude });
-                        setMapCenter({ lat: latitude, lng: longitude });
-                        setMapZoom(15);
-                    },
-                    (error) => {
-                        console.error('Error getting location:', error);
-                        setIsLocationError(true);
-                        setLocation(defaultCenter);
-                        setMapCenter(defaultCenter);
-                        setMapZoom(10);
-                    },
-                    { timeout: 10000 } // Optional: Add timeout to handle cases where location fetching takes too long
-                );
-            } else {
-                console.error('Geolocation is not supported by this browser.');
-                setIsLocationError(true);
-                setLocation(defaultCenter);
-                setMapCenter(defaultCenter);
-                setMapZoom(10);
-            }
-        };
+    const forcedZoom = 14;
 
-        getLocation();
+    const onLoad = useCallback(function callback(map) {
+        console.log('Map loaded');
+        mapRef.current = map;
     }, []);
 
-    const handleResetMap = () => {
-        if (location) {
-            setMapCenter(location);
-            setMapZoom(15);
-        } else {
-            setMapCenter(defaultCenter);
-            setMapZoom(10);
+    useEffect(() => {
+        if (mapRef.current) {
+            const newCenter = searchLocation || userLocation || { lat: 31.7683, lng: 35.2137 };
+            console.log('Panning to:', newCenter);
+            mapRef.current.panTo(newCenter);
+            mapRef.current.setZoom(forcedZoom);
         }
-        setMapKey((prevKey) => prevKey + 1); // increment key to force re-render
+    }, [userLocation, searchLocation, mikves]);
+
+    const handleMarkerClick = (mikve) => {
+        console.log('Marker clicked:', mikve);
+        setSelectedMikve(mikve);
+    };
+
+    const handleInfoWindowClose = () => {
+        setSelectedMikve(null);
     };
 
     return (
         <div className="map-container">
-            <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY}>
-                <GoogleMap
-                    key={mapKey} // use unique key to force re-render
-                    ref={mapRef}
-                    mapContainerClassName="map"
-                    center={mapCenter}
-                    zoom={mapZoom}
-                    options={{
-                        disableDefaultUI: true,
-                        zoomControl: true,
-                    }}
-                >
-                    {location && <Marker position={location} />}
-                </GoogleMap>
-            </LoadScript>
-            {isLocationError && (
-                <div className="location-error-message">
-                    Unable to fetch location. Showing default location (Jerusalem).
-                </div>
-            )}
-            <button className="reset-map-button" onClick={handleResetMap}>
-                איפוס המפה
-            </button>
+            <GoogleMap
+                mapContainerStyle={mapContainerStyle}
+                center={searchLocation || userLocation || { lat: 31.7683, lng: 35.2137 }}
+                zoom={forcedZoom}
+                onLoad={onLoad}
+                options={{
+                    disableDefaultUI: true,
+                    zoomControl: true,
+                }}
+            >
+                {React.Children.map(children, child => {
+                    console.log('Rendering child:', child);
+                    return React.cloneElement(child, { onClick: () => handleMarkerClick(child.props.mikve) });
+                })}
+                {selectedMikve && (
+                    <InfoWindow
+                        position={{ lat: selectedMikve.position.latitude, lng: selectedMikve.position.longitude }}
+                        onCloseClick={handleInfoWindowClose}
+                    >
+                        <div>
+                            <h2>{selectedMikve.name}</h2>
+                            <p>{selectedMikve.address}</p>
+                            <p>{selectedMikve.city}</p>
+                        </div>
+                    </InfoWindow>
+                )}
+            </GoogleMap>
         </div>
     );
 };

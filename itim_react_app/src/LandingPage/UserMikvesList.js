@@ -1,7 +1,7 @@
 import './UserMikvesList.css';
 import React, { useState } from 'react';
 
-const UserMikvesList = ({ mikves }) => {
+const UserMikvesList = ({ mikves, loadMore }) => {
     const [selectedMikve, setSelectedMikve] = useState(null);
 
     const handleShowDetails = (mikve) => {
@@ -37,6 +37,7 @@ const UserMikvesList = ({ mikves }) => {
                     </div>
                 ))}
             </div>
+            <button onClick={loadMore} className="load-more-button">טען עוד</button>
 
             {selectedMikve && (
                 <div className="mikve-popup">
