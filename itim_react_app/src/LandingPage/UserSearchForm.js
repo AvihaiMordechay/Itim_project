@@ -36,15 +36,9 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
         e.preventDefault();
 
         const searchTerm = searchInput.trim().toLowerCase();
-<<<<<<< HEAD
-    
+
         let searchLocation = userLocation;
-        
-=======
 
-        let searchLocation = userLocation || { lat: 31.7683, lng: 35.2137 }; // Default to Jerusalem
-
->>>>>>> Avihai_branch
         if (searchType === 'address' && searchTerm) {
             try {
                 let addressObject;
@@ -120,14 +114,9 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
         }));
 
         const sortedMikves = mikvesWithDistances.sort((a, b) => a.distance - b.distance);
-<<<<<<< HEAD
-    
+
         setFilteredMikves(sortedMikves.slice(0, displayCount));
         onSearch(searchTerm, searchLocation);
-=======
-
-        setFilteredMikves(sortedMikves);
->>>>>>> Avihai_branch
     };
 
     const closePopup = () => {
@@ -174,16 +163,16 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                         </select>
                     </div>
                     <div className="select-box">
-                        <label className="select-header">מצב תבאורה</label>
+                        <label className="select-header">בדיקת מים</label>
                         <select
                             value={waterSampling}
                             onChange={(e) => setWaterSampling(e.target.value)}
                             className="select-input"
                         >
                             <option value="">בחר</option>
-                            <option value="0">לא נבדק</option>
-                            <option value="1">נבדק ותקין</option>
-                            <option value="2">נבדק ולא תקין</option>
+                            <option value="0">ללא בדיקה</option>
+                            <option value="1">בדיקה לא תקינה</option>
+                            <option value="2">בדיקה תקינה</option>
                         </select>
                     </div>
                     <div className="select-box">
