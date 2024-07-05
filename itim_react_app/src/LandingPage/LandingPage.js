@@ -14,11 +14,12 @@ const libraries = ['places'];
 
 
 const LandingPage = () => {
+    let NUM_OF_MIKVES = 15;
     const [allMikves, setAllMikves] = useState([]);
     const [filteredMikves, setFilteredMikves] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
     const [searchLocation, setSearchLocation] = useState(null);
-    const [displayCount, setDisplayCount] = useState(50);
+    const [displayCount, setDisplayCount] = useState(NUM_OF_MIKVES);
     const [isLoading, setIsLoading] = useState(true);
 
     const { isLoaded, loadError } = useLoadScript({
@@ -75,9 +76,9 @@ const LandingPage = () => {
     const sortAndFilterMikves = (mikves, location) => {
         const mikvesWithDistances = mikves.map(mikve => ({
             ...mikve,
-            distance: calculateDistance(location, { 
-                lat: mikve.position?.latitude || 0, 
-                lng: mikve.position?.longitude || 0 
+            distance: calculateDistance(location, {
+                lat: mikve.position?.latitude || 0,
+                lng: mikve.position?.longitude || 0
             })
         }));
         const sortedMikves = mikvesWithDistances.sort((a, b) => a.distance - b.distance);
@@ -85,8 +86,8 @@ const LandingPage = () => {
     };
 
     const loadMore = () => {
-        setDisplayCount(prevCount => prevCount + 50);
-        setFilteredMikves(allMikves.slice(0, displayCount + 50));
+        setDisplayCount(prevCount => prevCount + NUM_OF_MIKVES);
+        setFilteredMikves(allMikves.slice(0, displayCount + NUM_OF_MIKVES));
     };
 
     const handleSearch = (searchTerm, location) => {
@@ -101,18 +102,18 @@ const LandingPage = () => {
         <div className="landing-page">
             <UserHeader />
             <div className="user-main-content">
-                <UserSearchForm 
-                    setFilteredMikves={setFilteredMikves} 
-                    allMikves={allMikves} 
+                <UserSearchForm
+                    setFilteredMikves={setFilteredMikves}
+                    allMikves={allMikves}
                     userLocation={userLocation}
                     displayCount={displayCount}
                     onSearch={handleSearch}
                 />
                 <div className="map-and-list">
-                    <Map 
-                        mikves={filteredMikves} 
-                        userLocation={userLocation} 
-                        searchLocation={searchLocation} 
+                    <Map
+                        mikves={filteredMikves}
+                        userLocation={userLocation}
+                        searchLocation={searchLocation}
                     />
                     <UserMikvesList mikves={filteredMikves} loadMore={loadMore} />
                 </div>

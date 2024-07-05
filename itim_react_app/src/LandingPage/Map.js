@@ -40,16 +40,6 @@ const Map = ({ mikves, userLocation, searchLocation }) => {
         }
     }, [userLocation, searchLocation, mikves]);
 
-    const handleResetMap = () => {
-        if (userLocation) {
-            setMapCenter(userLocation);
-        } else {
-            setMapCenter(defaultCenter);
-        }
-        setMapZoom(10);
-        setMapKey((prevKey) => prevKey + 1);
-    };
-
     const handleMarkerClick = (mikve) => {
         console.log('Marker clicked:', mikve);
         setSelectedMikve(mikve);
@@ -66,7 +56,6 @@ const Map = ({ mikves, userLocation, searchLocation }) => {
     if (!isLoaded) {
         return <div className="map-loading">Loading maps</div>;
     }
-
     return (
         <div className="map-container">
             <GoogleMap
@@ -109,9 +98,6 @@ const Map = ({ mikves, userLocation, searchLocation }) => {
                     </InfoWindow>
                 )}
             </GoogleMap>
-            <button className="reset-map-button" onClick={handleResetMap}>
-                איפוס המפה
-            </button>
         </div>
     );
 };
