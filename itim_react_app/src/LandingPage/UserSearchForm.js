@@ -34,11 +34,17 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
 
     const handleSearch = async (e) => {
         e.preventDefault();
-    
+
         const searchTerm = searchInput.trim().toLowerCase();
+<<<<<<< HEAD
     
         let searchLocation = userLocation;
         
+=======
+
+        let searchLocation = userLocation || { lat: 31.7683, lng: 35.2137 }; // Default to Jerusalem
+
+>>>>>>> Avihai_branch
         if (searchType === 'address' && searchTerm) {
             try {
                 let addressObject;
@@ -76,21 +82,21 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                 return;
             }
         }
-    
+
         const filteredMikves = allMikves.filter(mikve => {
-            const nameMatches = searchType === 'name' 
-                ? mikve.name.toLowerCase().includes(searchTerm) 
+            const nameMatches = searchType === 'name'
+                ? mikve.name.toLowerCase().includes(searchTerm)
                 : true;
-            
-            const accessibilityMatches = 
+
+            const accessibilityMatches =
                 accessibility === '' ||
                 (accessibility === '0' && mikve.general_accessibility === '0') ||
                 (accessibility === '1' && ['1', '2'].includes(mikve.general_accessibility)) ||
                 (accessibility === '2' && mikve.general_accessibility === '2');
-            
+
             const waterSamplingMatches = waterSampling === '' || mikve.water_sampling === waterSampling;
             const levadMatches = levad === '' || mikve.levad.toString() === levad;
-            const shelterMatches = 
+            const shelterMatches =
                 shelter === '' ||
                 (shelter === '0' && mikve.general_shelter === '0') ||
                 (shelter === '1' && ['1', '2'].includes(mikve.general_shelter)) ||
@@ -104,19 +110,24 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
             setShowPopup(true);
             return;
         }
-    
+
         const mikvesWithDistances = filteredMikves.map(mikve => ({
             ...mikve,
-            distance: calculateDistance(searchLocation, { 
-                lat: mikve.position?.latitude || 0, 
-                lng: mikve.position?.longitude || 0 
+            distance: calculateDistance(searchLocation, {
+                lat: mikve.position?.latitude || 0,
+                lng: mikve.position?.longitude || 0
             })
         }));
-    
+
         const sortedMikves = mikvesWithDistances.sort((a, b) => a.distance - b.distance);
+<<<<<<< HEAD
     
         setFilteredMikves(sortedMikves.slice(0, displayCount));
         onSearch(searchTerm, searchLocation);
+=======
+
+        setFilteredMikves(sortedMikves);
+>>>>>>> Avihai_branch
     };
 
     const closePopup = () => {
@@ -137,9 +148,9 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                     />
                     <div className="select-box">
                         <label className="select-header">סוג חיפוש</label>
-                        <select 
-                            value={searchType} 
-                            onChange={(e) => setSearchType(e.target.value)} 
+                        <select
+                            value={searchType}
+                            onChange={(e) => setSearchType(e.target.value)}
                             className="select-input"
                         >
                             <option value="address">חיפוש לפי כתובת</option>
@@ -163,16 +174,16 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                         </select>
                     </div>
                     <div className="select-box">
-                        <label className="select-header">בדיקת מים</label>
-                        <select 
-                            value={waterSampling} 
-                            onChange={(e) => setWaterSampling(e.target.value)} 
+                        <label className="select-header">מצב תבאורה</label>
+                        <select
+                            value={waterSampling}
+                            onChange={(e) => setWaterSampling(e.target.value)}
                             className="select-input"
                         >
                             <option value="">בחר</option>
-                            <option value="0">ללא בדיקה</option>
-                            <option value="1">בדיקה לא תקינה</option>
-                            <option value="2">בדיקה תקינה</option>
+                            <option value="0">לא נבדק</option>
+                            <option value="1">נבדק ותקין</option>
+                            <option value="2">נבדק ולא תקין</option>
                         </select>
                     </div>
                     <div className="select-box">
