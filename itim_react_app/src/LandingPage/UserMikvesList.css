@@ -1,10 +1,10 @@
 .mikves-list-container {
     width: 100%;
-    height: calc(100vh - 250px); /* Adjust based on your header/footer height */
+    height: calc(100vh - 250px);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 20px;
+    padding: 20px 20px 10px 20px;
     box-sizing: border-box;
     background-color: #a1c5db;
     border-radius: 8px;
@@ -148,7 +148,8 @@
 
 .load-more-button {
     display: block;
-    margin: 20px auto;
+    margin-top: 10px;
+    /* margin: 20px auto; */
     padding: 10px 20px;
     background-color: #00aec6;
     color: white;
