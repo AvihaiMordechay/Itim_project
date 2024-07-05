@@ -1,8 +1,9 @@
+// LandingPage.js
 import './LandingPage.css';
 import { useState, useEffect } from 'react';
 import { useLoadScript } from '@react-google-maps/api';
 import UserMikvesList from './UserMikvesList';
-import MapWithMarkers from './MapWithMarkers';
+import { Map } from './Map';  // Updated import
 import { UserHeader } from './UserHeader';
 import UserSearchForm from './UserSearchForm';
 import { db } from "../Firebase";
@@ -10,6 +11,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { calculateDistance } from '../utils/distance';
 
 const libraries = ['places'];
+
 
 const LandingPage = () => {
     const [allMikves, setAllMikves] = useState([]);
@@ -107,7 +109,7 @@ const LandingPage = () => {
                     onSearch={handleSearch}
                 />
                 <div className="map-and-list">
-                    <MapWithMarkers 
+                    <Map 
                         mikves={filteredMikves} 
                         userLocation={userLocation} 
                         searchLocation={searchLocation} 

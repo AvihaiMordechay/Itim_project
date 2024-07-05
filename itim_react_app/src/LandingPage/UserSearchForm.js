@@ -40,20 +40,38 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
         let searchLocation = userLocation;
         
         if (searchType === 'address' && searchTerm) {
-            if (autocompleteRef.current) {
-                const addressObject = autocompleteRef.current.getPlace();
+            try {
+                let addressObject;
+                if (autocompleteRef.current) {
+                    addressObject = autocompleteRef.current.getPlace();
+                }
+
                 if (addressObject && addressObject.geometry) {
                     searchLocation = {
                         lat: addressObject.geometry.location.lat(),
                         lng: addressObject.geometry.location.lng()
                     };
                 } else {
-                    setPopupMessage('לא הצלחנו למצוא את הכתובת. אנא נסי להכניס כתובת יותר מפורטת.');
-                    setShowPopup(true);
-                    return;
+                    // If autocomplete didn't provide a result, use Geocoding API
+                    const geocoder = new window.google.maps.Geocoder();
+                    const result = await new Promise((resolve, reject) => {
+                        geocoder.geocode({ address: searchTerm }, (results, status) => {
+                            if (status === 'OK') {
+                                resolve(results[0]);
+                            } else {
+                                reject(status);
+                            }
+                        });
+                    });
+
+                    searchLocation = {
+                        lat: result.geometry.location.lat(),
+                        lng: result.geometry.location.lng()
+                    };
                 }
-            } else {
-                setPopupMessage('מערכת החיפוש לא זמינה כרגע. אנא נסי שוב מאוחר יותר.');
+            } catch (error) {
+                console.error('Geocoding error:', error);
+                setPopupMessage('לא הצלחנו למצוא את הכתובת. אנא נסי להכניס כתובת יותר מפורטת.');
                 setShowPopup(true);
                 return;
             }
@@ -81,8 +99,8 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
             return nameMatches && accessibilityMatches && waterSamplingMatches && levadMatches && shelterMatches;
         });
 
-        if (filteredMikves.length === 0 && searchType === 'name') {
-            setPopupMessage('לא הצלחנו למצוא מקוואות המתאימות לשם זה. אנא נסי שנית או חפשי לפי כתובת.');
+        if (filteredMikves.length === 0) {
+            setPopupMessage('לא הצלחנו למצוא מקוואות המתאימות לחיפוש שלך. אנא נסי שנית.');
             setShowPopup(true);
             return;
         }
@@ -104,7 +122,6 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
     const closePopup = () => {
         setShowPopup(false);
     };
-
 
     return (
         <>
