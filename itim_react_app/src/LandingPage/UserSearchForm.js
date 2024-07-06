@@ -1,3 +1,4 @@
+// UserSearchForm.js
 import React, { useState, useEffect, useRef } from 'react';
 import { calculateDistance } from '../utils/distance';
 import './UserSearchForm.css';
@@ -11,13 +12,33 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
     const [shelter, setShelter] = useState('');
     const [showPopup, setShowPopup] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
+    const [showInstruction, setShowInstruction] = useState(false);
     const inputRef = useRef(null);
     const autocompleteRef = useRef(null);
+
+    const popupRef = useRef(null);
+
+    const positionAutocompletePopup = () => {
+        const inputElement = inputRef.current;
+        const popup = popupRef.current;
+        if (inputElement && popup) {
+            const rect = inputElement.getBoundingClientRect();
+            const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+            popup.style.top = `${rect.top + scrollTop - popup.offsetHeight - 5}px`;
+            popup.style.left = `${rect.left + scrollLeft}px`;
+            popup.style.width = `${rect.width*0.9}px`;
+        }
+    };
 
     useEffect(() => {
         if (window.google && window.google.maps && window.google.maps.places && !autocompleteRef.current) {
             autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, {
                 types: ['geocode'],
+                componentRestrictions: { country: 'il' }, // Restrict to Israel
+                fields: ['address_components', 'geometry', 'name'],
+                strictBounds: false,
             });
             autocompleteRef.current.addListener('place_changed', handlePlaceSelect);
         }
@@ -28,12 +49,24 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
             const addressObject = autocompleteRef.current.getPlace();
             if (addressObject && addressObject.formatted_address) {
                 setSearchInput(addressObject.formatted_address);
+                setShowInstruction(false);
             }
         }
     };
 
+    const handleInputChange = (e) => {
+        setSearchInput(e.target.value);
+        setShowInstruction(e.target.value.length > 0 && searchType === 'address');
+    };
+
     const handleSearch = async (e) => {
         e.preventDefault();
+
+        if (searchType === 'address' && !autocompleteRef.current.getPlace()) {
+            setPopupMessage('אנא בחרי כתובת מהרשימה המוצעת');
+            setShowPopup(true);
+            return;
+        }
 
         const searchTerm = searchInput.trim().toLowerCase();
 
@@ -127,14 +160,18 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
         <>
             <form className="search-form" onSubmit={handleSearch}>
                 <div className="search-bar-container">
-                    <input
-                        ref={inputRef}
-                        type="text"
-                        placeholder={searchType === 'name' ? "שם המקווה" : "עיר או רחוב"}
-                        value={searchInput}
-                        onChange={(e) => setSearchInput(e.target.value)}
-                        className="search-bar"
-                    />
+                    <div className="search-input-wrapper">
+                        <input
+                            ref={inputRef}
+                            type="text"
+                            placeholder={searchType === 'name' ? "שם המקווה" : "עיר או רחוב"}
+                            value={searchInput}
+                            onChange={handleInputChange}
+                            className="search-bar"
+                            autoComplete="off"
+                        />
+                        
+                    </div>
                     <div className="select-box">
                         <label className="select-header">סוג חיפוש</label>
                         <select
@@ -194,6 +231,11 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                     </div>
                 </div>
             </form>
+            {showInstruction && searchType === 'address' && (
+                <div ref={popupRef} className="autocomplete-popup">
+                    אנא בחרי כתובת מהרשימה המוצעת
+                </div>
+            )}
 
             {showPopup && (
                 <div className="popup">
