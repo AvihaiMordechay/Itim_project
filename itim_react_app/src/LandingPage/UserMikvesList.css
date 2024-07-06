@@ -1,3 +1,5 @@
+/* UserMikvesList.css */
+
 .mikves-list-container {
     width: 100%;
     height: calc(100vh - 250px);
@@ -43,7 +45,6 @@
     margin-bottom: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     flex-direction: column;
-    /* align-content: flex-end; */
     align-items: stretch;
 }
 
@@ -51,8 +52,8 @@
     display: flex;
     margin: 5px 0;
     justify-content: flex-end;
-
 }
+
 .mikve-item button {
     background-color: #00aec6;
     color: #fff;
@@ -88,68 +89,9 @@
     background: #555;
 }
 
-/* Add these styles to your existing UserMikvesList.css */
-
-.mikve-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.mikve-popup-content {
-    display: flex;
-    background-color: white;
-    padding: 0px 20px 20px 20px;
-    border-radius: 8px;
-    max-width: 80%;
-    max-height: 80%;
-    overflow-y: auto;
-    position: relative;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-.close-popup {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: white;
-    background-color: #605371;
-}
-
-.close-popup:hover{
-    background-color: #4a3f5a;
-}
-
-.mikve-map {
-    margin-top: 20px;
-    cursor: pointer;
-}
-
-.mikve-map img {
-    max-width: 100%;
-    border-radius: 8px;
-}
-
-.mikve-map:hover {
-    opacity: 0.8;
-}
-
 .load-more-button {
     display: block;
     margin-top: 10px;
-    /* margin: 20px auto; */
     padding: 10px 20px;
     background-color: #00aec6;
     color: white;
@@ -172,4 +114,3 @@
         max-height: 50vh;
     }
 }
-

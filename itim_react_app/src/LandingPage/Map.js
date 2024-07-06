@@ -1,7 +1,8 @@
 // Map.js
-import './Map.css';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
+import MikveDetailsPopup from './MikveDetailsPopup';
+import './Map.css';
 
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API;
 
@@ -24,6 +25,7 @@ const Map = ({ mikves, userLocation, searchLocation }) => {
     const [mapZoom, setMapZoom] = useState(10);
     const [selectedMikve, setSelectedMikve] = useState(null);
     const [mapKey, setMapKey] = useState(0);
+    const [showDetailsPopup, setShowDetailsPopup] = useState(false);
     const mapRef = useRef(null);
 
     const onLoad = useCallback(function callback(map) {
@@ -47,6 +49,15 @@ const Map = ({ mikves, userLocation, searchLocation }) => {
 
     const handleCloseInfoWindow = () => {
         setSelectedMikve(null);
+    };
+
+    const handleShowDetails = (mikve) => {
+        setSelectedMikve(mikve);
+        setShowDetailsPopup(true);
+    };
+
+    const handleCloseDetailsPopup = () => {
+        setShowDetailsPopup(false);
     };
 
     if (loadError) {
@@ -84,20 +95,25 @@ const Map = ({ mikves, userLocation, searchLocation }) => {
                         }}
                     />
                 )}
-                {selectedMikve && (
-                    <InfoWindow
-                        position={{ lat: selectedMikve.position.latitude, lng: selectedMikve.position.longitude }}
-                        onCloseClick={handleCloseInfoWindow}
-                    >
-                        <div>
-                            <h3>מקווה</h3>
-                            <p>{selectedMikve.name}</p>
-                            <p>{selectedMikve.address}</p>
-                            <p>{selectedMikve.city}</p>
-                        </div>
-                    </InfoWindow>
+                   {selectedMikve && (
+                   <InfoWindow
+                   position={{ lat: selectedMikve.position.latitude, lng: selectedMikve.position.longitude }}
+                   onCloseClick={handleCloseInfoWindow}
+                 >
+                   <div className="marker-info-window">
+                     <h3>מקווה</h3>
+                     <p><strong>{selectedMikve.name}</strong></p>
+                     <p>{selectedMikve.address}</p>
+                     <p>{selectedMikve.city}</p>
+                     <button onClick={() => handleShowDetails(selectedMikve)}>מידע נוסף</button>
+                   </div>
+                 </InfoWindow>
                 )}
             </GoogleMap>
+            
+            {showDetailsPopup && selectedMikve && (
+    <           MikveDetailsPopup mikve={selectedMikve} onClose={handleCloseDetailsPopup} />
+            )}
         </div>
     );
 };
