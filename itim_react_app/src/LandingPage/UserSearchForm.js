@@ -33,19 +33,24 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
     };
 
     useEffect(() => {
-        if (window.google && window.google.maps && window.google.maps.places && !autocompleteRef.current) {
-            autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, {
-                types: ['geocode'],
-                componentRestrictions: { country: 'il' }, // Restrict to Israel
-                fields: ['address_components', 'geometry', 'name'],
-                strictBounds: false,
-            });
+        if (searchType === 'address' && window.google && window.google.maps && window.google.maps.places) {
+            if (!autocompleteRef.current) {
+                autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, {
+                    types: ['geocode'],
+                    componentRestrictions: { country: 'il' },
+                    fields: ['address_components', 'geometry', 'name'],
+                    strictBounds: false,
+                });
+            }
             autocompleteRef.current.addListener('place_changed', handlePlaceSelect);
+        } else if (searchType === 'name' && autocompleteRef.current) {
+            window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
+            autocompleteRef.current = null;
         }
-    }, []);
+    }, [searchType]);
 
     const handlePlaceSelect = () => {
-        if (autocompleteRef.current) {
+        if (autocompleteRef.current && searchType === 'address') {
             const addressObject = autocompleteRef.current.getPlace();
             if (addressObject && addressObject.formatted_address) {
                 setSearchInput(addressObject.formatted_address);
@@ -62,28 +67,27 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
     const handleSearch = async (e) => {
         e.preventDefault();
 
-        if (searchType === 'address' && !autocompleteRef.current.getPlace()) {
-            setPopupMessage('אנא בחרי כתובת מהרשימה המוצעת');
-            setShowPopup(true);
-            return;
-        }
-
         const searchTerm = searchInput.trim().toLowerCase();
 
-        let searchLocation = userLocation;
+        if (searchType === 'name') {
+            const filteredMikves = allMikves.filter(mikve => 
+                mikve.name.toLowerCase().includes(searchTerm)
+            );
+            const searchLocation = userLocation || { lat: 31.7683, lng: 35.2137 }; // Default to Jerusalem if no user location
+            handleFilteredMikves(filteredMikves, searchLocation);
+            onSearch(searchTerm, null); // Pass null for location in name search
+        } else {
+            let searchLocation = userLocation;
 
-        if (searchType === 'address' && searchTerm) {
             try {
-                let addressObject;
-                if (autocompleteRef.current) {
-                    addressObject = autocompleteRef.current.getPlace();
-                }
-
-                if (addressObject && addressObject.geometry) {
-                    searchLocation = {
-                        lat: addressObject.geometry.location.lat(),
-                        lng: addressObject.geometry.location.lng()
-                    };
+                if (autocompleteRef.current && autocompleteRef.current.getPlace()) {
+                    const addressObject = autocompleteRef.current.getPlace();
+                    if (addressObject && addressObject.geometry) {
+                        searchLocation = {
+                            lat: addressObject.geometry.location.lat(),
+                            lng: addressObject.geometry.location.lng()
+                        };
+                    }
                 } else {
                     // If autocomplete didn't provide a result, use Geocoding API
                     const geocoder = new window.google.maps.Geocoder();
@@ -102,6 +106,9 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                         lng: result.geometry.location.lng()
                     };
                 }
+
+                handleFilteredMikves(allMikves, searchLocation);
+                onSearch(searchTerm, searchLocation);
             } catch (error) {
                 console.error('Geocoding error:', error);
                 setPopupMessage('לא הצלחנו למצוא את הכתובת. אנא נסי להכניס כתובת יותר מפורטת.');
@@ -109,12 +116,10 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                 return;
             }
         }
+    };
 
-        const filteredMikves = allMikves.filter(mikve => {
-            const nameMatches = searchType === 'name'
-                ? mikve.name.toLowerCase().includes(searchTerm)
-                : true;
-
+    const handleFilteredMikves = (mikves, location) => {
+        const filteredMikves = mikves.filter(mikve => {
             const accessibilityMatches =
                 accessibility === '' ||
                 (accessibility === '0' && mikve.general_accessibility === '0') ||
@@ -129,28 +134,29 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                 (shelter === '1' && ['1', '2'].includes(mikve.general_shelter)) ||
                 (shelter === '2' && mikve.general_shelter === '2');
 
-            return nameMatches && accessibilityMatches && waterSamplingMatches && levadMatches && shelterMatches;
+            return accessibilityMatches && waterSamplingMatches && levadMatches && shelterMatches;
         });
 
         if (filteredMikves.length === 0) {
-            setPopupMessage('לא הצלחנו למצוא מקוואות המתאימות לחיפוש שלך. אנא נסי שנית.');
-            setShowPopup(true);
-            return;
-        }
+        setPopupMessage('לא הצלחנו למצוא מקוואות המתאימות לחיפוש שלך. אנא נסי שנית.');
+        setShowPopup(true);
+        return;
+    }
 
-        const mikvesWithDistances = filteredMikves.map(mikve => ({
-            ...mikve,
-            distance: calculateDistance(searchLocation, {
-                lat: mikve.position?.latitude || 0,
-                lng: mikve.position?.longitude || 0
-            })
-        }));
+    const mikvesWithDistances = filteredMikves.map(mikve => ({
+        ...mikve,
+        distance: location ? calculateDistance(location, {
+            lat: mikve.position?.latitude || 0,
+            lng: mikve.position?.longitude || 0
+        }) : 0
+    }));
 
-        const sortedMikves = mikvesWithDistances.sort((a, b) => a.distance - b.distance);
+    const sortedMikves = location 
+        ? mikvesWithDistances.sort((a, b) => a.distance - b.distance)
+        : mikvesWithDistances;
 
-        setFilteredMikves(sortedMikves.slice(0, displayCount));
-        onSearch(searchTerm, searchLocation);
-    };
+    setFilteredMikves(sortedMikves.slice(0, displayCount));
+};
 
     const closePopup = () => {
         setShowPopup(false);
@@ -168,9 +174,8 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                             value={searchInput}
                             onChange={handleInputChange}
                             className="search-bar"
-                            autoComplete="off"
+                            autoComplete={searchType === 'name' ? 'on' : 'off'}
                         />
-                        
                     </div>
                     <div className="select-box">
                         <label className="select-header">סוג חיפוש</label>
