@@ -19,7 +19,6 @@ const UserMikvesList = ({ mikves, loadMore }) => {
 
     return (
         <div className="mikves-list-container">
-            <h3 className="list-header">מקוואות שמצאנו עבורך</h3>
             <div className="list">
                 {mikves.map(mikve => (
                     <div key={mikve.id} className="mikve-item">

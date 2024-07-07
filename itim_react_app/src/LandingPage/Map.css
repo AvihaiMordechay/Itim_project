@@ -1,8 +1,9 @@
 /* Map.css */
 
+/* Map.css */
 .map-container {
     width: 100%;
-    height: calc(100vh - 250px); /* Adjust based on your header/footer height */
+    height: 100%;
     position: relative;
 }
 

@@ -16,6 +16,69 @@ const mapContainerStyle = {
     height: '100%',
 };
 
+const mapStyles = [
+    {
+        featureType: "all",
+        elementType: "geometry",
+        stylers: [{ color: "#f0f0f0" }] // Light base color
+    },
+    {
+        featureType: "water",
+        elementType: "geometry",
+        stylers: [{ color: "#a1c5db" }] // Soft blue for water
+    },
+    {
+        featureType: "landscape",
+        elementType: "geometry",
+        stylers: [{ color: "#e8f0e8" }] // Very light green for landscape
+    },
+    {
+        featureType: "road",
+        elementType: "geometry",
+        stylers: [{ color: "#ffffff" }] // White for roads
+    },
+    {
+        featureType: "road.arterial",
+        elementType: "geometry",
+        stylers: [{ color: "#fde9d9" }] // Light peach for arterial roads
+    },
+    {
+        featureType: "road.highway",
+        elementType: "geometry",
+        stylers: [{ color: "#fcd2a6" }] // Darker peach for highways
+    },
+    {
+        featureType: "poi",
+        elementType: "geometry",
+        stylers: [{ color: "#d0e8d0" }] // Light green for points of interest
+    },
+    {
+        featureType: "transit",
+        elementType: "geometry",
+        stylers: [{ color: "#e5d5eb" }] // Light purple for transit
+    },
+    {
+        featureType: "administrative",
+        elementType: "geometry.stroke",
+        stylers: [{ color: "#c9c9c9" }] // Light grey for administrative boundaries
+    },
+    {
+        featureType: "administrative",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#444444" }] // Dark grey for administrative labels
+    },
+    {
+        featureType: "poi",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#565656" }] // Darker grey for POI labels
+    },
+    {
+        featureType: "water",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#4a6b8b" }] // Dark blue for water labels
+    }
+];
+
 const Map = ({ mikves, userLocation, searchLocation }) => {
     const { isLoaded, loadError } = useJsApiLoader({
         googleMapsApiKey: GOOGLE_MAPS_API_KEY,
@@ -78,6 +141,7 @@ const Map = ({ mikves, userLocation, searchLocation }) => {
                 options={{
                     disableDefaultUI: true,
                     zoomControl: true,
+                    styles: mapStyles,
                 }}
             >
                 {mikves.map((mikve) => (
