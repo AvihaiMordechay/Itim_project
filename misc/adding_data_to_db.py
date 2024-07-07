@@ -16,7 +16,8 @@ def reverse_hebrew_text(text):
 
 def get_coordinates(address):
     # Prepare the request URL
-    url = f'https://maps.googleapis.com/maps/api/geocode/json?address={address}&key={API_KEY}'
+    url = f'https://maps.googleapis.com/maps/api/geocode/json?address={
+        address}&key={API_KEY}'
 
     # Send the request
     response = requests.get(url)
