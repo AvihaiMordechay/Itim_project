@@ -133,12 +133,13 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                 ids: [...prevData.ids, newId.trim()],
             }));
             setNewId("");
+
         }
     };
 
 
     const handleDeleteId = (index) => {
-        // Create a copy of the ids array without the item at the specified index
+        // Create a copy of the ids array without the item at the spec  ified index
         const updatedIds = tempData.ids.filter((_, i) => i !== index);
 
         // Update the state with the new array of ids

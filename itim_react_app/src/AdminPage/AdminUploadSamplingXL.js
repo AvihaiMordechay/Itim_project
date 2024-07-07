@@ -10,6 +10,7 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
     const [fileName, setFileName] = useState('');
     const [mikveUploadPopup, setMikveUploadPopup] = useState(false);
     const [sanitationData, setSanitationData] = useState([]);
+    const [errorUploadMessage, setErrorUploadMessage] = useState('');
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -33,11 +34,37 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
             const workbook = XLSX.read(data, { type: 'array' });
             const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
             const jsonData = XLSX.utils.sheet_to_json(firstSheet);
-            initSanitationData(jsonData);
+            if (checkXlFile(jsonData)) {
+                initSanitationData(jsonData);
+            } else {
+                setErrorUploadMessage('הקובץ שהוכנס לא בפורמט התקין');
+                setTimeout(() => {
+                    setErrorUploadMessage('');
+                }, 1800);
+            }
             handleCancelUploadPopup();
         };
         reader.readAsArrayBuffer(file);
     };
+
+    const checkXlFile = (jsonData) => {
+        for (const row of jsonData) {
+            if (row['__EMPTY_5'] && typeof row['__EMPTY_5'] === 'string' && row['__EMPTY_5'].includes('NP')) {
+                if (
+                    row['__EMPTY_7'] != null &&  // תאריך
+                    row['__EMPTY_9'] != null &&  // קוליפורמים
+                    row['__EMPTY_10'] != null && // פסאודומונס
+                    row['__EMPTY_11'] != null && // סטפילוקוקוס
+                    row['__EMPTY_12'] != null && // עכירות
+                    row['__EMPTY_13'] != null && // הגבה
+                    row['__EMPTY_14'] != null) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
 
     const initSanitationData = (jsonData) => {
         const result = [];
@@ -51,18 +78,19 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
                 typeof row['__EMPTY_5'] === 'string'
                 && row['__EMPTY_5'].includes('NP')
                 && typeof row['__EMPTY_7'] === 'number') {
+                // if the id not checked.
                 if (row['__EMPTY_5'] !== mikveID) {
                     mikveID = row['__EMPTY_5'];
                     updatedDate = XLSX.SSF.format('yyyy-mm-dd', row['__EMPTY_7']);
                     values = {
-                        'קוליפורמים': parseInt(row['__EMPTY_9']),
-                        'פסאודומונס': parseInt(row['__EMPTY_10']),
-                        'סטפילוקוקוס': parseInt(row['__EMPTY_11']),
-                        'עכירות': parseInt(row['__EMPTY_12']),
-                        'הגבה': parseFloat(row['__EMPTY_13']),
-                        'כלור חופשי': parseFloat(row['__EMPTY_14']),
-                        'ברום חופשי': parseFloat(row['__EMPTY_15'])
+                        'קוליפורמים': row['__EMPTY_9'],
+                        'פסאודומונס': row['__EMPTY_10'],
+                        'סטפילוקוקוס': row['__EMPTY_11'],
+                        'עכירות': row['__EMPTY_12'],
+                        'הגבה': row['__EMPTY_13'],
+                        'כלור חופשי': row['__EMPTY_14']
                     };
+
                     if (isNaN(new Date(updatedDate))) {
                         mikveData = {
                             'isClean': checkValues(values),
@@ -79,13 +107,12 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
                     if (date > updatedDate) {
                         updatedDate = date;
                         values = {
-                            'קוליפורמים': parseInt(row['__EMPTY_9']),
-                            'פסאודומונס': parseInt(row['__EMPTY_10']),
-                            'סטפילוקוקוס': parseInt(row['__EMPTY_11']),
-                            'עכירות': parseInt(row['__EMPTY_12']),
-                            'הגבה': parseFloat(row['__EMPTY_13']),
-                            'כלור חופשי': parseFloat(row['__EMPTY_14']),
-                            'ברום חופשי': parseFloat(row['__EMPTY_15'])
+                            'קוליפורמים': row['__EMPTY_9'],
+                            'פסאודומונס': row['__EMPTY_10'],
+                            'סטפילוקוקוס': row['__EMPTY_11'],
+                            'עכירות': row['__EMPTY_12'],
+                            'הגבה': row['__EMPTY_13'],
+                            'כלור חופשי': row['__EMPTY_14']
                         };
                         if (isNaN(new Date(updatedDate))) {
                             mikveData = {
@@ -116,14 +143,48 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
 
 
     const checkValues = (values) => {
+        const details = {
+            "coliforms": values['קוליפורמים'],
+            "pseudomonas": values['פסאודומונס'],
+            "staphylococcus": values['סטפילוקוקוס'],
+            "opacity": values['עכירות'],
+            "reaction": values['הגבה'],
+            "freeChlorine": values['כלור חופשי'],
+        }
+        for (let key in details) {
+            let value = details[key];
+            if (typeof value === 'string' && (value.includes('<') || value.includes('>'))) {
+                value = parseFloat(value.replace(/>|<|\s+/g, ''));
+            }
+            if (isNaN(value)) {
+                if (value === "לא נדרש" || value === "לא נבדק") {
+                    if (key === details.coliforms) {
+                        details[key] = 1;
+                    } else if (key === details.pseudomonas) {
+                        details[key] = 1;
+                    } else if (key === details.staphylococcus) {
+                        details[key] = 1;
+                    } else if (key === details.opacity) {
+                        details[key] = 1;
+                    } else if (key === details.reaction) {
+                        details[key] = 7;
+                    } else if (key === details.freeChlorine) {
+                        details[key] = 1.5;
+                    }
+                } else {
+                    details[key] = 100; //ERROR.
+                }
+            } else {
+                details[key] = value;
+            }
+        }
         if (
-            values['קוליפורמים'] > 10 ||
-            values['פסאודומונס'] > 1 ||
-            values['סטפילוקוקוס'] > 2 ||
-            values['עכירות'] > 1 ||
-            values['הגבה'] < 7 || values['הגבה'] > 8 ||
-            values['כלור חופשי'] < 1.5 || values['כלור חופשי'] > 3 ||
-            values['ברום חופשי'] < 3 || values['ברום חופשי'] > 6
+            details.coliforms > 10 ||
+            details.pseudomonas > 1 ||
+            details.staphylococcus > 2 ||
+            details.opacity > 1 ||
+            details.reaction < 7 || details.reaction > 8 ||
+            details.freeChlorine < 1.5 || details.freeChlorine > 3
         ) {
             return false;
         } else {
@@ -209,6 +270,7 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
                 accept=".xlsx, .xls"
                 onChange={handleFileChange}
                 id="input-xl-file"
+                style={{ display: 'none' }} /* Hide the default file input */
             />
             <button
                 type="button"
@@ -218,6 +280,11 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
                 עדכן קובץ נתוני תבאורה
                 <MdOutlineFileUpload />
             </button>
+            {errorUploadMessage && (
+                <div className="error-message">
+                    {errorUploadMessage}
+                </div>
+            )}
             {mikveUploadPopup && (
                 <div className="mikve-upload-xl-popup">
                     <div className="mikve-upload-xl-popup-content">
@@ -235,6 +302,7 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
             )}
         </div>
     );
+
 };
 
 export { AdminUploadSamplingXL };
