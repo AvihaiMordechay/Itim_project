@@ -8,6 +8,7 @@ import { AdminMikvesList } from "./AdminMikvesList";
 import { AdminAddMikve } from "./AdminAddMikve";
 import { AdminUploadSamplingXL } from "./AdminUploadSamplingXL";
 import { AdminDownloadData } from "./AdminDownloadData.js";
+import { AdminDownloadStatistics } from './AdminDownloadStatistics.js';
 
 const AdminContent = () => {
     const numOfRows = 20;
@@ -63,6 +64,7 @@ const AdminContent = () => {
         <div className="admin-main-content">
             <div className="admin-operations">
                 <AdminAddMikve />
+                <AdminDownloadStatistics />
                 <AdminDownloadData allMikves={allMikves} />
                 <AdminUploadSamplingXL
                     allMikves={allMikves}
