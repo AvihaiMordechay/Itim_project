@@ -1,7 +1,7 @@
 /* UserSearchForm.css */
 .search-form {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
     width: 100%;
     padding: 0 0 20px;
@@ -20,7 +20,7 @@
 .search-bar {
     padding: 10px;
     font-size: 16px;
-    width: 200%;
+    width: 95%;
     height: 40px;
     border-radius: 35px;
 }
@@ -43,6 +43,18 @@
     background-color: #4a3f5a;
 }
 
+.advanced-search {
+    width: 100%;
+}
+
+.advanced-search-header {
+    text-align: center;
+    color: #635473;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
 .filters {
     display: flex;
     gap: 10px;
@@ -59,7 +71,7 @@
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 35px;
-    width: 100%;
+    width: 50%;
     height: 40px;
 }
 
@@ -130,4 +142,83 @@
 
 .popup-content button:hover {
     background-color: #4a3f5a;
+}
+
+/* Styles for Google Autocomplete suggestions */
+.pac-container {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    font-family: Arial, sans-serif;
+    z-index: 1000;
+    direction: rtl;
+}
+
+.pac-item {
+    padding: 10px;
+    cursor: pointer;
+    text-align: right;
+}
+
+.pac-item:hover {
+    background-color: #f0f0f0;
+}
+
+.pac-item-query {
+    font-weight: bold;
+}
+
+/* Style for the search input to indicate it's an autocomplete field */
+.search-bar[autocomplete="off"] {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="%23888"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+    width: 90%;
+}
+
+/* Styles for the autocomplete instruction */
+.autocomplete-instruction {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+    text-align: right;
+}
+
+/* Add this to your UserSearchForm.css file */
+
+.search-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.autocomplete-popup {
+    position: absolute;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 10000;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.autocomplete-popup::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #f9f9f9 transparent transparent transparent;
+}
+
+/* Add this new style */
+body {
+    position: relative;
 }

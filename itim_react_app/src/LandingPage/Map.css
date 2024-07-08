@@ -1,7 +1,9 @@
+/* Map.css */
+
+/* Map.css */
 .map-container {
     width: 100%;
-    height: calc(100vh - 250px); /* Adjust based on your header/footer height */
-    float: left;
+    height: 100%;
     position: relative;
 }
 
@@ -9,17 +11,17 @@
     width: 100%;
     height: 100%;
     border-radius: 8px;
-
 }
 
 .location-error-message {
     position: absolute;
-    bottom: 0px;
+    bottom: 20px;
     left: 20px;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.9);
     padding: 10px;
     border-radius: 5px;
     font-size: 14px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .reset-map-button {
@@ -35,15 +37,63 @@
     font-size: 14px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
-.reset-map-button:hover{
-    background-color: #4a3f5a;
 
+.reset-map-button:hover {
+    background-color: #4a3f5a;
+}
+
+/* Styles for the InfoWindow */
+.gm-style .gm-style-iw-c {
+    padding: 0px 10px 10px 10px !important;
+    max-width: 350px !important;
+    width: 250px !important;
+}
+
+.gm-style .gm-style-iw-d {
+    overflow: hidden !important;
+    max-width: 100% !important; /* Ensures content fits within the InfoWindow */
+}
+
+.marker-info-window {
+    font-family: Arial, sans-serif;
+    direction: rtl;
+    text-align: right;
+}
+
+.marker-info-window h3 {
+    color: #605371;
+    margin: 0 0 12px 0;
+    font-size: 20px; /* Slightly larger for better readability */
+}
+
+.marker-info-window p {
+    margin: 6px 0;
+    font-size: 14px;
+}
+
+.marker-info-window button {
+    background-color: #00aec6;
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.marker-info-window button:hover {
+    background-color: #008fa3;
 }
 
 @media (max-width: 768px) {
     .map-container {
-        width: 100%;
-        float: none;
         height: 50vh;
+    }
+    
+    .gm-style .gm-style-iw-c {
+        max-width: 300px !important; /* Slightly smaller for mobile */
+        width: 300px !important;
     }
 }

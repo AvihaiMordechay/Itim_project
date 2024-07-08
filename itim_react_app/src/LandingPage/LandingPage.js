@@ -109,13 +109,20 @@ const LandingPage = () => {
                     displayCount={displayCount}
                     onSearch={handleSearch}
                 />
-                <div className="map-and-list">
-                    <Map
-                        mikves={filteredMikves}
-                        userLocation={userLocation}
-                        searchLocation={searchLocation}
-                    />
-                    <UserMikvesList mikves={filteredMikves} loadMore={loadMore} />
+                <div className="map-and-list-container">
+                    <h2 className="results-header">מקוואות שמצאנו עבורך</h2>
+                    <div className="map-and-list">
+                        <div className="map-wrapper">
+                            <Map
+                                mikves={filteredMikves}
+                                userLocation={userLocation}
+                                searchLocation={searchLocation}
+                            />
+                        </div>
+                        <div className="list-wrapper">
+                            <UserMikvesList mikves={filteredMikves} loadMore={loadMore} />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

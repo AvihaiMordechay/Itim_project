@@ -1,7 +1,7 @@
 /* UserHeader.css */
 .header-container {
   color: white;
-  background-color: #605371;
+  background-color: #faccce;
   padding: 10px;
 }
 
@@ -10,6 +10,7 @@
   justify-content: space-between;
   align-items: center;
   height: 100px;
+  position: relative;
   flex-direction: row-reverse;
 }
 
@@ -22,20 +23,23 @@
 
 .header h1 {
   font-size: 42px;
-  text-align: center;
-  flex-grow: 1;
+  color: #635473;
+  position: absolute; /* Add this */
+  left: 50%; /* Add this */
+  transform: translateX(-50%); /* Add this */
+  margin: 0; /* Add this to remove default margins */
 }
 
 .admin-icon {
   cursor: pointer;
-  margin-left: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px; /* Adjusted size */
-  height: 40px; /* Adjusted size */
+  width: 40px;
+  height: 40px;
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
+  margin-left: 10px;
 }
 
 .admin-icon:hover {
@@ -129,16 +133,24 @@
 @media (max-width: 768px) {
   .header {
     flex-direction: column;
-    align-items: center;
     height: auto;
+    padding: 10px 0;
   }
 
   .header img {
     width: 80px;
+    margin-bottom: 10px; /* Add some space between the image and the title */
   }
 
   .header h1 {
+    position: static; /* Reset the position for mobile */
+    transform: none; /* Reset the transform for mobile */
     font-size: 26px;
     text-align: center;
+    margin-bottom: 10px; /* Add some space between the title and the admin icon */
+  }
+
+  .admin-icon {
+    margin-top: 10px; /* Add some space above the admin icon */
   }
 }
