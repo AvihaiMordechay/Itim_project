@@ -1,7 +1,7 @@
 /* UserSearchForm.css */
 .search-form {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
     width: 100%;
     padding: 0 0 20px;
@@ -41,6 +41,18 @@
 
 .search-button:hover {
     background-color: #4a3f5a;
+}
+
+.advanced-search {
+    width: 100%;
+}
+
+.advanced-search-header {
+    text-align: center;
+    color: #635473;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .filters {

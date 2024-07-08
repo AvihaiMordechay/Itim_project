@@ -194,6 +194,8 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                         </svg>
                     </button>
                 </div>
+                <div className="advanced-search">
+                <h3 className="advanced-search-header">חיפוש מתקדם</h3>
                 <div className="filters">
                     <div className="select-box">
                         <label className="select-header">נגישות</label>
@@ -234,6 +236,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                             <option value="false">אסור לרחוץ לבד</option>
                         </select>
                     </div>
+                </div>
                 </div>
             </form>
             {showInstruction && searchType === 'address' && (
