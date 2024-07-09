@@ -222,3 +222,14 @@
 body {
     position: relative;
 }
+
+@media (max-width: 768px) {
+    .search-form {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        width: 100%;
+        padding: 0 0 20px;
+        flex-direction: column;
+    }
+  }

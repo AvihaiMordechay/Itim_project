@@ -121,7 +121,7 @@
 
 @media (max-width: 768px) {
     .map-container {
-        height: 50vh;
+        height: 30vh;
     }
     
     .gm-style .gm-style-iw-c {

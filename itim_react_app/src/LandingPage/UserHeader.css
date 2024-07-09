@@ -131,15 +131,16 @@
 }
 
 @media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    height: auto;
-    padding: 10px 0;
+  .header-container{
+    margin-bottom: 20px;
   }
+  .header {
+    height: auto;
+    padding: 20px 0px 10px 0px;
+}
 
   .header img {
     width: 80px;
-    margin-bottom: 10px; /* Add some space between the image and the title */
   }
 
   .header h1 {
@@ -147,10 +148,6 @@
     transform: none; /* Reset the transform for mobile */
     font-size: 26px;
     text-align: center;
-    margin-bottom: 10px; /* Add some space between the title and the admin icon */
   }
 
-  .admin-icon {
-    margin-top: 10px; /* Add some space above the admin icon */
-  }
 }
