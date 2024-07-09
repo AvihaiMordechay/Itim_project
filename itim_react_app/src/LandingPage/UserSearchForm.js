@@ -41,13 +41,35 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                     fields: ['address_components', 'geometry', 'name'],
                     strictBounds: false,
                 });
+                autocompleteRef.current.addListener('place_changed', handlePlaceSelect);
             }
-            autocompleteRef.current.addListener('place_changed', handlePlaceSelect);
-        } else if (searchType === 'name' && autocompleteRef.current) {
-            window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
-            autocompleteRef.current = null;
+            inputRef.current.setAttribute('autocomplete', 'new-password');
+        } else if (searchType === 'name') {
+            if (autocompleteRef.current) {
+                window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
+                autocompleteRef.current.unbindAll();
+                window.google.maps.event.clearInstanceListeners(inputRef.current);
+                autocompleteRef.current = null;
+            }
+            inputRef.current.setAttribute('autocomplete', 'off');
         }
+    
+        // Cleanup function
+        return () => {
+            if (autocompleteRef.current) {
+                window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
+                autocompleteRef.current.unbindAll();
+                window.google.maps.event.clearInstanceListeners(inputRef.current);
+                autocompleteRef.current = null;
+            }
+        };
     }, [searchType]);
+    
+    // Add this function to handle search type change
+    const handleSearchTypeChange = (e) => {
+        setSearchType(e.target.value);
+        setSearchInput(''); // Clear the input when changing search type
+    };
 
     const handlePlaceSelect = () => {
         if (autocompleteRef.current && searchType === 'address') {
@@ -68,15 +90,15 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
         e.preventDefault();
 
         const searchTerm = searchInput.trim().toLowerCase();
+        const searchLocation = userLocation || { lat: 31.7683, lng: 35.2137 }; // Default to Jerusalem if no user location
 
         if (searchType === 'name') {
             const filteredMikves = allMikves.filter(mikve => 
                 mikve.name.toLowerCase().includes(searchTerm)
             );
-            const searchLocation = userLocation || { lat: 31.7683, lng: 35.2137 }; // Default to Jerusalem if no user location
             handleFilteredMikves(filteredMikves, searchLocation);
-            onSearch(searchTerm, null); // Pass null for location in name search
-        } else {
+            onSearch(searchTerm, null); // Keep this as null for name-based search
+            } else {
             let searchLocation = userLocation;
 
             try {
@@ -125,7 +147,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                 (accessibility === '0' && mikve.general_accessibility === '0') ||
                 (accessibility === '1' && ['1', '2'].includes(mikve.general_accessibility)) ||
                 (accessibility === '2' && mikve.general_accessibility === '2');
-
+    
             const waterSamplingMatches = waterSampling === '' || mikve.water_sampling === waterSampling;
             const levadMatches = levad === '' || mikve.levad.toString() === levad;
             const shelterMatches =
@@ -133,30 +155,36 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                 (shelter === '0' && mikve.general_shelter === '0') ||
                 (shelter === '1' && ['1', '2'].includes(mikve.general_shelter)) ||
                 (shelter === '2' && mikve.general_shelter === '2');
-
+    
             return accessibilityMatches && waterSamplingMatches && levadMatches && shelterMatches;
         });
-
+    
         if (filteredMikves.length === 0) {
-        setPopupMessage('לא הצלחנו למצוא מקוואות המתאימות לחיפוש שלך. אנא נסי שנית.');
-        setShowPopup(true);
-        return;
-    }
+            setPopupMessage('לא הצלחנו למצוא מקוואות המתאימות לחיפוש שלך. אנא נסי שנית.');
+            setShowPopup(true);
+            return;
+        }
+    
+        const validLocation = location && typeof location.lat === 'number' && typeof location.lng === 'number'
+        ? location
+        : { lat: 31.7683, lng: 35.2137 }; // Default to Jerusalem if invalid
 
     const mikvesWithDistances = filteredMikves.map(mikve => ({
         ...mikve,
-        distance: location ? calculateDistance(location, {
+        distance: calculateDistance(validLocation, {
             lat: mikve.position?.latitude || 0,
             lng: mikve.position?.longitude || 0
-        }) : 0
+        })
     }));
 
-    const sortedMikves = location 
-        ? mikvesWithDistances.sort((a, b) => a.distance - b.distance)
-        : mikvesWithDistances;
+    let sortedMikves;
+
+    
+    sortedMikves = mikvesWithDistances.sort((a, b) => a.distance - b.distance);
+
 
     setFilteredMikves(sortedMikves.slice(0, displayCount));
-};
+    };
 
     const closePopup = () => {
         setShowPopup(false);
@@ -174,19 +202,19 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                             value={searchInput}
                             onChange={handleInputChange}
                             className="search-bar"
-                            autoComplete={searchType === 'name' ? 'on' : 'off'}
+                            // autoComplete={searchType === 'name' ? 'on' : 'off'}
                         />
                     </div>
                     <div className="select-box">
                         <label className="select-header">סוג חיפוש</label>
                         <select
-                            value={searchType}
-                            onChange={(e) => setSearchType(e.target.value)}
-                            className="select-input"
-                        >
-                            <option value="address">חיפוש לפי כתובת</option>
-                            <option value="name">חיפוש לפי שם</option>
-                        </select>
+    value={searchType}
+    onChange={handleSearchTypeChange}
+    className="select-input"
+>
+    <option value="address">חיפוש לפי כתובת</option>
+    <option value="name">חיפוש לפי שם</option>
+</select>
                     </div>
                     <button type="submit" className="search-button">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
