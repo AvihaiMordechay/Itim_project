@@ -64,7 +64,9 @@ const AdminContent = () => {
         <div className="admin-main-content">
             <div className="admin-operations">
                 <AdminAddMikve />
-                <AdminDownloadStatistics />
+                <AdminDownloadStatistics
+                    allMikves={allMikves}
+                />
                 <AdminDownloadData allMikves={allMikves} />
                 <AdminUploadSamplingXL
                     allMikves={allMikves}

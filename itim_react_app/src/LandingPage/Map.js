@@ -84,6 +84,8 @@ const Map = ({ mikves, userLocation, searchLocation }) => {
         googleMapsApiKey: GOOGLE_MAPS_API_KEY,
     });
 
+    const [mapCenter, setMapCenter] = useState(defaultCenter);
+    const [mapZoom, setMapZoom] = useState(10);
     const [selectedMikve, setSelectedMikve] = useState(null);
     const [mapKey, setMapKey] = useState(0);
     const [showDetailsPopup, setShowDetailsPopup] = useState(false);
