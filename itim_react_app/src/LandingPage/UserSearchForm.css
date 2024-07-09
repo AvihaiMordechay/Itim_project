@@ -232,4 +232,19 @@ body {
         padding: 0 0 20px;
         flex-direction: column;
     }
+
+    .search-bar-container{
+        margin-left: 0px;
+    }
+
+    .search-bar{
+        width: -webkit-fill-available;
+    }
+
+    .select-header{
+        font-size: 14px;
+    }
+    .select-input{
+        font-size: 14px;
+    }
   }
