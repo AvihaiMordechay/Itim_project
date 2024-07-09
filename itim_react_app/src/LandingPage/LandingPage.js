@@ -1,17 +1,16 @@
 // LandingPage.js
-import './LandingPage.css';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLoadScript } from '@react-google-maps/api';
 import UserMikvesList from './UserMikvesList';
-import { Map } from './Map';  // Updated import
+import { Map } from './Map';
 import { UserHeader } from './UserHeader';
 import UserSearchForm from './UserSearchForm';
 import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { calculateDistance } from '../utils/distance';
+import './LandingPage.css';
 
 const libraries = ['places'];
-
 
 const LandingPage = () => {
     let NUM_OF_MIKVES = 15;
@@ -96,7 +95,6 @@ const LandingPage = () => {
     };
 
     if (loadError) return <div>Error loading Google Maps API</div>;
-    if (!isLoaded || isLoading) return <div>Loading...</div>;
 
     return (
         <div className="landing-page">
@@ -113,11 +111,18 @@ const LandingPage = () => {
                     <h2 className="results-header">מקוואות שמצאנו עבורך</h2>
                     <div className="map-and-list">
                         <div className="map-wrapper">
-                            <Map
-                                mikves={filteredMikves}
-                                userLocation={userLocation}
-                                searchLocation={searchLocation}
-                            />
+                            {!isLoaded ? (
+                                <div className="map-loading">
+                                    <div className="spinner"></div>
+                                    <p>Loading map...</p>
+                                </div>
+                            ) : (
+                                <Map
+                                    mikves={filteredMikves}
+                                    userLocation={userLocation}
+                                    searchLocation={searchLocation}
+                                />
+                            )}
                         </div>
                         <div className="list-wrapper">
                             <UserMikvesList mikves={filteredMikves} loadMore={loadMore} />
