@@ -175,7 +175,7 @@
     background-repeat: no-repeat;
     background-position: right 10px center;
     padding-right: 30px;
-    width: 90%;
+    width: -webkit-fill-available;
 }
 
 /* Styles for the autocomplete instruction */

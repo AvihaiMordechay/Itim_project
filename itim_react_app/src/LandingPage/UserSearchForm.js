@@ -54,7 +54,6 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
             inputRef.current.setAttribute('autocomplete', 'off');
         }
     
-        // Cleanup function
         return () => {
             if (autocompleteRef.current) {
                 window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
@@ -65,10 +64,9 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
         };
     }, [searchType]);
     
-    // Add this function to handle search type change
     const handleSearchTypeChange = (e) => {
         setSearchType(e.target.value);
-        setSearchInput(''); // Clear the input when changing search type
+        setSearchInput('');
     };
 
     const handlePlaceSelect = () => {
@@ -90,15 +88,14 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
         e.preventDefault();
 
         const searchTerm = searchInput.trim().toLowerCase();
-        const searchLocation = userLocation || { lat: 31.7683, lng: 35.2137 }; // Default to Jerusalem if no user location
 
         if (searchType === 'name') {
             const filteredMikves = allMikves.filter(mikve => 
                 mikve.name.toLowerCase().includes(searchTerm)
             );
-            handleFilteredMikves(filteredMikves, searchLocation);
-            onSearch(searchTerm, null); // Keep this as null for name-based search
-            } else {
+            handleFilteredMikves(filteredMikves, userLocation);
+            onSearch(searchTerm, null, 'name');
+        } else {
             let searchLocation = userLocation;
 
             try {
@@ -111,7 +108,6 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                         };
                     }
                 } else {
-                    // If autocomplete didn't provide a result, use Geocoding API
                     const geocoder = new window.google.maps.Geocoder();
                     const result = await new Promise((resolve, reject) => {
                         geocoder.geocode({ address: searchTerm }, (results, status) => {
@@ -130,7 +126,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                 }
 
                 handleFilteredMikves(allMikves, searchLocation);
-                onSearch(searchTerm, searchLocation);
+                onSearch(searchTerm, searchLocation, 'address');
             } catch (error) {
                 console.error('Geocoding error:', error);
                 setPopupMessage('לא הצלחנו למצוא את הכתובת. אנא נסי להכניס כתובת יותר מפורטת.');
@@ -166,24 +162,20 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
         }
     
         const validLocation = location && typeof location.lat === 'number' && typeof location.lng === 'number'
-        ? location
-        : { lat: 31.7683, lng: 35.2137 }; // Default to Jerusalem if invalid
+            ? location
+            : { lat: 31.7683, lng: 35.2137 };
 
-    const mikvesWithDistances = filteredMikves.map(mikve => ({
-        ...mikve,
-        distance: calculateDistance(validLocation, {
-            lat: mikve.position?.latitude || 0,
-            lng: mikve.position?.longitude || 0
-        })
-    }));
+        const mikvesWithDistances = filteredMikves.map(mikve => ({
+            ...mikve,
+            distance: calculateDistance(validLocation, {
+                lat: mikve.position?.latitude || 0,
+                lng: mikve.position?.longitude || 0
+            })
+        }));
 
-    let sortedMikves;
+        const sortedMikves = mikvesWithDistances.sort((a, b) => a.distance - b.distance);
 
-    
-    sortedMikves = mikvesWithDistances.sort((a, b) => a.distance - b.distance);
-
-
-    setFilteredMikves(sortedMikves.slice(0, displayCount));
+        setFilteredMikves(sortedMikves.slice(0, displayCount));
     };
 
     const closePopup = () => {
@@ -202,19 +194,18 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                             value={searchInput}
                             onChange={handleInputChange}
                             className="search-bar"
-                            // autoComplete={searchType === 'name' ? 'on' : 'off'}
                         />
                     </div>
                     <div className="select-box">
                         <label className="select-header">סוג חיפוש</label>
                         <select
-    value={searchType}
-    onChange={handleSearchTypeChange}
-    className="select-input"
->
-    <option value="address">חיפוש לפי כתובת</option>
-    <option value="name">חיפוש לפי שם</option>
-</select>
+                            value={searchType}
+                            onChange={handleSearchTypeChange}
+                            className="select-input"
+                        >
+                            <option value="address">חיפוש לפי כתובת</option>
+                            <option value="name">חיפוש לפי שם</option>
+                        </select>
                     </div>
                     <button type="submit" className="search-button">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
@@ -223,48 +214,48 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                     </button>
                 </div>
                 <div className="advanced-search">
-                <h3 className="advanced-search-header">חיפוש מתקדם</h3>
-                <div className="filters">
-                    <div className="select-box">
-                        <label className="select-header">נגישות</label>
-                        <select value={accessibility} onChange={(e) => setAccessibility(e.target.value)} className="select-input">
-                            <option value="">בחר</option>
-                            <option value="0">אין נגישות</option>
-                            <option value="1">נגישות חלקית</option>
-                            <option value="2">נגישות מלאה</option>
-                        </select>
+                    <h3 className="advanced-search-header">חיפוש מתקדם</h3>
+                    <div className="filters">
+                        <div className="select-box">
+                            <label className="select-header">נגישות</label>
+                            <select value={accessibility} onChange={(e) => setAccessibility(e.target.value)} className="select-input">
+                                <option value="">בחר</option>
+                                <option value="0">אין נגישות</option>
+                                <option value="1">נגישות חלקית</option>
+                                <option value="2">נגישות מלאה</option>
+                            </select>
+                        </div>
+                        <div className="select-box">
+                            <label className="select-header">בדיקת מים</label>
+                            <select
+                                value={waterSampling}
+                                onChange={(e) => setWaterSampling(e.target.value)}
+                                className="select-input"
+                            >
+                                <option value="">בחר</option>
+                                <option value="0">ללא בדיקה</option>
+                                <option value="1">בדיקה לא תקינה</option>
+                                <option value="2">בדיקה תקינה</option>
+                            </select>
+                        </div>
+                        <div className="select-box">
+                            <label className="select-header">מיגון</label>
+                            <select value={shelter} onChange={(e) => setShelter(e.target.value)} className="select-input">
+                                <option value="">בחר</option>
+                                <option value="0">ללא מיגון</option>
+                                <option value="1">מיגון חלקי</option>
+                                <option value="2">מיגון מלא</option>
+                            </select>
+                        </div>
+                        <div className="select-box">
+                            <label className="select-header">טבילה לבד</label>
+                            <select value={levad} onChange={(e) => setLevad(e.target.value)} className="select-input">
+                                <option value="">בחר</option>
+                                <option value="true">מותר לרחוץ לבד</option>
+                                <option value="false">אסור לרחוץ לבד</option>
+                            </select>
+                        </div>
                     </div>
-                    <div className="select-box">
-                        <label className="select-header">בדיקת מים</label>
-                        <select
-                            value={waterSampling}
-                            onChange={(e) => setWaterSampling(e.target.value)}
-                            className="select-input"
-                        >
-                            <option value="">בחר</option>
-                            <option value="0">ללא בדיקה</option>
-                            <option value="1">בדיקה לא תקינה</option>
-                            <option value="2">בדיקה תקינה</option>
-                        </select>
-                    </div>
-                    <div className="select-box">
-                        <label className="select-header">מיגון</label>
-                        <select value={shelter} onChange={(e) => setShelter(e.target.value)} className="select-input">
-                            <option value="">בחר</option>
-                            <option value="0">ללא מיגון</option>
-                            <option value="1">מיגון חלקי</option>
-                            <option value="2">מיגון מלא</option>
-                        </select>
-                    </div>
-                    <div className="select-box">
-                        <label className="select-header">טבילה לבד</label>
-                        <select value={levad} onChange={(e) => setLevad(e.target.value)} className="select-input">
-                            <option value="">בחר</option>
-                            <option value="true">מותר לרחוץ לבד</option>
-                            <option value="false">אסור לרחוץ לבד</option>
-                        </select>
-                    </div>
-                </div>
                 </div>
             </form>
             {showInstruction && searchType === 'address' && (
@@ -272,7 +263,6 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                     אנא בחרי כתובת מהרשימה המוצעת
                 </div>
             )}
-
             {showPopup && (
                 <div className="popup">
                     <div className="popup-content">

@@ -131,23 +131,34 @@
 }
 
 @media (max-width: 768px) {
-  .header-container{
+  .header-container {
+    padding-top: 20px;
     margin-bottom: 20px;
   }
+
   .header {
     height: auto;
-    padding: 20px 0px 10px 0px;
-}
+    padding: 10px 0;
+    flex-wrap: wrap; /* Allow items to wrap */
+    justify-content: flex-start; /* Align items to the start (right in RTL) */
+  }
 
   .header img {
     width: 80px;
+    order: -1; /* Ensure the image is first */
+    margin-right: 0;
+    margin-left: auto; /* Push the image to the right */
   }
 
   .header h1 {
-    position: static; /* Reset the position for mobile */
-    transform: none; /* Reset the transform for mobile */
-    font-size: 26px;
+    font-size: 24px;
     text-align: center;
+    width: 100%; /* Full width to center the text */
+    order: 0; /* Place the h1 after the image */
+    margin: 10px 0;
   }
 
+  .admin-icon {
+    display: none;
+  }
 }

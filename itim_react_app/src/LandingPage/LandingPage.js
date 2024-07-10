@@ -73,13 +73,19 @@ const LandingPage = () => {
     }, []);
 
     const sortAndFilterMikves = (mikves, location) => {
-        const mikvesWithDistances = mikves.map(mikve => ({
-            ...mikve,
-            distance: calculateDistance(location, {
-                lat: mikve.position?.latitude || 0,
-                lng: mikve.position?.longitude || 0
-            })
-        }));
+        console.log('sortAndFilterMikves called with location:', location);
+    
+        const mikvesWithDistances = mikves.map(mikve => {
+            console.log('Calculating distance for mikve:', mikve.name, 'with position:', mikve.position);
+    
+            return {
+                ...mikve,
+                distance: calculateDistance(location, {
+                    lat: mikve.position?.latitude || 0,
+                    lng: mikve.position?.longitude || 0
+                })
+            };
+        });
         const sortedMikves = mikvesWithDistances.sort((a, b) => a.distance - b.distance);
         setFilteredMikves(sortedMikves.slice(0, displayCount));
     };
@@ -89,9 +95,35 @@ const LandingPage = () => {
         setFilteredMikves(allMikves.slice(0, displayCount + NUM_OF_MIKVES));
     };
 
-    const handleSearch = (searchTerm, location) => {
-        setSearchLocation(location);
-        sortAndFilterMikves(allMikves, location);
+    const handleSearch = (searchTerm, location, searchType) => {
+        console.log('handleSearch called with:', { searchTerm, location, searchType });
+        
+        const referenceLocation = location || userLocation || { lat: 31.7683, lng: 35.2137 };
+        
+        let filteredMikves;
+        if (searchType === 'name') {
+            // For name-based search, filter mikves by name
+            filteredMikves = allMikves.filter(mikve => 
+                mikve.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setSearchLocation(null); // Clear search location for name-based search
+        } else {
+            // For location-based search, use all mikves
+            filteredMikves = allMikves;
+            setSearchLocation(referenceLocation);
+        }
+
+        // Calculate distances and sort for all searches
+        const mikvesWithDistances = filteredMikves.map(mikve => ({
+            ...mikve,
+            distance: calculateDistance(referenceLocation, {
+                lat: mikve.position?.latitude || 0,
+                lng: mikve.position?.longitude || 0
+            })
+        }));
+
+        const sortedMikves = mikvesWithDistances.sort((a, b) => a.distance - b.distance);
+        setFilteredMikves(sortedMikves.slice(0, displayCount));
     };
 
     if (loadError) return <div>Error loading Google Maps API</div>;
