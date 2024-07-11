@@ -115,7 +115,7 @@ const LandingPage = () => {
     };
 
     if (loadError) return <div>Error loading Google Maps API</div>;
-    if (!isLoaded) return <div>Loading...</div>;
+    if (!isLoaded) return null;
 
     return (
         <div className="landing-page">

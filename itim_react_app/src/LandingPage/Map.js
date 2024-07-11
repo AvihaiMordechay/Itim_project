@@ -127,14 +127,16 @@ const Map = ({ mikves, userLocation, searchLocation }) => {
         return <div className="map-error">Error loading maps</div>;
     }
 
+    if (!isLoaded) {
+        return (
+            <div className="map-loading">
+                <div className="loading-spinner"></div>
+            </div>
+        );
+    }
+
     return (
         <div className="map-container">
-            {!isLoaded ? (
-                <div className="map-loading">
-                    <div className="spinner"></div>
-                    <p>Loading map...</p>
-                </div>
-            ) : (
                 <GoogleMap
                     key={mapKey}
                     mapContainerStyle={mapContainerStyle}
@@ -177,7 +179,6 @@ const Map = ({ mikves, userLocation, searchLocation }) => {
                         </InfoWindow>
                     )}
                 </GoogleMap>
-            )}
             
             {showDetailsPopup && selectedMikve && (
                 <MikveDetailsPopup mikve={selectedMikve} onClose={handleCloseDetailsPopup} />
