@@ -46,9 +46,19 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
             inputRef.current.setAttribute('autocomplete', 'new-password');
         } else if (searchType === 'name') {
             if (autocompleteRef.current) {
-                window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
-                autocompleteRef.current.unbindAll();
-                window.google.maps.event.clearInstanceListeners(inputRef.current);
+                try {
+                    if (window.google && window.google.maps && window.google.maps.event) {
+                        window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
+                    }
+                    if (autocompleteRef.current.unbindAll) {
+                        autocompleteRef.current.unbindAll();
+                    }
+                    if (inputRef.current && window.google && window.google.maps && window.google.maps.event) {
+                        window.google.maps.event.clearInstanceListeners(inputRef.current);
+                    }
+                } catch (error) {
+                    console.error('Error cleaning up Google Maps instance:', error);
+                }
                 autocompleteRef.current = null;
             }
             inputRef.current.setAttribute('autocomplete', 'off');
@@ -56,9 +66,19 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
     
         return () => {
             if (autocompleteRef.current) {
-                window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
-                autocompleteRef.current.unbindAll();
-                window.google.maps.event.clearInstanceListeners(inputRef.current);
+                try {
+                    if (window.google && window.google.maps && window.google.maps.event) {
+                        window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
+                    }
+                    if (autocompleteRef.current.unbindAll) {
+                        autocompleteRef.current.unbindAll();
+                    }
+                    if (inputRef.current && window.google && window.google.maps && window.google.maps.event) {
+                        window.google.maps.event.clearInstanceListeners(inputRef.current);
+                    }
+                } catch (error) {
+                    console.error('Error cleaning up Google Maps instance:', error);
+                }
                 autocompleteRef.current = null;
             }
         };

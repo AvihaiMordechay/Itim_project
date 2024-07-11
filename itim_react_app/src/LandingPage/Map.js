@@ -127,57 +127,58 @@ const Map = ({ mikves, userLocation, searchLocation }) => {
         return <div className="map-error">Error loading maps</div>;
     }
 
+    if (!isLoaded) {
+        return (
+            <div className="map-loading">
+                <div className="loading-spinner"></div>
+            </div>
+        );
+    }
+
     return (
         <div className="map-container">
-            {!isLoaded ? (
-                <div className="map-loading">
-                    <div className="spinner"></div>
-                    <p>Loading map...</p>
-                </div>
-            ) : (
-                <GoogleMap
-                    key={mapKey}
-                    mapContainerStyle={mapContainerStyle}
-                    center={mapCenter}
-                    zoom={mapZoom}
-                    onLoad={onLoad}
-                    options={{
-                        disableDefaultUI: true,
-                        zoomControl: true,
-                        styles: mapStyles,
-                    }}
-                >
-                    {mikves.map((mikve) => (
-                        <Marker
-                            key={mikve.id}
-                            position={{ lat: mikve.position.latitude, lng: mikve.position.longitude }}
-                            onClick={() => handleMarkerClick(mikve)}
-                        />
-                    ))}
-                    {(searchLocation || userLocation) && (
-                        <Marker
-                            position={searchLocation || userLocation}
-                            icon={{
-                                url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-                            }}
-                        />
-                    )}
-                    {selectedMikve && (
-                        <InfoWindow
-                            position={{ lat: selectedMikve.position.latitude, lng: selectedMikve.position.longitude }}
-                            onCloseClick={handleCloseInfoWindow}
-                        >
-                            <div className="marker-info-window">
-                                <h3>מקווה</h3>
-                                <p><strong>{selectedMikve.name}</strong></p>
-                                <p>{selectedMikve.address}</p>
-                                <p>{selectedMikve.city}</p>
-                                <button onClick={() => handleShowDetails(selectedMikve)}>מידע נוסף</button>
-                            </div>
-                        </InfoWindow>
-                    )}
-                </GoogleMap>
-            )}
+            <GoogleMap
+                key={mapKey}
+                mapContainerStyle={mapContainerStyle}
+                center={mapCenter}
+                zoom={mapZoom}
+                onLoad={onLoad}
+                options={{
+                    disableDefaultUI: true,
+                    zoomControl: true,
+                    styles: mapStyles,
+                }}
+            >
+                {mikves.map((mikve) => (
+                    <Marker
+                        key={mikve.id}
+                        position={{ lat: mikve.position.latitude, lng: mikve.position.longitude }}
+                        onClick={() => handleMarkerClick(mikve)}
+                    />
+                ))}
+                {(searchLocation || userLocation) && (
+                    <Marker
+                        position={searchLocation || userLocation}
+                        icon={{
+                            url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                        }}
+                    />
+                )}
+                {selectedMikve && (
+                    <InfoWindow
+                        position={{ lat: selectedMikve.position.latitude, lng: selectedMikve.position.longitude }}
+                        onCloseClick={handleCloseInfoWindow}
+                    >
+                        <div className="marker-info-window">
+                            <h3>מקווה</h3>
+                            <p><strong>{selectedMikve.name}</strong></p>
+                            <p>{selectedMikve.address}</p>
+                            <p>{selectedMikve.city}</p>
+                            <button onClick={() => handleShowDetails(selectedMikve)}>מידע נוסף</button>
+                        </div>
+                    </InfoWindow>
+                )}
+            </GoogleMap>
 
             {showDetailsPopup && selectedMikve && (
                 <MikveDetailsPopup mikve={selectedMikve} onClose={handleCloseDetailsPopup} />
