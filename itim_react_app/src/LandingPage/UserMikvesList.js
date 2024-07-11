@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import MikveDetailsPopup from './MikveDetailsPopup';
 import './UserMikvesList.css';
 
-const UserMikvesList = ({ mikves, loadMore }) => {
+const UserMikvesList = ({ mikves, loadMore, hasMore }) => {
     const [selectedMikve, setSelectedMikve] = useState(null);
     const [showDetailsPopup, setShowDetailsPopup] = useState(false);
 
@@ -29,7 +29,9 @@ const UserMikvesList = ({ mikves, loadMore }) => {
                     </div>
                 ))}
             </div>
-            <button onClick={loadMore} className="load-more-button">טען עוד</button>
+            {hasMore && (
+                <button onClick={loadMore} className="load-more-button">טען עוד</button>
+            )}
 
             {showDetailsPopup && selectedMikve && (
                 <MikveDetailsPopup mikve={selectedMikve} onClose={handleCloseDetailsPopup} />

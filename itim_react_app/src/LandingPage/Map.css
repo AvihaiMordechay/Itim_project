@@ -87,9 +87,41 @@
     background-color: #008fa3;
 }
 
+/* Add this to your Map.css file */
+
+.map-loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    background-color: #f0f0f0;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #605379;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.map-loading p {
+    margin-top: 10px;
+    color: #605379;
+    font-weight: bold;
+}
+
 @media (max-width: 768px) {
     .map-container {
-        height: 50vh;
+        height: 30vh;
     }
     
     .gm-style .gm-style-iw-c {

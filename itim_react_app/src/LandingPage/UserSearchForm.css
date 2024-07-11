@@ -175,7 +175,7 @@
     background-repeat: no-repeat;
     background-position: right 10px center;
     padding-right: 30px;
-    width: 90%;
+    width: -webkit-fill-available;
 }
 
 /* Styles for the autocomplete instruction */
@@ -222,3 +222,29 @@
 body {
     position: relative;
 }
+
+@media (max-width: 768px) {
+    .search-form {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        width: 100%;
+        padding: 0 0 20px;
+        flex-direction: column;
+    }
+
+    .search-bar-container{
+        margin-left: 0px;
+    }
+
+    .search-bar{
+        width: -webkit-fill-available;
+    }
+
+    .select-header{
+        font-size: 14px;
+    }
+    .select-input{
+        font-size: 14px;
+    }
+  }

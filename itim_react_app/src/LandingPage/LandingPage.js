@@ -1,22 +1,22 @@
 // LandingPage.js
-import './LandingPage.css';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLoadScript } from '@react-google-maps/api';
 import UserMikvesList from './UserMikvesList';
-import { Map } from './Map';  // Updated import
+import { Map } from './Map';
 import { UserHeader } from './UserHeader';
 import UserSearchForm from './UserSearchForm';
 import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { calculateDistance } from '../utils/distance';
+import './LandingPage.css';
 
 const libraries = ['places'];
-
 
 const LandingPage = () => {
     let NUM_OF_MIKVES = 15;
     const [allMikves, setAllMikves] = useState([]);
     const [filteredMikves, setFilteredMikves] = useState([]);
+    const [displayedMikves, setDisplayedMikves] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
     const [searchLocation, setSearchLocation] = useState(null);
     const [displayCount, setDisplayCount] = useState(NUM_OF_MIKVES);
@@ -66,37 +66,56 @@ const LandingPage = () => {
             const mikves = await fetchMikves();
             const location = await getUserLocation();
             setUserLocation(location);
-            sortAndFilterMikves(mikves, location);
+            const sortedMikves = sortMikvesByDistance(mikves, location);
+            setFilteredMikves(sortedMikves);
+            setDisplayedMikves(sortedMikves.slice(0, NUM_OF_MIKVES));
             setIsLoading(false);
         };
 
         initializeData();
     }, []);
 
-    const sortAndFilterMikves = (mikves, location) => {
-        const mikvesWithDistances = mikves.map(mikve => ({
+    const sortMikvesByDistance = (mikves, location) => {
+        return mikves.map(mikve => ({
             ...mikve,
             distance: calculateDistance(location, {
                 lat: mikve.position?.latitude || 0,
                 lng: mikve.position?.longitude || 0
             })
-        }));
-        const sortedMikves = mikvesWithDistances.sort((a, b) => a.distance - b.distance);
-        setFilteredMikves(sortedMikves.slice(0, displayCount));
+        })).sort((a, b) => a.distance - b.distance);
     };
+
+    useEffect(() => {
+        setDisplayedMikves(filteredMikves.slice(0, displayCount));
+    }, [filteredMikves, displayCount]);
 
     const loadMore = () => {
         setDisplayCount(prevCount => prevCount + NUM_OF_MIKVES);
-        setFilteredMikves(allMikves.slice(0, displayCount + NUM_OF_MIKVES));
     };
 
-    const handleSearch = (searchTerm, location) => {
-        setSearchLocation(location);
-        sortAndFilterMikves(allMikves, location);
+    const handleSearch = (searchTerm, location, searchType) => {
+        console.log('handleSearch called with:', { searchTerm, location, searchType });
+        
+        const referenceLocation = location || userLocation || { lat: 31.7683, lng: 35.2137 };
+        
+        let filteredMikves;
+        if (searchType === 'name') {
+            filteredMikves = allMikves.filter(mikve => 
+                mikve.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setSearchLocation(null);
+        } else {
+            filteredMikves = allMikves;
+            setSearchLocation(referenceLocation);
+        }
+
+        const sortedMikves = sortMikvesByDistance(filteredMikves, referenceLocation);
+        setFilteredMikves(sortedMikves);
+        setDisplayCount(NUM_OF_MIKVES); // Reset display count on new search
     };
 
     if (loadError) return <div>Error loading Google Maps API</div>;
-    if (!isLoaded || isLoading) return <div>Loading...</div>;
+    if (!isLoaded) return <div>Loading...</div>;
 
     return (
         <div className="landing-page">
@@ -114,13 +133,17 @@ const LandingPage = () => {
                     <div className="map-and-list">
                         <div className="map-wrapper">
                             <Map
-                                mikves={filteredMikves}
+                                mikves={displayedMikves}
                                 userLocation={userLocation}
                                 searchLocation={searchLocation}
                             />
                         </div>
                         <div className="list-wrapper">
-                            <UserMikvesList mikves={filteredMikves} loadMore={loadMore} />
+                            <UserMikvesList 
+                                mikves={displayedMikves} 
+                                loadMore={loadMore} 
+                                hasMore={displayedMikves.length < filteredMikves.length}
+                            />
                         </div>
                     </div>
                 </div>

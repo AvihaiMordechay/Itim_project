@@ -89,8 +89,17 @@
     background-color: #008fa3;
 }
 
+/* In UserMikvesList.css */
+
 @media (max-width: 768px) {
     .mikves-list-container {
-        max-height: 50vh;
+      max-height: none;
+      overflow-y: visible;
     }
-}
+  
+    .list {
+        max-height: none;
+        overflow-y: visible;
+        padding: 0px 0px 0px 10px;
+    }
+  }
