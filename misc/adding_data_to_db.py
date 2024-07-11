@@ -39,7 +39,7 @@ def get_coordinates(address):
 def init_database():
     # Initialize Firestore connection
     cred = credentials.Certificate(
-        '/Users/avihaimor/Desktop/Itim_project/misc/itim-mikves-project-firebase-adminsdk-vxagm-50a369bc6a.json')
+        'itim-mikves-project-firebase-adminsdk-vxagm-e207e072e2.json')
     firebase_admin.initialize_app(cred)
     return firestore.client()
 
@@ -49,6 +49,8 @@ def upload_data_to_firestore(df, db):
         # Parse IDs into a list
         ids = row['ID'].replace('\n', ' ').split()
 
+        # Convert ids list to a dictionary
+        ids_dict = {mikveId: "0" for mikveId in ids}
         # Prepare the full address
         if row['address'] != 'nan':
             full_address = f"{row['address']}, {row['city']}"
@@ -64,13 +66,13 @@ def upload_data_to_firestore(df, db):
 
         # Prepare document data
         doc_data = {
-            'ids': ids,
+            'ids': ids_dict,
             'position': {'latitude': lat, 'longitude': lng} if lat is not None and lng is not None else None,
             'levad': levad  # Add the boolean field here
         }
 
         if ids[0][0] == "T":
-            doc_data['ids'] = []
+            doc_data['ids'] = {}
 
         # Add other fields as strings
         for col in df.columns:

@@ -196,53 +196,51 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
         const MIKVE_NOT_CHECKED = "0";
         const MIKVE_CHECKED_AND_PASSED = "1";
         const MIKVE_CHECKED_AND_NOT_PASSED = "2";
-
         const updatedMikves = allMikves.map(mikve => {
-            let mikveIsClean = MIKVE_NOT_CHECKED;
             let mikveSanitationDate = "";
-
-            for (const id of mikve.ids) {
+            let idsMap = new Map(Object.entries(mikve.ids));
+            for (const [id, value] of idsMap) {
                 const foundSanitationData = sanitationData.find(data => data.mikveID === id);
-
                 if (foundSanitationData) {
                     if (foundSanitationData.mikveData.date) {  // Check if the date exists
                         mikveSanitationDate = foundSanitationData.mikveData.date;
                     }
-
                     if (foundSanitationData.mikveData.isClean) {
-                        mikveIsClean = MIKVE_CHECKED_AND_PASSED;
+                        idsMap.set(id, MIKVE_CHECKED_AND_PASSED);
                     } else {
-                        mikveIsClean = MIKVE_CHECKED_AND_NOT_PASSED;
+                        idsMap.set(id, MIKVE_CHECKED_AND_NOT_PASSED);
                         break;
                     }
                 }
             }
-            if (mikveIsClean === MIKVE_CHECKED_AND_NOT_PASSED) {
-                return {
-                    ...mikve,
-                    ...(mikveSanitationDate && { when_sampling: mikveSanitationDate }),
-                    water_sampling: MIKVE_CHECKED_AND_NOT_PASSED
-                };
-            } else if (mikveIsClean === MIKVE_CHECKED_AND_PASSED) {
-                return {
-                    ...mikve,
-                    ...(mikveSanitationDate && { when_sampling: mikveSanitationDate }),
-                    water_sampling: MIKVE_CHECKED_AND_PASSED
-                };
-            } else {
-                // Check if water_sampling is already checked
-                if (mikve.water_sampling !== MIKVE_CHECKED_AND_PASSED &&
-                    mikve.water_sampling !== MIKVE_CHECKED_AND_NOT_PASSED
-                ) {
-                    // If not checked, set to MIKVE_NOT_CHECKED
-                    return {
-                        ...mikve,
-                        water_sampling: MIKVE_NOT_CHECKED
-                    };
+
+            // Determine the water_sampling status based on the updated ids Map
+            let waterSamplingStatus = MIKVE_NOT_CHECKED;
+            let hasUnchecked = true;
+
+            for (const value of idsMap.values()) {
+                if (value === MIKVE_CHECKED_AND_NOT_PASSED) {
+                    waterSamplingStatus = MIKVE_CHECKED_AND_NOT_PASSED;
+                    break;
                 }
-                // If already checked, return the original mikve object
-                return mikve;
+                if (value === MIKVE_CHECKED_AND_PASSED) {
+                    hasUnchecked = false;
+                }
             }
+
+            if (waterSamplingStatus !== MIKVE_CHECKED_AND_NOT_PASSED) {
+                if (hasUnchecked) {
+                    waterSamplingStatus = MIKVE_NOT_CHECKED;
+                } else {
+                    waterSamplingStatus = MIKVE_CHECKED_AND_PASSED;
+                }
+            }
+            return {
+                ...mikve,
+                ids: Object.fromEntries(idsMap),
+                ...(mikveSanitationDate && { when_sampling: mikveSanitationDate }),
+                water_sampling: waterSamplingStatus
+            };
         });
         setAllMikves(updatedMikves);
         updateFirebase(updatedMikves);
@@ -253,8 +251,12 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
         const batch = writeBatch(db);
 
         updatedMikves.forEach((mikve) => {
+            if (mikve.id === "RwoLelTDLIwF2Z4bE6sg") {
+                console.log(mikve.ids);
+            }
             const mikveDocRef = doc(collection(db, 'Mikves'), mikve.id);
             batch.update(mikveDocRef, {
+                ids: mikve.ids,
                 water_sampling: mikve.water_sampling,
                 ...(mikve.when_sampling && { when_sampling: mikve.when_sampling })
             });

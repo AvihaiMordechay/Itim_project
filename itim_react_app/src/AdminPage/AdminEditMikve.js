@@ -28,11 +28,10 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
             mikveData.name &&
             mikveData.city &&
             mikveData.address &&
-            mikveData.phone &&
             mikveData.general_shelter &&
             mikveData.general_accessibility
         ) {
-            if (!isValidPhoneNumber(mikveData.phone)) {
+            if (mikveData.phone && !isValidPhoneNumber(mikveData.phone)) {
                 alert("אנא הכנס טלפון חוקי");
                 // Handle invalid phone number case (can show an alert or any other UI indication)
                 return;
@@ -93,9 +92,6 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
         const newValue = type === "checkbox" ? checked : value;
 
         if (name === "generalShelter") {
-            if (newValue === "0") {
-
-            }
             // Handle special case for generalShelter
             setTempData((prevData) => ({
                 ...prevData,
@@ -130,7 +126,7 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
         if (newId.trim() !== "") {
             setTempData((prevData) => ({
                 ...prevData,
-                ids: [...prevData.ids, newId.trim()],
+                ids: { ...prevData.ids, [newId.trim()]: "0" },
             }));
             setNewId("");
 
@@ -138,14 +134,11 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
     };
 
 
-    const handleDeleteId = (index) => {
-        // Create a copy of the ids array without the item at the spec  ified index
-        const updatedIds = tempData.ids.filter((_, i) => i !== index);
-
-        // Update the state with the new array of ids
+    const handleDeleteId = (id) => {
+        const { [id]: _, ...updatedIds } = tempData.ids;
         setTempData((prevData) => ({
             ...prevData,
-            ids: updatedIds
+            ids: updatedIds,
         }));
     };
 
@@ -363,18 +356,18 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
 
                     <div className="adds-id">
                         {editField === "ids" ? (
-                            tempData.ids.map((id, index) => (
-                                <div key={index} className="added-id">
-                                    <span>{id}</span>
-                                    <button onClick={() => handleDeleteId(index)} type="button">
+                            Object.entries(tempData.ids).map(([key, value]) => (
+                                <div key={key} className="added-id">
+                                    <span>{key}</span>
+                                    <button onClick={() => handleDeleteId(key)} type="button">
                                         X
                                     </button>
                                 </div>
                             ))
                         ) : (
-                            tempData.ids.map((id, index) => (
-                                <div key={index} className="added-id">
-                                    <span>{id}</span>
+                            Object.entries(tempData.ids).map(([key, value]) => (
+                                <div key={key} className="added-id">
+                                    <span>{key}</span>
                                 </div>
                             ))
                         )}

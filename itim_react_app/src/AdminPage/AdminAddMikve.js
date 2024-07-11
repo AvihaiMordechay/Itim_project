@@ -22,7 +22,7 @@ const AdminAddMikve = () => {
         levad: false,
         when_levad: "",
         notes: "",
-        ids: [],
+        ids: {},
         newId: ""
     });
 
@@ -36,13 +36,12 @@ const AdminAddMikve = () => {
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
-
         if (name === "ids") {
             // Handle IDs separately to append to the array only if value is not empty
             if (value.trim() !== "") {
                 setMikveData((prevData) => ({
                     ...prevData,
-                    ids: [...prevData.ids, value.trim()], // Append new ID to the array
+                    ids: { ...prevData.ids, [value.trim()]: "0" }, // Append new ID to the array
                     newId: ""  // Clear the newId field after adding
                 }));
             }
@@ -74,11 +73,11 @@ const AdminAddMikve = () => {
 
     };
 
-    const handleDeleteId = (index) => {
-        // Create a copy of the ids array without the item at the specified index
-        const updatedIds = mikveData.ids.filter((_, i) => i !== index);
+    const handleDeleteId = (id) => {
+        // Create a copy of the ids map without the item with the specified id
+        const { [id]: _, ...updatedIds } = mikveData.ids;
 
-        // Update the state with the new array of ids
+        // Update the state with the new map of ids
         setMikveData((prevData) => ({
             ...prevData,
             ids: updatedIds
@@ -106,7 +105,7 @@ const AdminAddMikve = () => {
             levad: false,
             when_levad: "",
             notes: "",
-            ids: [],
+            ids: {},
             newId: "",
         });
         setIsLevadChecked(false); // Reset supervision checkbox state
@@ -120,11 +119,10 @@ const AdminAddMikve = () => {
             mikveData.name &&
             mikveData.city &&
             mikveData.address &&
-            mikveData.phone &&
             mikveData.general_shelter &&
             mikveData.general_accessibility
         ) {
-            if (!isValidPhoneNumber(mikveData.phone)) {
+            if (mikveData.phone && !isValidPhoneNumber(mikveData.phone)) {
                 alert("אנא הכנס מספר טלפון חוקי.");
                 return;
             }
@@ -230,7 +228,6 @@ const AdminAddMikve = () => {
                             <div className="form-group">
                                 <label htmlFor="mikve-phone">
                                     טלפון:
-                                    <span className="required">*</span>
                                 </label>
                                 <input
                                     type="tel"
@@ -238,7 +235,6 @@ const AdminAddMikve = () => {
                                     name="phone"
                                     value={mikveData.phone}
                                     onChange={handleInputChange}
-                                    required
                                 />
                             </div>
 
@@ -355,10 +351,10 @@ const AdminAddMikve = () => {
                             </div>
 
                             <div className="added-ids">
-                                {mikveData.ids.map((id, index) => (
-                                    <div key={index} className="added-id">
+                                {Object.keys(mikveData.ids).map((id) => (
+                                    <div key={id} className="added-id">
                                         <button
-                                            onClick={() => handleDeleteId(index)}
+                                            onClick={() => handleDeleteId(id)}
                                             type="button"
                                         >
                                             X
