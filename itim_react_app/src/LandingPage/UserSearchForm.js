@@ -46,6 +46,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
             }
             inputRef.current.setAttribute('autocomplete', 'new-password');
 
+
         } else if (searchType === 'name') {
             if (autocompleteRef.current) {
                 try {
@@ -87,13 +88,16 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
     }, [searchType]);
 
     useEffect(() => {
-        if (searchInput === '' || placeSelected) {
+        if (searchType === 'address') {
+            if (searchInput === '' || placeSelected) {
+                setShowInstruction(false);
+            } else {
+                setShowInstruction(true);
+            }
+        } else {
             setShowInstruction(false);
-        } else if (searchType === 'address' && searchInput !== '' && !placeSelected) {
-            setShowInstruction(true);
         }
     }, [searchInput, placeSelected, searchType]);
-    
 
     const handlePlaceSelect = () => {
         if (autocompleteRef.current && searchType === 'address') {
@@ -112,9 +116,17 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
         if (searchType === 'address') {
             setPlaceSelected(false);
             setShowInstruction(value.length > 0);
+        } else {
+            setShowInstruction(false);
         }
     };
 
+    const handleSearchTypeChange = (e) => {
+        setSearchType(e.target.value);
+        setSearchInput('');
+        setShowInstruction(false);
+        setPlaceSelected(false);
+    };
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -232,7 +244,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                         <label className="select-header">סוג חיפוש</label>
                         <select
                             value={searchType}
-                            onChange={handleInputChange}
+                            onChange={handleSearchTypeChange}
                             className="select-input"
                         >
                             <option value="address">חיפוש לפי כתובת</option>

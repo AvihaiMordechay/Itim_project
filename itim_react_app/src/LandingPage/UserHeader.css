@@ -1,7 +1,7 @@
 /* UserHeader.css */
 .landing-page .header-container {
   color: white;
-  background-color: #faccce;
+  background-color: #635473;
   padding: 10px;
 }
 
@@ -23,7 +23,7 @@
 
 .header h1 {
   font-size: 42px;
-  color: #635473;
+  color: #faccce;
   position: absolute; /* Add this */
   left: 50%; /* Add this */
   transform: translateX(-50%); /* Add this */
