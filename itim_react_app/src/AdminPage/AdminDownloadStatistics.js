@@ -1,9 +1,8 @@
-// src/AdminDownloadStatistics.js
 import React from 'react';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { Chart as ChartJS, ArcElement, PieController, Tooltip, Legend, Title } from 'chart.js';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+import './AdminDownloadStatistics.css'; // Import the CSS file
 
 ChartJS.register(ArcElement, PieController, Tooltip, Legend, Title);
 
@@ -12,131 +11,132 @@ const AdminDownloadStatistics = ({ allMikves }) => {
     const handleDownload = async () => {
         const doc = new jsPDF();
 
-        // Create an invisible div to generate content for the PDF
         const element = document.createElement('div');
         element.style.position = 'absolute';
         element.style.left = '-9999px';
         document.body.appendChild(element);
 
-        // Get mikveh data
         const mikvesData = collectMikveData();
         const mikvesLength = allMikves.length;
-        const shelterData = mikvesData.generalShelter;
 
-        // Create the content of the div
-        const textElement = document.createElement('div');
-        textElement.innerHTML = `
+        const headerElement = document.createElement('div');
+        headerElement.classList.add('header-container'); // Add class for styling
+        headerElement.innerHTML = `
            <h2>סטטיסטיקה</h2>
            <h3>עמותת עיתים</h3>
-           <p>התרשימים והנתונים הנ״ל מתארים את נתוני מקוואות נשים במדינת ישראל</p> 
+           <p>התרשימים והנתונים הנ״ל מתארים את נתוני מקוואות הנשים במדינת ישראל</p> 
            <label>סה״כ המקוואות במערכת: ${mikvesLength}</label> 
         `;
-        element.appendChild(textElement);
+        element.appendChild(headerElement);
 
-        // Add custom labels for the pie chart
-        const labelsContainer = document.createElement('div');
-        labelsContainer.style.display = 'flex';
-        labelsContainer.style.flexDirection = 'column';
-        labelsContainer.style.alignItems = 'flex-start'; // Align to the left side
-        labelsContainer.style.marginLeft = '40px';
-        labelsContainer.innerHTML = `
-            <div>
-                <span style="display: inline-block; width: 10px; height: 10px; background-color: rgba(255, 99, 132, 1); margin-right: 5px;"></span>
-                <span>ללא מיגון: ${shelterData.withoutShelter}</span>
-            </div>
-            <div>
-                <span style="display: inline-block; width: 10px; height: 10px; background-color: rgba(54, 162, 235, 1); margin-right: 5px;"></span>
-                <span>מיגון חלקי: ${shelterData.partialShelter}</span>
-            </div>
-            <div>
-                <span style="display: inline-block; width: 10px; height: 10px; background-color: rgba(255, 206, 86, 1); margin-right: 5px;"></span>
-                <span>מיגון מלא: ${shelterData.fullShelter}</span>
-            </div>
-        `;
+        const createChart = (chartData, labels, colors, containerClass) => {
+            const chartContainer = document.createElement('div');
+            chartContainer.classList.add('chart-container'); // Add class for styling
 
-        // Create a container to position the labels and the chart side by side
-        const container = document.createElement('div');
-        container.style.display = 'flex';
-        container.style.marginTop = '80px';
-        container.style.alignItems = 'center'; // Align vertically center
-        container.appendChild(labelsContainer);
+            const labelsContainer = document.createElement('div');
+            labelsContainer.classList.add('chart-labels-container'); // Add class for styling
+            labels.forEach((label, index) => {
+                const labelItem = document.createElement('div');
+                labelItem.classList.add('chart-item'); // Add class for margin between items
+                labelItem.innerHTML = `
+                    <span class="chart-label" style="background-color: ${colors[index].border};"></span>
+                    <span>${label.text}: ${chartData[index]} (${label.percentage}%)</span>
+                `;
+                labelsContainer.appendChild(labelItem);
+            });
 
-        // Add the chart to the container
-        const canvasElement = document.createElement('canvas');
-        canvasElement.width = 400;  // Set chart width
-        canvasElement.height = 400; // Set chart height
-        container.appendChild(canvasElement);
+            const canvasElement = document.createElement('canvas');
+            canvasElement.width = 400;
+            canvasElement.height = 400;
+            chartContainer.appendChild(labelsContainer);
+            chartContainer.appendChild(canvasElement);
 
-        // Create the pie chart data
-        const shelterPieData = {
-            labels: ['ללא מיגון', 'מיגון חלקי', 'מיגון מלא'],  // Add labels for the pie chart
-            datasets: [{
-                label: 'מיגון',
-                data: [shelterData.withoutShelter, shelterData.partialShelter, shelterData.fullShelter],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                ],
-                borderWidth: 1,
-            }],
+            new ChartJS(canvasElement, {
+                type: 'pie',
+                data: {
+                    labels: labels.map(label => label.text),
+                    datasets: [{
+                        data: chartData,
+                        backgroundColor: colors.map(color => color.background),
+                        borderColor: colors.map(color => color.border),
+                        borderWidth: 1,
+                    }],
+                },
+                options: {
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: false,
+                        tooltip: false,
+                        datalabels: {
+                            display: false,
+                        },
+                    },
+                },
+            });
+
+            element.appendChild(chartContainer);
         };
 
-        new ChartJS(canvasElement, {
-            type: 'pie',
-            data: shelterPieData,
-            options: {
-                responsive: false,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: false, // Disable automatic legend
-                    tooltip: false, // Disable automatic tooltips
-                    datalabels: {
-                        formatter: (value, ctx) => {
-                            let sum = 0;
-                            let dataArr = ctx.chart.data.datasets[0].data;
-                            dataArr.forEach(data => {
-                                sum += data;
-                            });
-                            let percentage = (value * 100 / sum).toFixed(2) + "%";
-                            return percentage;
-                        },
-                        color: '#000', // Set the color of the data labels to black
-                        align: 'center', // Align data labels to the center
-                        anchor: 'center', // Anchor the data labels to the center
-                        font: {
-                            weight: 'bold', // Make the font bold
-                            size: 16 // Set the font size
-                        },
-                    }
-                }
-            },
-            plugins: [ChartDataLabels] // Include the datalabels plugin
-        });
+        const shelterData = mikvesData.generalShelter;
+        createChart(
+            [shelterData.withoutShelter, shelterData.partialShelter, shelterData.fullShelter],
+            [
+                { text: 'ללא מיגון', percentage: ((shelterData.withoutShelter / mikvesLength) * 100).toFixed(2) },
+                { text: 'מיגון חלקי', percentage: ((shelterData.partialShelter / mikvesLength) * 100).toFixed(2) },
+                { text: 'מיגון מלא', percentage: ((shelterData.fullShelter / mikvesLength) * 100).toFixed(2) },
+            ],
+            [
+                { background: 'rgba(255, 99, 132, 0.2)', border: 'rgba(255, 99, 132, 1)' },
+                { background: 'rgba(54, 162, 235, 0.2)', border: 'rgba(54, 162, 235, 1)' },
+                { background: 'rgba(255, 206, 86, 0.2)', border: 'rgba(255, 206, 86, 1)' },
+            ]
+        );
 
-        element.appendChild(container);
-
-        // Wait for the chart to render and convert the element to an image
         await new Promise(resolve => setTimeout(resolve, 1000));
+        let canvas = await html2canvas(element);
+        let imgData = canvas.toDataURL('image/png');
+        doc.addImage(imgData, 'PNG', 10, 10, 180, 160);
+        element.innerHTML = '';
 
-        const canvas = await html2canvas(element);
-        const imgData = canvas.toDataURL('image/png');
+        const accessibilityData = mikvesData.generalAccessibility;
+        createChart(
+            [accessibilityData.withoutAccessibility, accessibilityData.partialAccessibility, accessibilityData.fullAccessibility],
+            [
+                { text: 'ללא נגישות', percentage: ((accessibilityData.withoutAccessibility / mikvesLength) * 100).toFixed(2) },
+                { text: 'נגישות חלקית', percentage: ((accessibilityData.partialAccessibility / mikvesLength) * 100).toFixed(2) },
+                { text: 'נגישות מלאה', percentage: ((accessibilityData.fullAccessibility / mikvesLength) * 100).toFixed(2) },
+            ],
+            [
+                { background: 'rgba(255, 99, 132, 0.2)', border: 'rgba(255, 99, 132, 1)' },
+                { background: 'rgba(54, 162, 235, 0.2)', border: 'rgba(54, 162, 235, 1)' },
+                { background: 'rgba(255, 206, 86, 0.2)', border: 'rgba(255, 206, 86, 1)' },
+            ]
+        );
 
-        // Add the chart image to the PDF
+
+        const levadData = mikvesData.levad;
+        createChart(
+            [levadData.true, levadData.false],
+            [
+                { text: 'עם השגחה', percentage: ((levadData.true / mikvesLength) * 100).toFixed(2) },
+                { text: 'ללא השגחה', percentage: ((levadData.false / mikvesLength) * 100).toFixed(2) },
+            ],
+            [
+                { background: 'rgba(255, 99, 132, 0.2)', border: 'rgba(255, 99, 132, 1)' },
+                { background: 'rgba(54, 162, 235, 0.2)', border: 'rgba(54, 162, 235, 1)' },
+            ]
+        );
+
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        canvas = await html2canvas(element);
+        imgData = canvas.toDataURL('image/png');
+        doc.addPage();
         doc.addImage(imgData, 'PNG', 10, 10, 180, 160);
 
         doc.save('Statistics.pdf');
-
-        // Remove the element from the page
         document.body.removeChild(element);
     };
-
-
 
     const collectMikveData = () => {
         const acc = {
