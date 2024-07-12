@@ -108,16 +108,9 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
         e.preventDefault();
 
         const searchTerm = searchInput.trim().toLowerCase();
+        let searchLocation = userLocation;
 
-        if (searchType === 'name') {
-            const filteredMikves = allMikves.filter(mikve => 
-                mikve.name.toLowerCase().includes(searchTerm)
-            );
-            handleFilteredMikves(filteredMikves, userLocation);
-            onSearch(searchTerm, null, 'name');
-        } else {
-            let searchLocation = userLocation;
-
+        if (searchType === 'address' && searchTerm) {
             try {
                 if (autocompleteRef.current && autocompleteRef.current.getPlace()) {
                     const addressObject = autocompleteRef.current.getPlace();
@@ -144,9 +137,6 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                         lng: result.geometry.location.lng()
                     };
                 }
-
-                handleFilteredMikves(allMikves, searchLocation);
-                onSearch(searchTerm, searchLocation, 'address');
             } catch (error) {
                 console.error('Geocoding error:', error);
                 setPopupMessage('לא הצלחנו למצוא את הכתובת. אנא נסי להכניס כתובת יותר מפורטת.');
@@ -154,10 +144,15 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                 return;
             }
         }
+
+        const filteredMikves = filterMikves(allMikves, searchTerm, searchType);
+        handleFilteredMikves(filteredMikves, searchLocation);
+        onSearch(searchTerm, searchLocation, searchType);
     };
 
-    const handleFilteredMikves = (mikves, location) => {
-        const filteredMikves = mikves.filter(mikve => {
+    const filterMikves = (mikves, searchTerm, searchType) => {
+        return mikves.filter(mikve => {
+            const nameMatch = searchType === 'name' ? mikve.name.toLowerCase().includes(searchTerm) : true;
             const accessibilityMatches =
                 accessibility === '' ||
                 (accessibility === '0' && mikve.general_accessibility === '0') ||
@@ -172,9 +167,11 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                 (shelter === '1' && ['1', '2'].includes(mikve.general_shelter)) ||
                 (shelter === '2' && mikve.general_shelter === '2');
     
-            return accessibilityMatches && waterSamplingMatches && levadMatches && shelterMatches;
+            return nameMatch && accessibilityMatches && waterSamplingMatches && levadMatches && shelterMatches;
         });
-    
+    };
+
+    const handleFilteredMikves = (filteredMikves, location) => {
         if (filteredMikves.length === 0) {
             setPopupMessage('לא הצלחנו למצוא מקוואות המתאימות לחיפוש שלך. אנא נסי שנית.');
             setShowPopup(true);
@@ -195,8 +192,9 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
 
         const sortedMikves = mikvesWithDistances.sort((a, b) => a.distance - b.distance);
 
-        setFilteredMikves(sortedMikves.slice(0, displayCount));
+        setFilteredMikves(sortedMikves);
     };
+
 
     const closePopup = () => {
         setShowPopup(false);

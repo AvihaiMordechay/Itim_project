@@ -94,23 +94,8 @@ const LandingPage = () => {
     };
 
     const handleSearch = (searchTerm, location, searchType) => {
-        console.log('handleSearch called with:', { searchTerm, location, searchType });
-        
         const referenceLocation = location || userLocation || { lat: 31.7683, lng: 35.2137 };
-        
-        let filteredMikves;
-        if (searchType === 'name') {
-            filteredMikves = allMikves.filter(mikve => 
-                mikve.name.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-            setSearchLocation(null);
-        } else {
-            filteredMikves = allMikves;
-            setSearchLocation(referenceLocation);
-        }
-
-        const sortedMikves = sortMikvesByDistance(filteredMikves, referenceLocation);
-        setFilteredMikves(sortedMikves);
+        setSearchLocation(searchType === 'address' ? referenceLocation : null);
         setDisplayCount(NUM_OF_MIKVES); // Reset display count on new search
     };
 
@@ -125,7 +110,6 @@ const LandingPage = () => {
                     setFilteredMikves={setFilteredMikves}
                     allMikves={allMikves}
                     userLocation={userLocation}
-                    displayCount={displayCount}
                     onSearch={handleSearch}
                 />
                 <div className="map-and-list-container">

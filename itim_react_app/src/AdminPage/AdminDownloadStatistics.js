@@ -20,7 +20,7 @@ const AdminDownloadStatistics = ({ allMikves }) => {
         const mikvesLength = allMikves.length;
 
         const headerElement = document.createElement('div');
-        headerElement.classList.add('header-container'); // Add class for styling
+        headerElement.classList.add('header-container-stat'); // Add class for styling
         headerElement.innerHTML = `
            <h2>סטטיסטיקה</h2>
            <h3>עמותת עיתים</h3>
