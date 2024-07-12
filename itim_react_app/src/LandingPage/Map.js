@@ -105,6 +105,12 @@ const Map = ({ mikves, userLocation, searchLocation }) => {
         }
     }, [userLocation, searchLocation, mikves]);
 
+    useEffect(() => {
+        if (isLoaded && mapRef.current) {
+          window.google.maps.event.trigger(mapRef.current, 'resize');
+        }
+      }, [isLoaded]);
+
     const handleMarkerClick = (mikve) => {
         console.log('Marker clicked:', mikve);
         setSelectedMikve(mikve);

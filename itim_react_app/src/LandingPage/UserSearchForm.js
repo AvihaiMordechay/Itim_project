@@ -229,37 +229,38 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
     return (
         <>
             <form className="search-form" onSubmit={handleSearch}>
-                <div className="search-bar-container">
-                    <div className="search-input-wrapper">
-                        <input
-                            ref={inputRef}
-                            type="text"
-                            placeholder={searchType === 'name' ? "שם המקווה" : "עיר או רחוב"}
-                            value={searchInput}
-                            onChange={handleInputChange}
-                            className="search-bar"
-                        />
-                    </div>
-                    <div className="select-box">
-                        <label className="select-header">סוג חיפוש</label>
-                        <select
-                            value={searchType}
-                            onChange={handleSearchTypeChange}
-                            className="select-input"
-                        >
-                            <option value="address">חיפוש לפי כתובת</option>
-                            <option value="name">חיפוש לפי שם</option>
-                        </select>
-                    </div>
-                    <button type="submit" className="search-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-                            <path d="M10 2a8 8 0 106.32 12.9l4.39 4.38a1 1 0 001.42-1.42l-4.38-4.39A8 8 0 0010 2zm0 2a6 6 0 11-4.24 10.24A6 6 0 0110 4z" />
-                        </svg>
-                    </button>
-                </div>
+            <div className="search-bar-container">
+    <div className="search-input-wrapper">
+        <input
+            ref={inputRef}
+            type="text"
+            placeholder={searchType === 'name' ? "שם המקווה" : "עיר או רחוב"}
+            value={searchInput}
+            onChange={handleInputChange}
+            className="search-bar"
+        />
+        <button type="submit" className="search-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                <path d="M10 2a8 8 0 106.32 12.9l4.39 4.38a1 1 0 001.42-1.42l-4.38-4.39A8 8 0 0010 2zm0 2a6 6 0 11-4.24 10.24A6 6 0 0110 4z" />
+            </svg>
+        </button>
+    </div>
+    <div className="select-box">
+        <label className="select-header">סוג חיפוש</label>
+        <select
+            value={searchType}
+            onChange={handleSearchTypeChange}
+            className="select-input"
+        >
+            <option value="address">חיפוש לפי כתובת</option>
+            <option value="name">חיפוש לפי שם</option>
+        </select>
+    </div>
+</div>
                 <div className="advanced-search">
                     <h3 className="advanced-search-header">חיפוש מתקדם</h3>
                     <div className="filters">
+                        <div className="two-filters">
                         <div className="select-box">
                             <label className="select-header">נגישות</label>
                             <select value={accessibility} onChange={(e) => setAccessibility(e.target.value)} className="select-input">
@@ -282,6 +283,8 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                                 <option value="2">בדיקה תקינה</option>
                             </select>
                         </div>
+                        </div>
+                        <div className="two-filters">
                         <div className="select-box">
                             <label className="select-header">מיגון</label>
                             <select value={shelter} onChange={(e) => setShelter(e.target.value)} className="select-input">
@@ -298,6 +301,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                                 <option value="true">מותר לרחוץ לבד</option>
                                 <option value="false">אסור לרחוץ לבד</option>
                             </select>
+                        </div>
                         </div>
                     </div>
                 </div>

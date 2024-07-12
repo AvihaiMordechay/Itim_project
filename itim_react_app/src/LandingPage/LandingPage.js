@@ -115,13 +115,15 @@ const LandingPage = () => {
                 <div className="map-and-list-container">
                     <h2 className="results-header">מקוואות שמצאנו עבורך</h2>
                     <div className="map-and-list">
-                        <div className="map-wrapper">
-                            <Map
-                                mikves={displayedMikves}
-                                userLocation={userLocation}
-                                searchLocation={searchLocation}
-                            />
-                        </div>
+                    {isLoaded && (
+  <div className="map-wrapper">
+    <Map
+      mikves={displayedMikves}
+      userLocation={userLocation}
+      searchLocation={searchLocation}
+    />
+  </div>
+)}
                         <div className="list-wrapper">
                             <UserMikvesList 
                                 mikves={displayedMikves} 
