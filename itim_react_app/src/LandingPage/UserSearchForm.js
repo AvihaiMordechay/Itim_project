@@ -13,6 +13,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
     const [showPopup, setShowPopup] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
     const [showInstruction, setShowInstruction] = useState(false);
+    const [placeSelected, setPlaceSelected] = useState(false);
     const inputRef = useRef(null);
     const autocompleteRef = useRef(null);
 
@@ -38,12 +39,13 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                 autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, {
                     types: ['geocode'],
                     componentRestrictions: { country: 'il' },
-                    fields: ['address_components', 'geometry', 'name'],
+                    fields: ['address_components', 'geometry', 'name', 'formatted_address'],
                     strictBounds: false,
                 });
                 autocompleteRef.current.addListener('place_changed', handlePlaceSelect);
             }
             inputRef.current.setAttribute('autocomplete', 'new-password');
+
         } else if (searchType === 'name') {
             if (autocompleteRef.current) {
                 try {
@@ -83,11 +85,15 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
             }
         };
     }, [searchType]);
+
+    useEffect(() => {
+        if (searchInput === '' || placeSelected) {
+            setShowInstruction(false);
+        } else if (searchType === 'address' && searchInput !== '' && !placeSelected) {
+            setShowInstruction(true);
+        }
+    }, [searchInput, placeSelected, searchType]);
     
-    const handleSearchTypeChange = (e) => {
-        setSearchType(e.target.value);
-        setSearchInput('');
-    };
 
     const handlePlaceSelect = () => {
         if (autocompleteRef.current && searchType === 'address') {
@@ -95,17 +101,25 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
             if (addressObject && addressObject.formatted_address) {
                 setSearchInput(addressObject.formatted_address);
                 setShowInstruction(false);
+                setPlaceSelected(true);
             }
         }
     };
 
     const handleInputChange = (e) => {
-        setSearchInput(e.target.value);
-        setShowInstruction(e.target.value.length > 0 && searchType === 'address');
+        const value = e.target.value;
+        setSearchInput(value);
+        if (searchType === 'address') {
+            setPlaceSelected(false);
+            setShowInstruction(value.length > 0);
+        }
     };
+
 
     const handleSearch = async (e) => {
         e.preventDefault();
+        setShowInstruction(false);
+
 
         const searchTerm = searchInput.trim().toLowerCase();
         let searchLocation = userLocation;
@@ -218,7 +232,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                         <label className="select-header">סוג חיפוש</label>
                         <select
                             value={searchType}
-                            onChange={handleSearchTypeChange}
+                            onChange={handleInputChange}
                             className="select-input"
                         >
                             <option value="address">חיפוש לפי כתובת</option>
@@ -276,7 +290,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                     </div>
                 </div>
             </form>
-            {showInstruction && searchType === 'address' && (
+            {showInstruction && searchType === 'address' && !placeSelected && (
                 <div ref={popupRef} className="autocomplete-popup">
                     אנא בחרי כתובת מהרשימה המוצעת
                 </div>
