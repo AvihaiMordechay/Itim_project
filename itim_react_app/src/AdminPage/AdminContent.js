@@ -56,8 +56,8 @@ const AdminContent = () => {
         setPresentationMikves((prevMikves) => prevMikves.filter((mikve) => mikve.id !== deletedMikveId));
     };
 
-    const handleUploadSuccess = (updatedMikves) => {
-        setPresentationMikves(updatedMikves);
+    const handleUploadSuccess = () => {
+        setPresentationMikves(allMikves);
     };
 
     return (

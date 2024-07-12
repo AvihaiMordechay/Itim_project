@@ -1,6 +1,8 @@
 import "./AdminMikvesList.css"
 import React from "react";
 import { MdModeEdit } from "react-icons/md";
+import { format } from 'date-fns';
+
 const AdminMikvesList = ({ presentationMikves, handleEditMikve, visibleCount, setVisibleCount, numOfRows }) => {
     const handleShowMore = () => {
         setVisibleCount((prevCount) => prevCount + numOfRows);
@@ -34,7 +36,7 @@ const AdminMikvesList = ({ presentationMikves, handleEditMikve, visibleCount, se
                                     {mikve.water_sampling === "1" && "נבדק ותקין"}
                                     {mikve.water_sampling === "2" && "נבדק ולא תקין"}
                                 </td>
-                                <td>{mikve.when_sampling.length > 0 && mikve.when_sampling}</td>
+                                <td>{mikve.when_sampling && mikve.when_sampling.length > 0 ? format(new Date(mikve.when_sampling), 'dd-MM-yyyy') : 'לא נבדק'}</td>
                                 <td>
                                     <button className="admin-mikve-edit-button"
                                         onClick={() => handleEditMikve(mikve)}><MdModeEdit /></button>
