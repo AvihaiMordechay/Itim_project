@@ -32,7 +32,7 @@ const AdminDownloadData = ({ allMikves }) => {
 
     return (
         <div>
-            <button className="download-button" onClick={handleDownload}>
+            <button className="download-data-button" onClick={handleDownload}>
                 הורד קובץ נתוני מקוואות
                 <FaFileDownload />
             </button>

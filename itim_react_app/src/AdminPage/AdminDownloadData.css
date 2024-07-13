@@ -1,4 +1,4 @@
-.download-button {
+.download-data-button {
     display: flex;
     background-color: #605371;
     color: white;
@@ -11,7 +11,8 @@
     transition: background-color 0.3s ease;
     align-items: center;
 }
-.download-button:hover{
+
+.download-data-button:hover {
     background-color: #4a3f5a;
 
 }

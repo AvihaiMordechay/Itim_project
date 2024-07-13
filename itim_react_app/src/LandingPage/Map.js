@@ -101,7 +101,8 @@ const Map = ({ mikves, userLocation, searchLocation, searchType }) => {
             mapRef.current.panTo(newCenter);
             mapRef.current.setZoom(14);
         }
-    }, [userLocation, searchLocation, mikves]);
+    }, [userLocation, searchLocation, mikves, searchType]);
+
 
     useEffect(() => {
         if (isLoaded && mapRef.current) {

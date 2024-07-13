@@ -214,7 +214,7 @@ const AdminDownloadStatistics = ({ allMikves }) => {
 
     return (
         <div>
-            <button onClick={handleDownload}>הורד סטטיסטיקות כ-PDF</button>
+            <button className="download-statistics-botton" onClick={handleDownload}>הורד סטטיסטיקות כ-PDF</button>
             {loading && (
                 <div className="loading-container">
                     <div className="loading-spinner"></div>

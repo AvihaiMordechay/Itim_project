@@ -177,6 +177,13 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
         } else if (searchType === 'name') {
             const filteredMikves = filterMikves(allMikves, searchTerm, searchType);
             if (filteredMikves.length > 0) {
+                const mikveToShow = filteredMikves.find(mikve => mikve.position !== null);
+                if (mikveToShow.position) {
+                    searchLocation = {
+                        lat: mikveToShow.position.latitude,
+                        lng: mikveToShow.position.longitude
+                    };
+                }
                 setFilteredMikves(filteredMikves);
             } else {
                 if (filteredMikves.length === 0) {

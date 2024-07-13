@@ -23,7 +23,6 @@ const LandingPage = () => {
     const [searchType, setSearchType] = useState("null");
     const [searchLocation, setSearchLocation] = useState(null);
     const [displayCount, setDisplayCount] = useState(NUM_OF_MIKVES);
-    // const [isLoading, setIsLoading] = useState(true);
 
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API,
@@ -86,7 +85,7 @@ const LandingPage = () => {
             })
         })).sort((a, b) => a.distance - b.distance);
     };
-    const onClear = async () => {
+    const onClear = () => {
         setFilteredMikves(initMikves);
         setDisplayedMikves(filteredMikves.slice(0, NUM_OF_MIKVES));
         setSearchLocation(null);
@@ -109,13 +108,7 @@ const LandingPage = () => {
             setSearchLocation(referenceLocation);
         } else if (searchType === 'name') {
             setSearchType("name");
-            const mikveToShow = filteredMikves.find(mikve => mikve.position !== null);
-            if (mikveToShow) {
-                const mikveToShowPosition = { lat: mikveToShow.position.latitude, lng: mikveToShow.position.longitude }
-                setSearchLocation(mikveToShowPosition);
-            } else {
-                setSearchLocation(userLocation || { lat: 31.7683, lng: 35.2137 })
-            }
+            setSearchLocation(location || userLocation || { lat: 31.7683, lng: 35.2137 });
         }
         setDisplayCount(NUM_OF_MIKVES); // Reset display count on new search
     };
