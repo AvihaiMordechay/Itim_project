@@ -3,7 +3,6 @@ import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { Chart as ChartJS, ArcElement, PieController, Tooltip, Legend, Title } from 'chart.js';
 import './AdminDownloadStatistics.css'; // Import the CSS file
-import { el } from 'date-fns/locale';
 
 ChartJS.register(ArcElement, PieController, Tooltip, Legend, Title);
 

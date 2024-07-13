@@ -79,27 +79,25 @@ const mapStyles = [
     }
 ];
 
-const Map = ({ mikves, userLocation, searchLocation }) => {
+const Map = ({ mikves, userLocation, searchLocation, searchType }) => {
     const { isLoaded, loadError } = useJsApiLoader({
         googleMapsApiKey: GOOGLE_MAPS_API_KEY,
     });
 
-    const [mapCenter, setMapCenter] = useState(defaultCenter);
-    const [mapZoom, setMapZoom] = useState(10);
+    const mapCenter = defaultCenter;
+    const mapZoom = 10;
+    const mapKey = 0;
     const [selectedMikve, setSelectedMikve] = useState(null);
-    const [mapKey, setMapKey] = useState(0);
     const [showDetailsPopup, setShowDetailsPopup] = useState(false);
     const mapRef = useRef(null);
 
     const onLoad = useCallback(function callback(map) {
-        console.log('Map loaded');
         mapRef.current = map;
     }, []);
 
     useEffect(() => {
         if (mapRef.current) {
             const newCenter = searchLocation || userLocation || defaultCenter;
-            console.log('Panning to:', newCenter);
             mapRef.current.panTo(newCenter);
             mapRef.current.setZoom(14);
         }
@@ -107,12 +105,11 @@ const Map = ({ mikves, userLocation, searchLocation }) => {
 
     useEffect(() => {
         if (isLoaded && mapRef.current) {
-          window.google.maps.event.trigger(mapRef.current, 'resize');
+            window.google.maps.event.trigger(mapRef.current, 'resize');
         }
-      }, [isLoaded]);
+    }, [isLoaded]);
 
     const handleMarkerClick = (mikve) => {
-        console.log('Marker clicked:', mikve);
         setSelectedMikve(mikve);
     };
 
@@ -156,13 +153,15 @@ const Map = ({ mikves, userLocation, searchLocation }) => {
                 }}
             >
                 {mikves.map((mikve) => (
-                    <Marker
-                        key={mikve.id}
-                        position={{ lat: mikve.position.latitude, lng: mikve.position.longitude }}
-                        onClick={() => handleMarkerClick(mikve)}
-                    />
+                    mikve.position ? (
+                        <Marker
+                            key={mikve.id}
+                            position={{ lat: mikve.position.latitude, lng: mikve.position.longitude }}
+                            onClick={() => handleMarkerClick(mikve)}
+                        />
+                    ) : null
                 ))}
-                {(searchLocation || userLocation) && (
+                {(searchLocation || userLocation) && searchType !== "name" && (
                     <Marker
                         position={searchLocation || userLocation}
                         icon={{

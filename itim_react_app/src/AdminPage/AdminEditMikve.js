@@ -66,13 +66,13 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                 ["when_levad"]: tempData.when_levad,
             }));
 
-        } else if (field == "general_shelter") {
+        } else if (field === "general_shelter") {
             setMikveData((prevData) => ({
                 ...prevData,
                 [field]: tempData[field],
                 ["shelter"]: tempData.shelter,
             }));
-        } else if (field == "general_accessibility") {
+        } else if (field === "general_accessibility") {
             setMikveData((prevData) => ({
                 ...prevData,
                 [field]: tempData[field],
@@ -113,7 +113,7 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
 
         if (name === "levad") {
             setIsLevadChecked(checked);
-            if (checked == false) {
+            if (checked === false) {
                 setTempData((prevData) => ({
                     ...prevData,
                     when_levad: "",

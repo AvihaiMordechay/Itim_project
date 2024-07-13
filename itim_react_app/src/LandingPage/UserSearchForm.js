@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { calculateDistance } from '../utils/distance';
 import './UserSearchForm.css';
 
-const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCount, onSearch }) => {
+const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, onClear }) => {
     const [searchInput, setSearchInput] = useState('');
     const [searchType, setSearchType] = useState('address');
     const [accessibility, setAccessibility] = useState('');
@@ -26,10 +26,10 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
             const rect = inputElement.getBoundingClientRect();
             const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
+
             popup.style.top = `${rect.top + scrollTop - popup.offsetHeight - 5}px`;
             popup.style.left = `${rect.left + scrollLeft}px`;
-            popup.style.width = `${rect.width*0.9}px`;
+            popup.style.width = `${rect.width * 0.9}px`;
         }
     };
 
@@ -66,7 +66,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
             }
             inputRef.current.setAttribute('autocomplete', 'off');
         }
-    
+
         return () => {
             if (autocompleteRef.current) {
                 try {
@@ -135,8 +135,9 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
 
         const searchTerm = searchInput.trim().toLowerCase();
         let searchLocation = userLocation;
-
-        if (searchType === 'address' && searchTerm) {
+        if (!searchTerm) {
+            onClear();
+        } else if (searchType === 'address') {
             try {
                 if (autocompleteRef.current && autocompleteRef.current.getPlace()) {
                     const addressObject = autocompleteRef.current.getPlace();
@@ -169,11 +170,23 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                 setShowPopup(true);
                 return;
             }
-        }
 
-        const filteredMikves = filterMikves(allMikves, searchTerm, searchType);
-        handleFilteredMikves(filteredMikves, searchLocation);
-        onSearch(searchTerm, searchLocation, searchType);
+            const filteredMikves = filterMikves(allMikves, searchTerm, searchType);
+            handleFilteredMikves(filteredMikves, searchLocation);
+            onSearch(searchTerm, searchLocation, searchType);
+        } else if (searchType === 'name') {
+            const filteredMikves = filterMikves(allMikves, searchTerm, searchType);
+            if (filteredMikves.length > 0) {
+                setFilteredMikves(filteredMikves);
+            } else {
+                if (filteredMikves.length === 0) {
+                    setPopupMessage('לא הצלחנו למצוא מקוואות המתאימות לחיפוש שלך. אנא נסי שנית.');
+                    setShowPopup(true);
+                    return;
+                }
+            }
+            onSearch(searchTerm, searchLocation, searchType);
+        }
     };
 
     const filterMikves = (mikves, searchTerm, searchType) => {
@@ -184,7 +197,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                 (accessibility === '0' && mikve.general_accessibility === '0') ||
                 (accessibility === '1' && ['1', '2'].includes(mikve.general_accessibility)) ||
                 (accessibility === '2' && mikve.general_accessibility === '2');
-    
+
             const waterSamplingMatches = waterSampling === '' || mikve.water_sampling === waterSampling;
             const levadMatches = levad === '' || mikve.levad.toString() === levad;
             const shelterMatches =
@@ -192,7 +205,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
                 (shelter === '0' && mikve.general_shelter === '0') ||
                 (shelter === '1' && ['1', '2'].includes(mikve.general_shelter)) ||
                 (shelter === '2' && mikve.general_shelter === '2');
-    
+
             return nameMatch && accessibilityMatches && waterSamplingMatches && levadMatches && shelterMatches;
         });
     };
@@ -203,7 +216,6 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
             setShowPopup(true);
             return;
         }
-    
         const validLocation = location && typeof location.lat === 'number' && typeof location.lng === 'number'
             ? location
             : { lat: 31.7683, lng: 35.2137 };
@@ -229,79 +241,79 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, displayCou
     return (
         <>
             <form className="search-form" onSubmit={handleSearch}>
-            <div className="search-bar-container">
-    <div className="search-input-wrapper">
-        <input
-            ref={inputRef}
-            type="text"
-            placeholder={searchType === 'name' ? "שם המקווה" : "עיר או רחוב"}
-            value={searchInput}
-            onChange={handleInputChange}
-            className="search-bar"
-        />
-        <button type="submit" className="search-button">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-                <path d="M10 2a8 8 0 106.32 12.9l4.39 4.38a1 1 0 001.42-1.42l-4.38-4.39A8 8 0 0010 2zm0 2a6 6 0 11-4.24 10.24A6 6 0 0110 4z" />
-            </svg>
-        </button>
-    </div>
-    <div className="select-box">
-        <label className="select-header">סוג חיפוש</label>
-        <select
-            value={searchType}
-            onChange={handleSearchTypeChange}
-            className="select-input"
-        >
-            <option value="address">חיפוש לפי כתובת</option>
-            <option value="name">חיפוש לפי שם</option>
-        </select>
-    </div>
-</div>
+                <div className="search-bar-container">
+                    <div className="search-input-wrapper">
+                        <input
+                            ref={inputRef}
+                            type="text"
+                            placeholder={searchType === 'name' ? "שם המקווה" : "עיר או רחוב"}
+                            value={searchInput}
+                            onChange={handleInputChange}
+                            className="search-bar"
+                        />
+                        <button type="submit" className="search-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                                <path d="M10 2a8 8 0 106.32 12.9l4.39 4.38a1 1 0 001.42-1.42l-4.38-4.39A8 8 0 0010 2zm0 2a6 6 0 11-4.24 10.24A6 6 0 0110 4z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div className="select-box">
+                        <label className="select-header">סוג חיפוש</label>
+                        <select
+                            value={searchType}
+                            onChange={handleSearchTypeChange}
+                            className="select-input"
+                        >
+                            <option value="address">חיפוש לפי כתובת</option>
+                            <option value="name">חיפוש לפי שם</option>
+                        </select>
+                    </div>
+                </div>
                 <div className="advanced-search">
                     <h3 className="advanced-search-header">חיפוש מתקדם</h3>
                     <div className="filters">
                         <div className="two-filters">
-                        <div className="select-box">
-                            <label className="select-header">נגישות</label>
-                            <select value={accessibility} onChange={(e) => setAccessibility(e.target.value)} className="select-input">
-                                <option value="">בחר</option>
-                                <option value="0">אין נגישות</option>
-                                <option value="1">נגישות חלקית</option>
-                                <option value="2">נגישות מלאה</option>
-                            </select>
-                        </div>
-                        <div className="select-box">
-                            <label className="select-header">בדיקת מים</label>
-                            <select
-                                value={waterSampling}
-                                onChange={(e) => setWaterSampling(e.target.value)}
-                                className="select-input"
-                            >
-                                <option value="">בחר</option>
-                                <option value="0">ללא בדיקה</option>
-                                <option value="1">בדיקה לא תקינה</option>
-                                <option value="2">בדיקה תקינה</option>
-                            </select>
-                        </div>
+                            <div className="select-box">
+                                <label className="select-header">נגישות</label>
+                                <select value={accessibility} onChange={(e) => setAccessibility(e.target.value)} className="select-input">
+                                    <option value="">בחר</option>
+                                    <option value="0">אין נגישות</option>
+                                    <option value="1">נגישות חלקית</option>
+                                    <option value="2">נגישות מלאה</option>
+                                </select>
+                            </div>
+                            <div className="select-box">
+                                <label className="select-header">בדיקת מים</label>
+                                <select
+                                    value={waterSampling}
+                                    onChange={(e) => setWaterSampling(e.target.value)}
+                                    className="select-input"
+                                >
+                                    <option value="">בחר</option>
+                                    <option value="0">לא נבדק</option>
+                                    <option value="1">נבדק ותקין</option>
+                                    <option value="2">נבדק ולא תקין</option>
+                                </select>
+                            </div>
                         </div>
                         <div className="two-filters">
-                        <div className="select-box">
-                            <label className="select-header">מיגון</label>
-                            <select value={shelter} onChange={(e) => setShelter(e.target.value)} className="select-input">
-                                <option value="">בחר</option>
-                                <option value="0">ללא מיגון</option>
-                                <option value="1">מיגון חלקי</option>
-                                <option value="2">מיגון מלא</option>
-                            </select>
-                        </div>
-                        <div className="select-box">
-                            <label className="select-header">טבילה לבד</label>
-                            <select value={levad} onChange={(e) => setLevad(e.target.value)} className="select-input">
-                                <option value="">בחר</option>
-                                <option value="true">מותר לרחוץ לבד</option>
-                                <option value="false">אסור לרחוץ לבד</option>
-                            </select>
-                        </div>
+                            <div className="select-box">
+                                <label className="select-header">מיגון</label>
+                                <select value={shelter} onChange={(e) => setShelter(e.target.value)} className="select-input">
+                                    <option value="">בחר</option>
+                                    <option value="0">ללא מיגון</option>
+                                    <option value="1">מיגון חלקי</option>
+                                    <option value="2">מיגון מלא</option>
+                                </select>
+                            </div>
+                            <div className="select-box">
+                                <label className="select-header">טבילה לבד</label>
+                                <select value={levad} onChange={(e) => setLevad(e.target.value)} className="select-input">
+                                    <option value="">בחר</option>
+                                    <option value="true">מותר לרחוץ לבד</option>
+                                    <option value="false">אסור לרחוץ לבד</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
