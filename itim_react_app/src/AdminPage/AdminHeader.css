@@ -1,18 +1,84 @@
-.admin-header h1 {
-    font-size: 42px;
-    text-align: center;
-    flex-grow: 1;
+.admin-header {
+    display: flex;
+    background-color: #605379e0;
     color: white;
+    position: fixed;
+    /* padding: 20px; */
+    /* position: fixed; */
+    top: 0;
+    right: 0;
+    width: 15%;
+    height: -webkit-fill-available;
+    overflow-y: auto;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-content: flex-start;
 }
 
-.return-button {
-    background-color: white;
-    color: #605371;
+.admin-header h1 {
+    margin: 20px 0 20px 0;
+    text-align: right;
+}
+
+.admin-operations {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-right: 20px;
+    width: 100%;
+    text-align: right;
+}
+
+.admin-operations h3{
+    margin: 0;
+}
+
+/* New styles for the buttons */
+.admin-operations button {
+    background: none;
     border: none;
-    padding: 10px 20px;
+    color: white;
+    text-decoration: underline;
     cursor: pointer;
+    font-size: 16px;
+    text-align: right;
+    padding: 5px 0;
+    position: relative;
 }
 
-.return-button:hover {
-    background-color: #a1c5db;
+.admin-operations button::after {
+    content: attr(data-text);
+    display: block;
+    font-weight: bold;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+.admin-operations button:hover {
+    font-weight: bold;
+}
+
+/* Override any existing button styles */
+.add-mikve-button,
+.download-button,
+.mikve-upload-button {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: white !important;
+    text-decoration: underline !important;
+}
+
+.add-mikve-button:hover,
+.download-button:hover,
+.mikve-upload-button:hover {
+    font-weight: bold !important;
+    background: none !important;
+}
+
+/* Adjust icon styles if needed */
+.admin-operations button svg {
+    vertical-align: middle;
+    margin-left: 5px;
 }

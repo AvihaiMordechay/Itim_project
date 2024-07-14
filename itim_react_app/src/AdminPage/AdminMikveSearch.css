@@ -2,28 +2,27 @@
     display: flex;
     direction: rtl;
     text-align: right;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    /* height: 40px; */
+    height: 40px;
     margin-right: 10px;
-
+    margin-top: 20px;
 }
 
-.mikve-button {
+.mikve-button-bar{
     background-color: #605371;
     color: white;
     border: none;
-    border-radius: 20px;
-    /* padding: 10px 20px; */
+    height: inherit;
+    border-radius: 35px;
+    padding: 10px;
     font-size: 16px;
     cursor: pointer;
     margin-right: 10px;
     transition: background-color 0.3s ease;
 }
-#mikve-button-search {
-    margin-right: 10px;
-    height: 28px;
-}
+
+
 .mikve-button:hover {
     background-color: #4a3f5a;
 }

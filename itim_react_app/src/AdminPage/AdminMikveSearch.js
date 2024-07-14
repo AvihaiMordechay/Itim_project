@@ -51,8 +51,10 @@ const AdminMikveSearch = ({ allMikves, setPresentationMikves, setVisibleCount, n
                 value={searchInput}
                 placeholder="הקלד..."
                 style={{
-                    borderRadius: '20px',
-                    height: '20px'
+                    width: '25%',
+                    height: '-webkit-fill-available',
+                    borderRadius: '20px'
+                
                 }}
                 onChange={(e) => setSearchInput(e.target.value)}
             />
@@ -62,7 +64,7 @@ const AdminMikveSearch = ({ allMikves, setPresentationMikves, setVisibleCount, n
                     id="mikve-search-type"
                     value={searchType}
                     style={{
-                        height: '26px',
+                        height: '40px',
                         borderRadius: '20px',
                         border: 'solid',
                         marginRight: '10px',
@@ -78,7 +80,7 @@ const AdminMikveSearch = ({ allMikves, setPresentationMikves, setVisibleCount, n
             <button
                 type="button"
                 id="mikve-button-search"
-                className="mikve-button"
+                className="mikve-button-bar"
                 onClick={handleSearchMikves}
             >
                 <ImSearch />
@@ -86,7 +88,7 @@ const AdminMikveSearch = ({ allMikves, setPresentationMikves, setVisibleCount, n
             <button
                 type="button"
                 id="mikve-button-clear"
-                className="mikve-button"
+                className="mikve-button-bar"
                 onClick={handleClearSearch}
             >
                 נקה

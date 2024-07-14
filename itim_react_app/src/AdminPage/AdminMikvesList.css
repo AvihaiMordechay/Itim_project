@@ -78,27 +78,17 @@ tr:hover {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .admin-mikve-show-more-button:hover {
     background-color: #008fa3;
 }
 
-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 4px;
-}
-
-button:hover {
-    background-color: #45a049;
+.list-bottom{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row-reverse;
+    margin: 0 10px 0 10px;
 }
