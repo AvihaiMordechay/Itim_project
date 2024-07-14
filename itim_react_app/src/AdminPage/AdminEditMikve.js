@@ -15,12 +15,10 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
     const [newId, setNewId] = useState("");
     const [mikveDeletePopup, setMikveDeletePopup] = useState(false);
 
-    const isValidPhoneNumber = (phone) => {
-        const regexMobile = /^05\d([-]{0,1})\d{3}([-]{0,1})\d{4}$/;
-        const regexPhone = /^0\d([-]{0,1})\d{7}$/;
-
-        return regexMobile.test(phone) || regexPhone.test(phone);
-    };
+    function isValidPhoneNumber(phoneNumber) {
+        const pattern = /^(?:\+972|0)?([2345789]|5[012345678]|7\d)-?\d{7}$|^(?:\+972|0)?(5[012345678]|7\d)-?\d{8}$/;
+        return pattern.test(phoneNumber);
+    }
 
     const handleSave = async () => {
         // Check if all required fields are filled
