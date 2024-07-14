@@ -20,12 +20,6 @@
     padding: 20px;
 }
 
-.statistics-modal h3 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #343a40;
-}
-
 .statistics-modal .distribution-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -44,41 +38,49 @@
     cursor: pointer;
     width: 150px;
     text-align: center;
-    background-color: #007bff;
+    background-color: #605371;
     color: white;
     transition: background-color 0.3s ease;
 }
 
 .statistics-modal .distribution-button:hover {
-    background-color: #0056b3;
+    background-color: #493e57;
 }
 
 .statistics-modal .close-statistics-button {
     text-decoration: none;
-    background-color: #ff0000;
+    background-color: #a43f3f;
     color: white;
     margin-top: 20px;
     padding: 10px;
-    border: none;
     border-radius: 5px;
+    border: none;
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s ease;
 }
 
 .statistics-modal .close-statistics-button:hover {
-    background-color: #d33e3e;
+    background-color: #af5252;
 }
 
 .chart-container {
     display: flex;
-    align-items: center;
-    /* שים את ה-label וה-select באותו קו */
     justify-content: center;
     gap: 10px;
-    /* רווח בין ה-label ל-select */
     margin: 20px 0;
 }
+
+.choose-city-label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+
+
 
 .chart-container label {
     font-size: 16px;
@@ -114,4 +116,16 @@
     margin-top: 3%;
     height: 50%;
     width: 50%;
+}
+
+.statistics-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.statistics-modal-header h3 {
+    margin: auto;
+    color: #343a40;
 }

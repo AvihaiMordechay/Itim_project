@@ -1,4 +1,3 @@
-import "./AdminDownloadData.css";
 import React from 'react';
 import * as XLSX from 'xlsx';
 import { FaFileDownload } from "react-icons/fa";

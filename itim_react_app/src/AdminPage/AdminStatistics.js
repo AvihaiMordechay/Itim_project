@@ -52,8 +52,9 @@ const AdminStatistics = ({ allMikves }) => {
                 false: 0
             },
             waterSampling: {
-                yes: 0,
-                no: 0
+                mikveNotChecked: 0,
+                mikveCheckedAndPassed: 0,
+                mikveCheckedAndNotPassed: 0
             }
         };
 
@@ -71,8 +72,10 @@ const AdminStatistics = ({ allMikves }) => {
             if (levad === true) acc.levad.true += 1;
             else if (levad === false) acc.levad.false += 1;
 
-            if (water_sampling === true) acc.waterSampling.yes += 1;
-            else if (water_sampling === false) acc.waterSampling.no += 1;
+            if (water_sampling === "0") acc.waterSampling.mikveNotChecked += 1;
+            else if (water_sampling === "1") acc.waterSampling.mikveCheckedAndPassed += 1;
+            else if (water_sampling === "2") acc.waterSampling.mikveCheckedAndNotPassed += 1;
+
         }
 
         return acc;
@@ -80,7 +83,6 @@ const AdminStatistics = ({ allMikves }) => {
 
     const getPieChartData = (type) => {
         const mikvesData = collectMikveData(filteredMikves);
-
         switch (type) {
             case 'shelter':
                 return {
@@ -147,19 +149,22 @@ const AdminStatistics = ({ allMikves }) => {
                 };
             case 'waterSampling':
                 return {
-                    labels: ['נבדק', 'לא נבדק'],
+                    labels: ['נבדק ולא תקין', 'נבדק ותקין', 'לא נבדק'],
                     datasets: [{
                         data: [
-                            mikvesData.waterSampling.yes,
-                            mikvesData.waterSampling.no
+                            mikvesData.waterSampling.mikveNotChecked,
+                            mikvesData.waterSampling.mikveCheckedAndPassed,
+                            mikvesData.waterSampling.mikveCheckedAndNotPassed
                         ],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)'
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)'
                         ],
                         borderColor: [
                             'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)'
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
                         ],
                         borderWidth: 1
                     }]
@@ -172,11 +177,13 @@ const AdminStatistics = ({ allMikves }) => {
     return (
         <div className="admin-statistics-content">
 
-            <button className="open-statistics-button" onClick={() => setShowModal(true)}>הצג סטטיסטיקות</button>
+            <button className="open-statistics-button" onClick={() => { setShowModal(true); setFilteredMikves(allMikves) }}>הצג סטטיסטיקות</button>
             {showModal && (
                 <div className="statistics-modal">
-                    <button className="close-statistics-button" onClick={() => { handleCloseModal(); }}>X</button>
-                    <h3>התפלגויות</h3>
+                    <div className="statistics-modal-header">
+                        <h3>התפלגויות</h3>
+                        <button className="close-statistics-button" onClick={() => { handleCloseModal(); }}>X</button>
+                    </div>
                     <div className="distribution-buttons">
                         <button className="distribution-button" onClick={() => { setShowTrafficGraph(true); setChartType(''); }}>כניסות לאתר</button>
                         <button className="distribution-button" onClick={() => { setShowTrafficGraph(false); setChartType('shelter'); }}>מיגון</button>
@@ -189,13 +196,19 @@ const AdminStatistics = ({ allMikves }) => {
                         {chartType && (
 
                             <div className="chart-container">
-                                <label htmlFor="city-select">בחר עיר:</label>
-                                <select id="city-select" onChange={(e) => handleFilter(e.target.value)}>
-                                    <option value="">כל הערים</option>
-                                    {cities.map(city => (
-                                        <option key={city} value={city}>{city}</option>
-                                    ))}
-                                </select>
+                                <div className='filter-labels'>
+                                    <div className='choose-city-label'>
+                                        <label htmlFor="city-select">בחר עיר:</label>
+                                        <select id="city-select" onChange={(e) => handleFilter(e.target.value)}>
+                                            <option value="">כל הערים</option>
+                                            {cities.map(city => (
+                                                <option key={city} value={city}>{city}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <label>סה"כ מקוואות בתרשים: {filteredMikves.length}</label>
+                                    <label>סה"כ מקוואות במערכת: {allMikves.length}</label>
+                                </div>
                                 <div className="chartjs-container">
                                     {/* {showTrafficGraph && (
                                         
@@ -208,8 +221,9 @@ const AdminStatistics = ({ allMikves }) => {
                     </div>
 
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 };
 
