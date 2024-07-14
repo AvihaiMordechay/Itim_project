@@ -38,6 +38,7 @@ tr:nth-child(even) {
 tr:hover {
     background-color: #ddd;
 }
+
 .admin-mikve-button {
     background-color: #00aec6;
     color: white;
@@ -85,10 +86,24 @@ tr:hover {
     background-color: #008fa3;
 }
 
-.list-bottom{
+.list-bottom {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-direction: row-reverse;
     margin: 0 10px 0 10px;
+}
+
+.sortable {
+    cursor: pointer;
+    user-select: none;
+}
+
+.sortable:hover {
+    background-color: #8eb5cb;
+}
+
+.sortable svg {
+    margin-left: 5px;
+    vertical-align: middle;
 }
