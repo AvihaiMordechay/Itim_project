@@ -1,44 +1,216 @@
-import { useState } from "react";
+import React, { useState, useMemo } from 'react';
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import './AdminStatistics.css'; // Import the CSS file
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const AdminStatistics = ({ allMikves }) => {
     const [showModal, setShowModal] = useState(false);
+    const [chartType, setChartType] = useState('');
+    const [filteredMikves, setFilteredMikves] = useState(allMikves);
+    const [showTrafficGraph, setShowTrafficGraph] = useState(false);
 
-    const handleVisitsDistribution = () => {
-        // Implement the functionality for visits distribution
+    const cities = useMemo(() => {
+        const cityCounts = allMikves.reduce((acc, mikve) => {
+            acc[mikve.city] = (acc[mikve.city] || 0) + 1;
+            return acc;
+        }, {});
+
+        const filteredCities = Object.entries(cityCounts)
+            .filter(([city, count]) => count >= 2)
+            .map(([city]) => city)
+            .sort();
+
+        return filteredCities;
+    }, [allMikves]);
+    const handleFilter = (city) => {
+        const filtered = city ? allMikves.filter(mikve => mikve.city === city) : allMikves;
+        setFilteredMikves(filtered);
     };
 
-    const handleShelterDistribution = () => {
-        // Implement the functionality for shelter distribution
+    const handleCloseModal = () => {
+        setChartType('');
+        setShowModal(false);
+        setFilteredMikves(allMikves);
+    }
+
+    const collectMikveData = (data) => {
+        const acc = {
+            generalShelter: {
+                withoutShelter: 0,
+                partialShelter: 0,
+                fullShelter: 0
+            },
+            generalAccessibility: {
+                withoutAccessibility: 0,
+                partialAccessibility: 0,
+                fullAccessibility: 0
+            },
+            levad: {
+                true: 0,
+                false: 0
+            },
+            waterSampling: {
+                yes: 0,
+                no: 0
+            }
+        };
+
+        for (let i = 0; i < data.length; i++) {
+            const { general_shelter, general_accessibility, levad, water_sampling } = data[i];
+
+            if (general_shelter === "0") acc.generalShelter.withoutShelter += 1;
+            else if (general_shelter === "1") acc.generalShelter.partialShelter += 1;
+            else if (general_shelter === "2") acc.generalShelter.fullShelter += 1;
+
+            if (general_accessibility === "0") acc.generalAccessibility.withoutAccessibility += 1;
+            else if (general_accessibility === "1") acc.generalAccessibility.partialAccessibility += 1;
+            else if (general_accessibility === "2") acc.generalAccessibility.fullAccessibility += 1;
+
+            if (levad === true) acc.levad.true += 1;
+            else if (levad === false) acc.levad.false += 1;
+
+            if (water_sampling === true) acc.waterSampling.yes += 1;
+            else if (water_sampling === false) acc.waterSampling.no += 1;
+        }
+
+        return acc;
     };
 
-    const handleLevadDistribution = () => {
-        // Implement the functionality for levad distribution
-    };
+    const getPieChartData = (type) => {
+        const mikvesData = collectMikveData(filteredMikves);
 
-    const handleWaterSamplingDistribution = () => {
-        // Implement the functionality for water sampling distribution
-    };
-
-    const handleAccessibilityDistribution = () => {
-        // Implement the functionality for accessibility distribution
+        switch (type) {
+            case 'shelter':
+                return {
+                    labels: ['ללא מיגון', 'מיגון חלקי', 'מיגון מלא'],
+                    datasets: [{
+                        data: [
+                            mikvesData.generalShelter.withoutShelter,
+                            mikvesData.generalShelter.partialShelter,
+                            mikvesData.generalShelter.fullShelter
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+            case 'accessibility':
+                return {
+                    labels: ['ללא נגישות', 'נגישות חלקית', 'נגישות מלאה'],
+                    datasets: [{
+                        data: [
+                            mikvesData.generalAccessibility.withoutAccessibility,
+                            mikvesData.generalAccessibility.partialAccessibility,
+                            mikvesData.generalAccessibility.fullAccessibility
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+            case 'levad':
+                return {
+                    labels: ['עם השגחה', 'ללא השגחה'],
+                    datasets: [{
+                        data: [
+                            mikvesData.levad.true,
+                            mikvesData.levad.false
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+            case 'waterSampling':
+                return {
+                    labels: ['נבדק', 'לא נבדק'],
+                    datasets: [{
+                        data: [
+                            mikvesData.waterSampling.yes,
+                            mikvesData.waterSampling.no
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+            default:
+                return {};
+        }
     };
 
     return (
         <div className="admin-statistics-content">
-            <button type="submit" className="open-statistics-botton" onClick={() => setShowModal(true)}>הצג סטטיסטיקות</button>
+
+            <button className="open-statistics-button" onClick={() => setShowModal(true)}>הצג סטטיסטיקות</button>
             {showModal && (
                 <div className="statistics-modal">
+                    <button className="close-statistics-button" onClick={() => { handleCloseModal(); }}>X</button>
                     <h3>התפלגויות</h3>
-                    <button type="submit" className="distribution-visits-button" onClick={handleVisitsDistribution}>מספר כניסות</button>
-                    <button type="submit" className="distribution-shelter-button" onClick={handleShelterDistribution}>מיגון</button>
-                    <button type="submit" className="distribution-levad-button" onClick={handleLevadDistribution}>השגחה</button>
-                    <button type="submit" className="distribution-water-sampling-button" onClick={handleWaterSamplingDistribution}>תברואה</button>
-                    <button type="submit" className="distribution-accessibility-button" onClick={handleAccessibilityDistribution}>נגישות</button>
-                    <button type="submit" className="close-statistics-button" onClick={() => setShowModal(false)}>סגור</button>
+                    <div className="distribution-buttons">
+                        <button className="distribution-button" onClick={() => { setShowTrafficGraph(true); setChartType(''); }}>כניסות לאתר</button>
+                        <button className="distribution-button" onClick={() => { setShowTrafficGraph(false); setChartType('shelter'); }}>מיגון</button>
+                        <button className="distribution-button" onClick={() => { setShowTrafficGraph(false); setChartType('accessibility'); }}>נגישות</button>
+                        <button className="distribution-button" onClick={() => { setShowTrafficGraph(false); setChartType('levad'); }}>השגחה</button>
+                        <button className="distribution-button" onClick={() => { setShowTrafficGraph(false); setChartType('waterSampling'); }}>תברואה</button>
+                    </div>
+                    <div className="distribution-content">
+
+                        {chartType && (
+
+                            <div className="chart-container">
+                                <label htmlFor="city-select">בחר עיר:</label>
+                                <select id="city-select" onChange={(e) => handleFilter(e.target.value)}>
+                                    <option value="">כל הערים</option>
+                                    {cities.map(city => (
+                                        <option key={city} value={city}>{city}</option>
+                                    ))}
+                                </select>
+                                <div className="chartjs-container">
+                                    {/* {showTrafficGraph && (
+                                        
+                                    )}; */}
+                                    <Pie data={getPieChartData(chartType)} />
+                                </div>
+                            </div>
+                        )}
+
+                    </div>
+
                 </div>
             )}
         </div>
     );
-}
+};
 
 export { AdminStatistics };

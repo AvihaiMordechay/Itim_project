@@ -11,7 +11,8 @@
     max-width: 800px;
     height: auto;
     max-height: 80%;
-    background-color: white;
+    background-color: #f8f9fa;
+    color: black;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     z-index: 1000;
@@ -20,28 +21,97 @@
 }
 
 .statistics-modal h3 {
-    margin-top: 0;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #343a40;
 }
 
-.statistics-modal button {
+.statistics-modal .distribution-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.statistics-modal .distribution-button {
+    text-decoration: none;
     display: block;
-    width: 100%;
     padding: 10px;
-    margin: 10px 0;
+    margin: 1px;
     font-size: 14px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    width: 150px;
+    text-align: center;
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.3s ease;
 }
 
-.close-statistics-button {
+.statistics-modal .distribution-button:hover {
+    background-color: #0056b3;
+}
+
+.statistics-modal .close-statistics-button {
+    text-decoration: none;
     background-color: #ff0000;
     color: white;
     margin-top: 20px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
 }
 
-.close-statistics-button:hover {
-    background-color: #b02828;
-    color: white;
-    margin-top: 20px;
+.statistics-modal .close-statistics-button:hover {
+    background-color: #d33e3e;
+}
+
+.chart-container {
+    display: flex;
+    align-items: center;
+    /* שים את ה-label וה-select באותו קו */
+    justify-content: center;
+    gap: 10px;
+    /* רווח בין ה-label ל-select */
+    margin: 20px 0;
+}
+
+.chart-container label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #343a40;
+}
+
+.chart-container select {
+    padding: 8px;
+    margin-top: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #495057;
+    background-color: #fff;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container select:hover {
+    border-color: #007bff;
+}
+
+.chart-container select:focus {
+    outline: none;
+    border-color: #0056b3;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.chartjs-container {
+    box-sizing: border-box;
+    display: block;
+    margin-top: 3%;
+    height: 50%;
+    width: 50%;
 }
