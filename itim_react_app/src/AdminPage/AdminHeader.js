@@ -5,6 +5,7 @@ import { AdminAddMikve } from "./AdminAddMikve";
 import { AdminDownloadStatistics } from "./AdminDownloadStatistics";
 import { AdminDownloadData } from "./AdminDownloadData";
 import { AdminUploadSamplingXL } from "./AdminUploadSamplingXL";
+import { AdminStatistics } from './AdminStatistics';
 
 const AdminHeader = ({ allMikves, setAllMikves, handleUploadSuccess }) => {
     return (
@@ -20,6 +21,7 @@ const AdminHeader = ({ allMikves, setAllMikves, handleUploadSuccess }) => {
                     setAllMikves={setAllMikves}
                     onUploadSuccess={handleUploadSuccess}
                 />
+                <AdminStatistics allMikves={allMikves} />
             </div>
         </div>
     );

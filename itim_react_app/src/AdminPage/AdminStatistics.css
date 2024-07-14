@@ -1,0 +1,47 @@
+.admin-statistics-content {
+    position: relative;
+}
+
+.statistics-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    max-width: 800px;
+    height: auto;
+    max-height: 80%;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    z-index: 1000;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.statistics-modal h3 {
+    margin-top: 0;
+}
+
+.statistics-modal button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.close-statistics-button {
+    background-color: #ff0000;
+    color: white;
+    margin-top: 20px;
+}
+
+.close-statistics-button:hover {
+    background-color: #b02828;
+    color: white;
+    margin-top: 20px;
+}
