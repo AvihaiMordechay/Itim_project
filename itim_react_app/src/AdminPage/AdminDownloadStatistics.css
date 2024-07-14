@@ -1,21 +1,19 @@
 /* AdminDownloadStatistics.css */
-.download-statistics-botton {
+/* .download-statistics-botton {
     display: flex;
     background-color: #605371;
     color: white;
     border: none;
     border-radius: 20px;
-    /* padding: 10px 20px; */
     font-size: 16px;
     cursor: pointer;
-    /* margin: 5px; */
     transition: background-color 0.3s ease;
     align-items: center;
 }
 
 .download-statistics-botton:hover {
     background-color: #4a3f5a;
-}
+} */
 
 .header-container-stat {
     background-color: rgb(216, 216, 231);
