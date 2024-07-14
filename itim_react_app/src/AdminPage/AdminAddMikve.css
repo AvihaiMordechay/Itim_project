@@ -40,9 +40,10 @@
     max-height: 80%;
     overflow-y: auto;
 }
-.add-mikve-content h2{
+.add-mikve-content h2 {
     display: flex;
     justify-content: center;
+    color: black;
 }
 .add-mikve-form {
     display: flex;
@@ -99,7 +100,7 @@
 .exit-button-add-mikve,
 .add-id {
     margin-top: 10px;
-    padding: 10px 20px;
+    padding: 10px 20px !important;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -137,21 +138,25 @@
 }
 
 .confirm-add-mikve-button, .add-id {
-    background-color: #00aec6;
+    background-color: #00aec6 !important;
     color: white;
+    margin-right: 10px;
+    text-decoration: none !important;
+
 }
 
 .confirm-add-mikve-button:hover, .add-id:hover {
-    background-color: #008fa3;
+    background-color: #008fa3 !important;
 }
 
 .exit-button-add-mikve {
-    background-color: #f44336;
+    background-color: #f44336 !important;
     color: white;
-    margin-left: 10px;
+    text-decoration: none !important;
+
 }
 .exit-button-add-mikve:hover {
-    background-color: #da3b2f;
+    background-color: #da3b2f !important;
 }
 
 .added-ids {

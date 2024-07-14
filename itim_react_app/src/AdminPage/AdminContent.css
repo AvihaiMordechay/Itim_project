@@ -1,7 +1,19 @@
-.admin-operations {
+.admin-container {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: row-reverse;
-    margin-top: 20px;
+    justify-content: flex-end;
 }
+
+.admin-main-content {
+    width: 85%;
+    left: 0;
+    /* flex-grow: 1; */
+    /* margin-right: unset; */
+    /* padding: 20px; */
+    overflow-y: auto;
+
+}
+.admin-statistics {
+    margin-bottom: 20px;
+}
+
+/* Add any additional styles as needed */

@@ -1,14 +1,12 @@
+// AdminContent.js
 import './AdminContent.css';
 import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { AdminEditMikve } from "./AdminEditMikve";
-import { AdminMikveSearch } from "./AdminMikveSearch.js";
 import { AdminMikvesList } from "./AdminMikvesList";
-import { AdminAddMikve } from "./AdminAddMikve";
-import { AdminUploadSamplingXL } from "./AdminUploadSamplingXL";
-import { AdminDownloadData } from "./AdminDownloadData.js";
-import { AdminDownloadStatistics } from './AdminDownloadStatistics.js';
+import { AdminHeader } from "./AdminHeader";
+import { AdminMikveSearch } from "./AdminMikveSearch";
 
 const AdminContent = () => {
     const numOfRows = 20;
@@ -61,44 +59,39 @@ const AdminContent = () => {
     };
 
     return (
-        <div className="admin-main-content">
-            <div className="admin-operations">
-                <AdminAddMikve />
-                <AdminDownloadStatistics
-                    allMikves={allMikves}
-                />
-                <AdminDownloadData allMikves={allMikves} />
-                <AdminUploadSamplingXL
-                    allMikves={allMikves}
-                    setAllMikves={setAllMikves}
-                    onUploadSuccess={handleUploadSuccess}
-                />
+        <div className="admin-container">
+            <AdminHeader
+                allMikves={allMikves}
+                setAllMikves={setAllMikves}
+                handleUploadSuccess={handleUploadSuccess}
+            />
+            <div className="admin-main-content">
+                
                 <AdminMikveSearch
                     allMikves={allMikves}
                     setPresentationMikves={setPresentationMikves}
                     setVisibleCount={setVisibleCount}
                     numOfRows={numOfRows}
                 />
-            </div>
-            <div className='admin-statistics'>
-                <label>מספר המקוואות במערכת: {allMikves.length}</label>
-
-            </div>
-            <AdminMikvesList
-                presentationMikves={presentationMikves}
-                handleEditMikve={handleEditMikvePopup}
-                visibleCount={visibleCount}
-                setVisibleCount={setVisibleCount}
-                numOfRows={numOfRows}
-            />
-            {isEditMikvePopupOpen && (
-                <AdminEditMikve
-                    mikve={selectedMikve}
-                    onClose={handleClosePopup}
-                    onSave={handleEditSaveMikve}
-                    onDelete={handleDeleteMikve}
+                <AdminMikvesList
+                    presentationMikves={presentationMikves}
+                    handleEditMikve={handleEditMikvePopup}
+                    visibleCount={visibleCount}
+                    setVisibleCount={setVisibleCount}
+                    numOfRows={numOfRows}
                 />
-            )}
+                {isEditMikvePopupOpen && (
+                    <AdminEditMikve
+                        mikve={selectedMikve}
+                        onClose={handleClosePopup}
+                        onSave={handleEditSaveMikve}
+                        onDelete={handleDeleteMikve}
+                    />
+                )}
+                <div className='admin-statistics'>
+                    <label>מספר המקוואות במערכת: {allMikves.length}</label>
+                </div>
+            </div>
         </div>
     );
 };

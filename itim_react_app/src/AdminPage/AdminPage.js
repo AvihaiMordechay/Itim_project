@@ -5,7 +5,6 @@ const AdminPage = () => {
 
   return (
     <div className="admin-page">
-      < AdminHeader />
       < AdminContent />
     </div>
   );
