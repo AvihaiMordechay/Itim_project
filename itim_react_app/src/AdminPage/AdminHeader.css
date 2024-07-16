@@ -80,3 +80,33 @@
     vertical-align: middle;
     margin-left: 5px;
 }
+
+.operations-button {
+    border: 1px dashed white;
+    padding: 5px;
+    margin-left: 20px;
+    transition: all 0.3s ease;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.operations-button:hover {
+    border-width: 2px;
+}
+
+.operations-button > * {
+    width: 100%;
+    display: block;
+}
+
+/* Make sure the inner button takes up the full space of the operations-button */
+.operations-button button {
+    width: 100%;
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+    text-align: right;
+}

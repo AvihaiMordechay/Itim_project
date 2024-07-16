@@ -119,7 +119,7 @@
 
 .buttons-container {
     display: flex;
-    /* gap: 10px; */
+    gap: 30%;
     justify-content: space-between;
 }
 
@@ -155,17 +155,22 @@
 .confirm-add-mikve-button:hover,
 .add-id:hover {
     background-color: #008fa3 !important;
+    font-weight: normal !important;
+
 }
 
 .exit-button-add-mikve {
     background-color: #f44336 !important;
     color: white;
     text-decoration: none !important;
+    font-weight: normal !important;
 
 }
 
 .exit-button-add-mikve:hover {
     background-color: #da3b2f !important;
+    font-weight: normal !important;
+
 }
 
 .added-ids {
