@@ -1,0 +1,35 @@
+/* VisitorStatistics.css */
+.visitor-statistics {
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.visitor-statistics h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.visitor-statistics select {
+    display: block;
+    margin: 0 auto 20px;
+    padding: 5px;
+}
+
+.visitor-statistics button {
+    display: block;
+    margin: 20px auto 0;
+    padding: 10px 20px;
+    background-color: #00aec6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.visitor-statistics button:hover {
+    background-color: #008fa3;
+}

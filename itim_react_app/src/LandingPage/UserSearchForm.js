@@ -250,6 +250,11 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
             <form className="search-form" onSubmit={handleSearch}>
                 <div className="search-bar-container">
                     <div className="search-input-wrapper">
+                    {showInstruction && searchType === 'address' && !placeSelected && (
+                <div ref={popupRef} className="autocomplete-popup">
+                    אנא בחרי כתובת מהרשימה המוצעת
+                </div>
+            )}
                         <input
                             ref={inputRef}
                             type="text"
@@ -325,11 +330,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                     </div>
                 </div>
             </form>
-            {showInstruction && searchType === 'address' && !placeSelected && (
-                <div ref={popupRef} className="autocomplete-popup">
-                    אנא בחרי כתובת מהרשימה המוצעת
-                </div>
-            )}
+            
             {showPopup && (
                 <div className="popup">
                     <div className="popup-content">

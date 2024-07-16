@@ -14,7 +14,18 @@
   flex-direction: row-reverse;
 }
 
+.header-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex-direction: row-reverse;
+}
+
+
 .header img {
+  position: absolute;
+  right: 0;
   width: 200px;
   height: auto;
   border-radius: 35px;
@@ -24,9 +35,6 @@
 .header h1 {
   font-size: 42px;
   color: #faccce;
-  position: absolute; /* Add this */
-  left: 50%; /* Add this */
-  transform: translateX(-50%); /* Add this */
   margin: 0; /* Add this to remove default margins */
 }
 
@@ -143,11 +151,19 @@
     justify-content: flex-start; /* Align items to the start (right in RTL) */
   }
 
+  .header-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+  }
+
   .header img {
+    position: unset;
     width: 80px;
     order: -1; /* Ensure the image is first */
-    margin-right: 0;
-    margin-left: auto; /* Push the image to the right */
+    margin: 0;
   }
 
   .header h1 {
