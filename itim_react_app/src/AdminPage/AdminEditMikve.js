@@ -315,7 +315,7 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
 
                     <div className="form-group">
                         <label htmlFor="edit-select-box-accessibility">
-                            רמת נגישות:
+                            רמת נגישות פיזית:
                             <span className="required">*</span>
                         </label>
                         <select
@@ -326,8 +326,8 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                             disabled={editField !== "general_accessibility"}
                             required
                         >
-                            <option value="">--בחר רמת נגישות--</option>
-                            <option value="0">אין נגישות</option>
+                            <option value="">-- בחר רמת נגישות פיזית--</option>
+                            <option value="0">לא נגיש</option>
                             <option value="1">נגישות חלקית</option>
                             <option value="2">נגישות מלאה</option>
                         </select>
@@ -344,7 +344,7 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                     </div>
                     <div className="form-group">
                         <label htmlFor={`edit-mikve-accessibility`}>
-                            תיאור נגישות:
+                            תיאור נגישות פיזית:
                         </label>
                         <input
                             type="text"
