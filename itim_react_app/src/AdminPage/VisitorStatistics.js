@@ -10,9 +10,11 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 const VisitorStatistics = () => {
     const [visitorData, setVisitorData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchVisitorData = async () => {
+            setIsLoading(true);
             const today = new Date();
             const thirtyDaysAgo = new Date(today);
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -46,15 +48,17 @@ const VisitorStatistics = () => {
                     .sort((a, b) => a.date.localeCompare(b.date));
 
                 setVisitorData(sortedData);
+                setIsLoading(false);
                 // Cleanup old data
                 await cleanupOldData(startDate);
             } catch (error) {
                 console.error("Error fetching visitor data: ", error);
+                setIsLoading(false);
             }
         };
 
         fetchVisitorData();
-    }, []); // Empty dependency array to run effect only once
+    }, []);
 
     useEffect(() => {
         console.log('Updated visitorData:', visitorData);
@@ -75,11 +79,11 @@ const VisitorStatistics = () => {
     };
 
     const chartData = {
-        labels: visitorData?.map(d => d.date) || [],
+        labels: visitorData ? visitorData.map(d => d.date) : [],
         datasets: [
             {
                 label: 'מספר מבקרים',
-                data: visitorData?.map(d => d.visitors) || [],
+                data: visitorData ? visitorData.map(d => d.visitors) : [],
                 fill: false,
                 backgroundColor: 'rgb(75, 192, 192)',
                 borderColor: 'rgba(75, 192, 192, 0.2)',
@@ -114,10 +118,18 @@ const VisitorStatistics = () => {
         }
     };
 
+    console.log('visitorData before rendering:', visitorData);
+
     return (
         <div className="visitor-statistics">
             <h2>סטטיסטיקת מבקרים</h2>
-            {visitorData && <Line data={chartData} options={chartOptions} />}
+            {isLoading ? (
+                <p>טוען נתונים...</p>
+            ) : visitorData && visitorData.length > 0 ? (
+                <Line data={chartData} options={chartOptions} />
+            ) : (
+                <p>אין נתונים זמינים</p>
+            )}
         </div>
     );
 };

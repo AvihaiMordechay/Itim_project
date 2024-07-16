@@ -115,8 +115,8 @@
     box-sizing: border-box;
     display: block;
     margin-top: 3%;
-    height: 50%;
-    width: 50%;
+    height: -webkit-fill-available;
+    width: -webkit-fill-available;
 }
 
 .statistics-modal-header {

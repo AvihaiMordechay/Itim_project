@@ -1,4 +1,6 @@
-import './AdminStatistics.css'; // Import the CSS file
+// AdminStatistics.js
+
+import './AdminStatistics.css';
 import React, { useState, useMemo } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
@@ -176,7 +178,6 @@ const AdminStatistics = ({ allMikves }) => {
 
     return (
         <div className="admin-statistics-content">
-
             <button className="open-statistics-button" onClick={() => { setShowModal(true); setFilteredMikves(allMikves) }}>הצג סטטיסטיקות</button>
             {showModal && <div className="backdrop" onClick={handleCloseModal}></div>}
             {showModal && (
@@ -193,38 +194,36 @@ const AdminStatistics = ({ allMikves }) => {
                         <button className="distribution-button" onClick={() => { setShowTrafficGraph(false); setChartType('waterSampling'); }}>תברואה</button>
                     </div>
                     <div className="distribution-content">
-
                         {(chartType || showTrafficGraph) && (
-
                             <div className="chart-container">
-                                <div className='filter-labels'>
-                                    <div className='choose-city-label'>
-                                        <label htmlFor="city-select">בחר עיר:</label>
-                                        <select id="city-select" onChange={(e) => handleFilter(e.target.value)}>
-                                            <option value="">כל הערים</option>
-                                            {cities.map(city => (
-                                                <option key={city} value={city}>{city}</option>
-                                            ))}
-                                        </select>
+                                {!showTrafficGraph && (
+                                    <div className='filter-labels'>
+                                        <div className='choose-city-label'>
+                                            <label htmlFor="city-select">בחר עיר:</label>
+                                            <select id="city-select" onChange={(e) => handleFilter(e.target.value)}>
+                                                <option value="">כל הערים</option>
+                                                {cities.map(city => (
+                                                    <option key={city} value={city}>{city}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <label>סה"כ מקוואות בתרשים: {filteredMikves.length}</label>
+                                        <label>סה"כ מקוואות במערכת: {allMikves.length}</label>
                                     </div>
-                                    <label>סה"כ מקוואות בתרשים: {filteredMikves.length}</label>
-                                    <label>סה"כ מקוואות במערכת: {allMikves.length}</label>
-                                </div>
+                                )}
                                 <div className="chartjs-container">
-                                    {showTrafficGraph && (
+                                    {showTrafficGraph ? (
                                         <VisitorStatistics />
+                                    ) : (
+                                        <Pie data={getPieChartData(chartType)} />
                                     )}
-                                    <Pie data={getPieChartData(chartType)} />
                                 </div>
                             </div>
                         )}
-
                     </div>
-
                 </div>
-            )
-            }
-        </div >
+            )}
+        </div>
     );
 };
 
