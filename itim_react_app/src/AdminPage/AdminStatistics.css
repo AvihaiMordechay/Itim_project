@@ -7,9 +7,11 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60%;
-    max-width: 800px;
-    height: auto;
+    min-width: max-content;
+    max-width: max-content;
+    min-height: -webkit-fill-available;
+    /* max-width: 800px; */
+    max-height: max-content;
     max-height: 80%;
     background-color: #f8f9fa;
     color: black;
@@ -32,23 +34,27 @@
     display: block;
     padding: 10px;
     margin: 1px;
-    font-size: 14px;
+    font-size: 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    width: 150px;
+    width: 120px;
     text-align: center;
-    background-color: #605371;
-    color: white;
+    /* background-color: #605371; */
+    font-weight: bold;
+    color: #f68357;
     transition: background-color 0.3s ease;
 }
 
 .statistics-modal .distribution-button:hover {
-    background-color: #493e57;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;  /* Adjust this value to make the underline thicker or thinner */
+    text-decoration-style: solid;
 }
 
 .statistics-modal .close-statistics-button {
     text-decoration: none;
+    width: auto;
     background-color: #a43f3f;
     color: white;
     margin-top: 20px;
