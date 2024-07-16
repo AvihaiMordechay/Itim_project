@@ -281,10 +281,10 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                     <div className="filters">
                         <div className="two-filters">
                             <div className="select-box">
-                                <label className="select-header">נגישות</label>
+                                <label className="select-header">נגישות פיזית</label>
                                 <select value={accessibility} onChange={(e) => setAccessibility(e.target.value)} className="select-input">
                                     <option value="">בחר</option>
-                                    <option value="0">אין נגישות</option>
+                                    <option value="0">לא נגיש</option>
                                     <option value="1">נגישות חלקית</option>
                                     <option value="2">נגישות מלאה</option>
                                 </select>

@@ -324,7 +324,7 @@ const AdminAddMikve = () => {
 
               <div className="form-group">
                 <label htmlFor="select-box-accessibility">
-                  רמת נגישות:
+                  רמת נגישות פיזית:
                   <span className="required">*</span>
                 </label>
                 <select
@@ -334,14 +334,14 @@ const AdminAddMikve = () => {
                   onChange={handleInputChange}
                   required
                 >
-                  <option value="">--בחר רמת נגישות--</option>
-                  <option value="0">אין נגישות</option>
+                  <option value="">--בחר רמת נגישות פיזית --</option>
+                  <option value="0">לא נגיש</option>
                   <option value="1">נגישות חלקית </option>
                   <option value="2">נגישות מלאה</option>
                 </select>
               </div>
               <div className="form-group">
-                <label htmlFor="mikve-accessibility">תיאור נגישות:</label>
+                <label htmlFor="mikve-accessibility">תיאור נגישות פיזית:</label>
                 <input
                   type="text"
                   id="mikve-accessibility"

@@ -53,10 +53,10 @@ const AdminMikvesList = ({ presentationMikves, handleEditMikve, visibleCount, se
                         <th>כתובת</th>
                         <th>טלפון</th>
                         <th className="sortable" onClick={() => handleSort('water_sampling')}>
-                            רמת תבאורה {getSortIcon('water_sampling')}
+                            רמת תברואה {getSortIcon('water_sampling')}
                         </th>
                         <th className="sortable" onClick={() => handleSort('when_sampling')}>
-                            תאריך בדיקת תבאורה {getSortIcon('when_sampling')}
+                            תאריך בדיקת תברואה {getSortIcon('when_sampling')}
                         </th>
                         <th>עריכה</th>
                     </tr>
