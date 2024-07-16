@@ -303,7 +303,7 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
                 <MdOutlineFileUpload />
             </button>
             {errorUploadMessage && (
-                <div className="error-message">
+                <div className="xl-error-message">
                     {errorUploadMessage}
                 </div>
             )}

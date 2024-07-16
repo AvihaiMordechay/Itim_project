@@ -84,7 +84,7 @@ label {
     display: flex;
 }
 
-.error-message {
+.xl-error-message {
     color: red;
     background-color: #ffe6e6;
     border: 1px solid red;
@@ -93,4 +93,9 @@ label {
     border-radius: 5px;
     text-align: center;
     width: fit-content;
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
 }

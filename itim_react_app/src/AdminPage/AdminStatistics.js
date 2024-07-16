@@ -1,8 +1,8 @@
+import './AdminStatistics.css'; // Import the CSS file
 import React, { useState, useMemo } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import './AdminStatistics.css'; // Import the CSS file
-
+import { VisitorStatistics } from './VisitorStatistics';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const AdminStatistics = ({ allMikves }) => {
@@ -178,6 +178,7 @@ const AdminStatistics = ({ allMikves }) => {
         <div className="admin-statistics-content">
 
             <button className="open-statistics-button" onClick={() => { setShowModal(true); setFilteredMikves(allMikves) }}>הצג סטטיסטיקות</button>
+            {showModal && <div className="backdrop" onClick={handleCloseModal}></div>}
             {showModal && (
                 <div className="statistics-modal">
                     <div className="statistics-modal-header">
@@ -193,7 +194,7 @@ const AdminStatistics = ({ allMikves }) => {
                     </div>
                     <div className="distribution-content">
 
-                        {chartType && (
+                        {(chartType || showTrafficGraph) && (
 
                             <div className="chart-container">
                                 <div className='filter-labels'>
@@ -210,9 +211,9 @@ const AdminStatistics = ({ allMikves }) => {
                                     <label>סה"כ מקוואות במערכת: {allMikves.length}</label>
                                 </div>
                                 <div className="chartjs-container">
-                                    {/* {showTrafficGraph && (
-                                        
-                                    )}; */}
+                                    {showTrafficGraph && (
+                                        <VisitorStatistics />
+                                    )}
                                     <Pie data={getPieChartData(chartType)} />
                                 </div>
                             </div>

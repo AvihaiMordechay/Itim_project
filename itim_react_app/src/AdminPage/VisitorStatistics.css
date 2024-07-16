@@ -1,0 +1,236 @@
+.add-mikve-container {
+    direction: rtl;
+    text-align: right;
+    margin-left: 10px;
+}
+
+.add-mikve-button {
+    background-color: #605371;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    /* padding: 10px 20px; */
+    font-size: 16px;
+    cursor: pointer;
+    /* margin: 5px; */
+    transition: background-color 0.3s ease;
+}
+
+.add-mikve-button:hover {
+    background-color: #4a3f5a;
+
+}
+
+.add-mikve-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.add-mikve-content {
+    background-color: white;
+    padding: 0px 0px 10px 10px;
+    border-radius: 4px;
+    width: 400px;
+    max-width: 90%;
+    max-height: 80%;
+    overflow-y: auto;
+}
+
+.add-mikve-content h2 {
+    display: flex;
+    justify-content: center;
+    color: black;
+}
+
+.add-mikve-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    margin-right: 10px;
+    margin-left: 10px;
+    text-align: left;
+    min-width: 100px;
+    display: flex;
+    /* justify-content: flex-end; */
+}
+
+.form-group textarea {
+    flex: 2;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: right;
+    resize: vertical;
+    max-height: 150px;
+    min-height: 80px;
+}
+
+.form-group input,
+.form-group textarea {
+    flex: 2;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: right;
+}
+
+.required {
+    color: red;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+    margin-top: -5px;
+    margin-bottom: 5px;
+}
+
+.confirm-add-mikve-button,
+.exit-button-add-mikve,
+.add-id {
+    margin-top: 10px;
+    padding: 10px 20px !important;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.supervision-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.buttons-container {
+    display: flex;
+    /* gap: 10px; */
+    justify-content: space-between;
+}
+
+.add-id {
+    margin-right: 10px;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #4caf50;
+    color: white;
+}
+
+#mikve-ids-input {
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: right;
+    flex: 2;
+}
+
+.confirm-add-mikve-button,
+.add-id {
+    background-color: #00aec6 !important;
+    color: white;
+    margin-right: 10px;
+    text-decoration: none !important;
+
+}
+
+.confirm-add-mikve-button:hover,
+.add-id:hover {
+    background-color: #008fa3 !important;
+}
+
+.exit-button-add-mikve {
+    background-color: #f44336 !important;
+    color: white;
+    text-decoration: none !important;
+
+}
+
+.exit-button-add-mikve:hover {
+    background-color: #da3b2f !important;
+}
+
+.added-ids {
+    margin-top: 5px;
+}
+
+.added-id {
+    display: inline-block;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.added-id span {
+    margin-right: 5px;
+}
+
+.added-id button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 3px 5px;
+    border-radius: 50%;
+    font-size: 12px;
+}
+
+.supervision-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.supervision-group label {
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: right;
+    min-width: 100px;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.supervision-group input {
+    margin-left: 250px;
+}
+
+/* Select boxes styling */
+.form-group select {
+    flex: 2;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: right;
+    background-color: white;
+}
+
+/* Options styling */
+.form-group option {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: right;
+    background-color: white;
+}
