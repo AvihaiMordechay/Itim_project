@@ -82,10 +82,9 @@
 }
 
 .operations-button {
-    border: 1px dashed white;
+    border: 1px solid white;
     padding: 5px;
     margin-left: 20px;
-    transition: all 0.3s ease;
     border-radius: 30px;
     cursor: pointer;
 }
@@ -94,7 +93,7 @@
     border-width: 2px;
 }
 
-.operations-button > * {
+.operations-button>* {
     width: 100%;
     display: block;
 }

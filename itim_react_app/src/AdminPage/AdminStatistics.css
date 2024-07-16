@@ -42,13 +42,14 @@
     text-align: center;
     /* background-color: #605371; */
     font-weight: bold;
-    color: #f68357;
+    color: #008fa3;
     transition: background-color 0.3s ease;
 }
 
 .statistics-modal .distribution-button:hover {
     text-decoration: underline;
-    text-decoration-thickness: 2px;  /* Adjust this value to make the underline thicker or thinner */
+    text-decoration-thickness: 2px;
+    /* Adjust this value to make the underline thicker or thinner */
     text-decoration-style: solid;
 }
 
