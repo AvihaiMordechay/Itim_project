@@ -48,7 +48,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    /* height: 30px; */
+    height: 30px;
     width: 30px;
     border-radius: 50%;
     padding: 0;
@@ -58,11 +58,12 @@
     background-color: rgba(96, 83, 121, 0.1);
 }
 
+/*
 .search-button svg {
     width: 20px;
     height: 20px;
 }
-
+*/
 
 .advanced-search {
     width: 100%;
