@@ -141,7 +141,6 @@ const AdminAddMikve = () => {
   const handleAddMikve = async () => {
     // Check if all required fields are filled
     if (
-      mikveData.name &&
       mikveData.city &&
       mikveData.general_shelter &&
       mikveData.general_accessibility
@@ -220,7 +219,6 @@ const AdminAddMikve = () => {
               <div className="form-group">
                 <label htmlFor="mikve-name">
                   שם המקווה:
-                  <span className="required">*</span>
                 </label>
                 <input
                   type="text"
@@ -228,7 +226,6 @@ const AdminAddMikve = () => {
                   name="name"
                   value={mikveData.name}
                   onChange={handleInputChange}
-                  required
                 />
               </div>
 
@@ -243,10 +240,7 @@ const AdminAddMikve = () => {
                   renderItem={(item, isHighlighted) => (
                     <div
                       key={item}
-                      style={{
-                        background: isHighlighted ? "lightgray" : "white",
-                        cursor: "pointer",
-                      }}
+                      className={`autocomplete-item ${isHighlighted ? 'highlighted' : ''}`}
                     >
                       {item}
                     </div>
@@ -262,12 +256,14 @@ const AdminAddMikve = () => {
                     id: "mikve-city",
                     name: "city",
                     required: true,
+                    className: "autocomplete-input",
                   }}
                   wrapperStyle={{
                     display: "flex",
                     width: "100%",
                     position: "relative",
                     zIndex: "9999",
+                    color: "black",
                   }}
                 />
               </div>

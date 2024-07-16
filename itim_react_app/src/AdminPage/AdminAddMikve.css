@@ -3,6 +3,7 @@
     text-align: right;
     margin-left: 10px;
 }
+
 .add-mikve-button {
     background-color: #605371;
     color: white;
@@ -14,10 +15,12 @@
     /* margin: 5px; */
     transition: background-color 0.3s ease;
 }
-.add-mikve-button:hover{
+
+.add-mikve-button:hover {
     background-color: #4a3f5a;
 
 }
+
 .add-mikve-popup {
     position: fixed;
     top: 0;
@@ -40,11 +43,13 @@
     max-height: 80%;
     overflow-y: auto;
 }
+
 .add-mikve-content h2 {
     display: flex;
     justify-content: center;
     color: black;
 }
+
 .add-mikve-form {
     display: flex;
     flex-direction: column;
@@ -117,6 +122,7 @@
     /* gap: 10px; */
     justify-content: space-between;
 }
+
 .add-id {
     margin-right: 10px;
     margin-bottom: 20px;
@@ -137,7 +143,8 @@
     flex: 2;
 }
 
-.confirm-add-mikve-button, .add-id {
+.confirm-add-mikve-button,
+.add-id {
     background-color: #00aec6 !important;
     color: white;
     margin-right: 10px;
@@ -145,7 +152,8 @@
 
 }
 
-.confirm-add-mikve-button:hover, .add-id:hover {
+.confirm-add-mikve-button:hover,
+.add-id:hover {
     background-color: #008fa3 !important;
 }
 
@@ -155,6 +163,7 @@
     text-decoration: none !important;
 
 }
+
 .exit-button-add-mikve:hover {
     background-color: #da3b2f !important;
 }
@@ -224,4 +233,29 @@
     border-radius: 4px;
     text-align: right;
     background-color: white;
+}
+
+.autocomplete-input {
+    width: 100%;
+    padding: 0.5em;
+    font-size: 0.88em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    position: relative;
+    background: white url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="14" height="14" stroke-width="1.6" stroke="%23666"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>') no-repeat left 2px center;
+    padding-left: 30px;
+    /* Adjust padding to make room for the icon */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+
+.autocomplete-item {
+    padding: 0.5em;
+    cursor: pointer;
+}
+
+.autocomplete-item.highlighted {
+    background: lightgray;
 }

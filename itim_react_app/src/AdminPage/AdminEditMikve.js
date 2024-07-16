@@ -24,7 +24,6 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
     const handleSave = async () => {
         // Check if all required fields are filled
         if (
-            mikveData.name &&
             mikveData.city &&
             mikveData.general_shelter &&
             mikveData.general_accessibility
@@ -51,9 +50,6 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
             } else {
                 mikveData.position = {};
             }
-
-            console.log(coordinates);
-            console.log(mikveData);
 
             try {
                 // Create a copy of mikveData without the id field
@@ -194,8 +190,55 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                     <h2>עריכת מקווה</h2>
                 </div>
                 <form className="edit-mikve-form">
+                    <div className="form-group" key="name">
+                        <label htmlFor="edit-mikve-name">
+                            שם מקווה:
+                        </label>
+
+                        <input
+                            type="text"
+                            id="edit-mikve-name"
+                            name="name"
+                            value={editField === "name" ? tempData["name"] : mikveData["name"]}
+                            onChange={handleInputChange}
+                            disabled={editField !== "name"}
+                        />
+                        {editField === "name" ? (
+                            <button className="edit-button" type="button" onClick={() => handleFieldSave("name")}>
+                                <IoIosSave />
+                            </button>
+                        ) : (
+                            <button className="edit-button" type="button" onClick={() => handleFieldEdit("name")}>
+                                <TbEdit />
+                            </button>
+                        )}
+                    </div>
+                    <div className="form-group" key="city">
+                        <label htmlFor="edit-mikve-city">
+                            עיר:
+                            <span className="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="edit-mikve-city"
+                            name="city"
+                            value={editField === "city" ? tempData["city"] : mikveData["city"]}
+                            onChange={handleInputChange}
+                            disabled={editField !== "city"}
+                            required
+                        />
+                        {editField === "city" ? (
+                            <button className="edit-button" type="button" onClick={() => handleFieldSave("city")}>
+                                <IoIosSave />
+                            </button>
+                        ) : (
+                            <button className="edit-button" type="button" onClick={() => handleFieldEdit("city")}>
+                                <TbEdit />
+                            </button>
+                        )}
+                    </div>
                     {[
-                        { id: "name", label: "שם המקווה", type: "text", required: true },
                         { id: "city", label: "עיר", type: "text", required: true },
                         { id: "address", label: "כתובת", type: "text", required: false },
                         { id: "phone", label: "טלפון", type: "tel", required: false },

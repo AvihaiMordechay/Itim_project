@@ -45,27 +45,33 @@ label {
 
 .mikve-upload-xl-popup-content {
     background: white;
+    color: black;
     padding: 0px 20px 20px 20px;
     border-radius: 5px;
     text-align: center;
 }
 
 .confirm-upload-xl-button {
-    background-color: #00aec6;
-    color: white;
+    background-color: #00aec6 !important;
+    border-radius: 5px !important;
+    padding: 5px !important;
 }
 
 .confirm-upload-xl-button:hover {
-    background-color: #008fa3;
+    background-color: #008fa3 !important;
+    ;
 }
 
 .cancel-upload-xl-button {
-    background-color: #f44336;
-    color: white;
+    border-radius: 5px !important;
+    padding: 5px !important;
+    background-color: #f44336 !important;
+    ;
 }
 
 .cancel-upload-xl-button:hover {
-    background-color: #da3b2f;
+    background-color: #da3b2f !important;
+    ;
 }
 
 .upload-buttons {

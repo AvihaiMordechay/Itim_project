@@ -51,7 +51,7 @@ const MikveDetailsPopup = ({ mikve, onClose }) => {
         <div className="mikve-popup">
             <div className="mikve-popup-content">
                 <button className="close-popup" onClick={onClose}>X</button>
-                <h2>{mikve.name || "מקווה ללא שם"}</h2>
+                <h2>{mikve.name || "מקווה"}</h2>
                 <p><strong>כתובת:</strong> {getAddress(mikve.address, mikve.city)}</p>
                 <p><strong>טלפון:</strong> {mikve.phone || 'לא קיים מידע בנושא'}</p>
                 <p><strong>נגישות:</strong> {mikve.accessibility || 'לא קיים מידע בנושא'}</p>
