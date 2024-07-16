@@ -117,7 +117,6 @@ const AdminAddMikve = () => {
         if (
             mikveData.name &&
             mikveData.city &&
-            mikveData.address &&
             mikveData.general_shelter &&
             mikveData.general_accessibility
         ) {
@@ -125,10 +124,16 @@ const AdminAddMikve = () => {
                 alert("אנא הכנס מספר טלפון חוקי.");
                 return;
             }
-            // Call getCoordinates to fetch latitude and longitude
-            const coordinates = await getCoordinates(
-                `${mikveData.address}, ${mikveData.city}`
-            );
+            let coordinates;
+            if (mikveData.address) {
+                // Call getCoordinates to fetch latitude and longitude
+                coordinates = await getCoordinates(
+                    `${mikveData.address}, ${mikveData.city}`
+                );
+            } else {
+                coordinates = await getCoordinates(
+                    `${mikveData.city}`)
+            };
 
             // Prepare data to upload to Firestore or perform other actions
             const mikveToAdd = {
@@ -212,7 +217,6 @@ const AdminAddMikve = () => {
                             <div className="form-group">
                                 <label htmlFor="mikve-address">
                                     כתובת:
-                                    <span className="required">*</span>
                                 </label>
                                 <input
                                     type="text"
@@ -220,7 +224,6 @@ const AdminAddMikve = () => {
                                     name="address"
                                     value={mikveData.address}
                                     onChange={handleInputChange}
-                                    required
                                 />
                             </div>
 

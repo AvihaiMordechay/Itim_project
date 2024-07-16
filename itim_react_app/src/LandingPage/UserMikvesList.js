@@ -23,7 +23,7 @@ const UserMikvesList = ({ mikves, loadMore, hasMore }) => {
                 {mikves.map(mikve => (
                     <div key={mikve.id} className="mikve-item">
                         <p><strong>{mikve.name}</strong></p>
-                        <p>{mikve.address}</p>
+                        {mikve.address && (<p>{mikve.address}</p>)}
                         <p>{mikve.city}</p>
                         <button onClick={() => handleShowDetails(mikve)}>מידע נוסף</button>
                     </div>

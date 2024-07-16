@@ -23,7 +23,7 @@
     text-align: right;
 }
 
-.edit-mikve-content h2{
+.edit-mikve-content h2 {
     display: flex;
     justify-content: center;
 }
@@ -38,7 +38,6 @@
     align-items: center;
     margin-bottom: 10px;
     justify-content: flex-end;
-    /* Align form elements to the right */
 }
 
 .form-group label {
@@ -55,7 +54,6 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     text-align: right;
-    /* Align text to the right */
     resize: vertical;
     max-height: 150px;
     min-height: 80px;
@@ -68,7 +66,6 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     text-align: right;
-    /* Align text to the right */
 }
 
 .levad-group {
@@ -76,7 +73,6 @@
     align-items: center;
     margin-bottom: 10px;
     justify-content: flex-end;
-    /* Align form elements to the right */
 }
 
 .edit-mikve-buttons {
@@ -108,21 +104,26 @@
     background-color: #00aec6;
     color: white;
 }
-.save-button:hover{
+
+.save-button:hover {
     background-color: #008fa3;
 }
+
 .cancel-button {
     background-color: #f44336;
     color: white;
 }
-.cancel-button:hover{
+
+.cancel-button:hover {
     background-color: #da3b2f;
 }
+
 .delete-button {
     background-color: #f44336;
     color: white;
 }
-.delete-button:hover{
+
+.delete-button:hover {
     background-color: #da3b2f;
 }
 

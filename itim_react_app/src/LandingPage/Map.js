@@ -178,7 +178,7 @@ const Map = ({ mikves, userLocation, searchLocation, searchType }) => {
                         <div className="marker-info-window">
                             <h3>מקווה</h3>
                             <p><strong>{selectedMikve.name}</strong></p>
-                            <p>{selectedMikve.address}</p>
+                            {selectedMikve.address && (<p>{selectedMikve.address}</p>)}
                             <p>{selectedMikve.city}</p>
                             <button onClick={() => handleShowDetails(selectedMikve)}>מידע נוסף</button>
                         </div>

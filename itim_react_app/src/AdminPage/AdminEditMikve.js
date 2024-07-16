@@ -4,6 +4,7 @@ import { db } from "../Firebase"
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { TbEdit } from "react-icons/tb";
 import { IoIosSave } from "react-icons/io";
+import { getCoordinates } from "../GetCoordinates";
 
 
 
@@ -25,7 +26,6 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
         if (
             mikveData.name &&
             mikveData.city &&
-            mikveData.address &&
             mikveData.general_shelter &&
             mikveData.general_accessibility
         ) {
@@ -34,9 +34,36 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                 // Handle invalid phone number case (can show an alert or any other UI indication)
                 return;
             }
+
+            let coordinates;
+            if (mikveData.address) {
+                // Call getCoordinates to fetch latitude and longitude
+                coordinates = await getCoordinates(`${mikveData.address}, ${mikveData.city}`);
+            } else {
+                coordinates = await getCoordinates(`${mikveData.city}`);
+            }
+
+            if (coordinates) {
+                mikveData.position = {
+                    latitude: coordinates.lat,
+                    longitude: coordinates.lng,
+                };
+            } else {
+                mikveData.position = {};
+            }
+
+            console.log(coordinates);
+            console.log(mikveData);
+
             try {
                 // Create a copy of mikveData without the id field
                 const { id, ...mikveDataWithoutId } = mikveData;
+
+                // Ensure position is not undefined
+                if (!mikveDataWithoutId.position) {
+                    delete mikveDataWithoutId.position;
+                }
+
                 const mikveRef = doc(db, "Mikves", mikve.id);
                 await updateDoc(mikveRef, mikveDataWithoutId);
                 onSave(mikveData);
@@ -158,18 +185,25 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
     return (
         <div className="edit-mikve-popup">
             <div className="edit-mikve-content">
-                <h2>עריכת מקווה</h2>
+                <div className="edit-mikve-header">
+                    <button className="close-icon" onClick={onClose} >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+                        </svg>
+                    </button>
+                    <h2>עריכת מקווה</h2>
+                </div>
                 <form className="edit-mikve-form">
                     {[
-                        { id: "name", label: "שם המקווה", type: "text" },
-                        { id: "city", label: "עיר", type: "text" },
-                        { id: "address", label: "כתובת", type: "text" },
-                        { id: "phone", label: "טלפון", type: "tel" },
+                        { id: "name", label: "שם המקווה", type: "text", required: true },
+                        { id: "city", label: "עיר", type: "text", required: true },
+                        { id: "address", label: "כתובת", type: "text", required: false },
+                        { id: "phone", label: "טלפון", type: "tel", required: false },
                     ].map((field) => (
                         <div className="form-group" key={field.id}>
                             <label htmlFor={`edit-mikve-${field.id}`}>
                                 {`${field.label}:`}
-                                <span className="required">*</span>
+                                {field.required && <span className="required">*</span>}
                             </label>
 
                             <input
@@ -179,7 +213,7 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                                 value={editField === field.id ? tempData[field.id] : mikveData[field.id]}
                                 onChange={handleInputChange}
                                 disabled={editField !== field.id}
-                                required
+                                required={field.required}
                             />
                             {editField === field.id ? (
                                 <button className="edit-button" type="button" onClick={() => handleFieldSave(field.id)}>
@@ -190,8 +224,6 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                                     <TbEdit />
                                 </button>
                             )}
-
-
                         </div>
                     ))}
                     <div className="form-group">
@@ -334,7 +366,7 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                             onChange={(e) => setNewId(e.target.value)}
                         />
                         {editField === "ids" && (
-                            <button id="add-mikve-id" type="button" onClick={handleAddId}>
+                            <button className="edit-button" id="add-mikve-id" type="button" onClick={handleAddId}>
                                 הוסף
                             </button>
                         )}
