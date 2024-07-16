@@ -36,19 +36,16 @@
 
 .add-mikve-content {
     background-color: white;
-    padding: 0px 0px 10px 10px;
-    border-radius: 4px;
+    padding: 0 0 10px 10px;
+    border-radius: 8px;
     width: 400px;
     max-width: 90%;
     max-height: 80%;
     overflow-y: auto;
+    direction: rtl;
+    text-align: right;
 }
 
-.add-mikve-content h2 {
-    display: flex;
-    justify-content: center;
-    color: black;
-}
 
 .add-mikve-form {
     display: flex;
@@ -263,4 +260,39 @@
 
 .autocomplete-item.highlighted {
     background: lightgray;
+}
+
+
+.add-mikve-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    color: black;
+
+}
+
+.add-mikve-title {
+    margin-right: 15px !important;
+    display: flex !important;
+    justify-content: center !important;
+    flex-grow: 1 !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+}
+
+.add-mikve-close-icon {
+    display: flex !important;
+    justify-content: left !important;
+    background: none !important;
+    border: none !important;
+    color: gray !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: transform 0.2s ease, color 0.2s ease !important;
+    margin-left: 10px !important;
+}
+
+.add-mikve-close-icon:hover {
+    color: darkgray !important;
 }

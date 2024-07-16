@@ -214,7 +214,10 @@ const AdminAddMikve = () => {
       {isAddMikvePopupOpen && (
         <div className="add-mikve-popup">
           <div className="add-mikve-content">
-            <h2>הוספת מקווה:</h2>
+            <div className="add-mikve-header">
+              <h2 className="add-mikve-title">הוספת מקווה:</h2>
+              <button className="add-mikve-close-icon" onClick={handleClosePopup} >X</button>
+            </div>
             <form className="add-mikve-form">
               <div className="form-group">
                 <label htmlFor="mikve-name">

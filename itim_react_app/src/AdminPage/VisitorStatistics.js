@@ -60,10 +60,6 @@ const VisitorStatistics = () => {
         fetchVisitorData();
     }, []);
 
-    useEffect(() => {
-        console.log('Updated visitorData:', visitorData);
-    }, [visitorData]);
-
     const cleanupOldData = async (cutoffDate) => {
         const visitorRef = collection(db, 'visitors');
         const oldDataQuery = query(visitorRef, where('__name__', '<', cutoffDate));
