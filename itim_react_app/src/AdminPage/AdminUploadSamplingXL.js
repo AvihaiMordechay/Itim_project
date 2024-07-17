@@ -4,6 +4,7 @@ import * as XLSX from 'xlsx';
 import { MdOutlineFileUpload } from "react-icons/md";
 import { db } from '../Firebase'; // Import your Firebase configuration
 import { collection, doc, writeBatch } from "firebase/firestore";
+import { RingLoader } from 'react-spinners';
 
 const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => {
     const [file, setFile] = useState(null);
@@ -11,6 +12,11 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
     const [mikveUploadPopup, setMikveUploadPopup] = useState(false);
     const [sanitationData, setSanitationData] = useState([]);
     const [errorUploadMessage, setErrorUploadMessage] = useState('');
+    const [showMikvesMissing, setShowMikvesMissing] = useState(false);
+    const [showLoadingUploading, setShowLoadingUploading] = useState(false);
+    const [missingIDs, setMissingIDs] = useState([]);
+    const [uploadSuccessfuly, setUploadSuccessfuly] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -18,6 +24,11 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
         setFileName(selectedFile ? selectedFile.name : '');
         setMikveUploadPopup(true);
     };
+
+    const handleExitLoadingUploading = () => {
+        setShowLoadingUploading(false);
+        setShowMikvesMissing(false);
+    }
 
     const handleCancelUploadPopup = () => {
         setFile(null);
@@ -34,15 +45,18 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
             const workbook = XLSX.read(data, { type: 'array' });
             const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
             const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+            handleCancelUploadPopup();
+            setShowLoadingUploading(true);
             if (checkXlFile(jsonData)) {
+                setIsLoading(true);
                 initSanitationData(jsonData);
+                setIsLoading(false);
             } else {
                 setErrorUploadMessage('הקובץ שהוכנס לא בפורמט התקין');
                 setTimeout(() => {
                     setErrorUploadMessage('');
                 }, 1800);
             }
-            handleCancelUploadPopup();
         };
         reader.readAsArrayBuffer(file);
     };
@@ -196,11 +210,18 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
         const MIKVE_NOT_CHECKED = "0";
         const MIKVE_CHECKED_AND_PASSED = "1";
         const MIKVE_CHECKED_AND_NOT_PASSED = "2";
+        const tempMissingIds = [];
         const updatedMikves = allMikves.reduce((acc, mikve) => {
             let mikveSanitationDate = "";
             let idsMap = new Map(Object.entries(mikve.ids));
             let isUpdated = false; // Flag to check if there are changes in the mikve
 
+            // Collect IDs in sanitationData but not in idsMap
+            sanitationData.forEach(data => {
+                if (!idsMap.has(data.mikveID)) {
+                    tempMissingIds.push(data.mikveID);
+                }
+            });
             for (const [id, value] of idsMap) {
                 const foundSanitationData = sanitationData.find(data => data.mikveID === id);
                 if (foundSanitationData) {
@@ -257,6 +278,7 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
         }, []);
 
         if (updatedMikves.length > 0) {
+            setMissingIDs(tempMissingIds);
             setAllMikves(prevMikves => {
                 const updatedMikveIds = new Set(updatedMikves.map(mikve => mikve.id));
                 console.log(updatedMikveIds);
@@ -266,23 +288,31 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
             });
             updateFirebase(updatedMikves);
             onUploadSuccess();
+            if (missingIDs.length > 0) {
+                setShowMikvesMissing(true);
+            }
         }
     };
 
-
-    const updateFirebase = (updatedMikves) => {
+    const updateFirebase = async (updatedMikves) => {
         const batch = writeBatch(db);
 
-        updatedMikves.forEach((mikve) => {
-            const mikveDocRef = doc(collection(db, 'Mikves'), mikve.id);
-            batch.update(mikveDocRef, {
-                ids: mikve.ids,
-                water_sampling: mikve.water_sampling,
-                ...(mikve.when_sampling && { when_sampling: mikve.when_sampling })
+        try {
+            updatedMikves.forEach((mikve) => {
+                const mikveDocRef = doc(collection(db, 'Mikves'), mikve.id);
+                batch.update(mikveDocRef, {
+                    ids: mikve.ids,
+                    water_sampling: mikve.water_sampling,
+                    ...(mikve.when_sampling && { when_sampling: mikve.when_sampling })
+                });
             });
-        });
 
-        batch.commit();
+            await batch.commit();
+            setUploadSuccessfuly("true");
+        } catch (error) {
+            console.error("Error updating Firebase:", error);
+            setUploadSuccessfuly("false");
+        }
     };
 
     return (
@@ -322,6 +352,33 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
                     </div>
                 </div>
             )}
+            {showLoadingUploading && (
+                <div className="loading-uploading-popup">
+                    {isLoading && (
+                        <div className="loading-spinner">
+                            <RingLoader color={"#123abc"} loading={isLoading} size={150} />
+                        </div>
+                    )}
+                    {uploadSuccessfuly === "true" && (
+                        <h2 className="upload-xl-successfuly">הקובץ הועלה בהצלחה</h2>
+                    )}
+                    {uploadSuccessfuly === "false" && (
+                        <h2 className="upload-xl-successfuly">העלאה נכשלה</h2>
+                    )}
+                    {showMikvesMissing && (
+                        <div>
+                            <h3 className="missing-ids">IDs חדשים שנמצאו בקובץ:</h3>
+                            <ul className="missing-ids-list">
+                                {missingIDs.map(id => (
+                                    <li key={id}>{id}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                    <button type="submit" className="exit-loading-uploading-button" onClick={handleExitLoadingUploading}>צא</button>
+                </div>
+            )}
+
         </div>
     );
 

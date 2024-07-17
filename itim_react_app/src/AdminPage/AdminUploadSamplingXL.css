@@ -111,3 +111,22 @@ label {
     transform: translateX(-50%);
     z-index: 9999;
 }
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.missing-ids-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.missing-ids-list li {
+    background-color: #f8d7da;
+    padding: 5px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
