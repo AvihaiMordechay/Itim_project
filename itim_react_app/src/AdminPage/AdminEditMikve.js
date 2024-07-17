@@ -5,7 +5,8 @@ import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { TbEdit } from "react-icons/tb";
 import { IoIosSave } from "react-icons/io";
 import { getCoordinates } from "../GetCoordinates";
-
+import citiesList from "./cityList.json";
+import Autocomplete from "react-autocomplete";
 
 
 const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
@@ -15,6 +16,7 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
     const [isLevadChecked, setIsLevadChecked] = useState(mikve.levad);
     const [newId, setNewId] = useState("");
     const [mikveDeletePopup, setMikveDeletePopup] = useState(false);
+    const [cities, setCities] = useState(citiesList);
 
     function isValidPhoneNumber(phoneNumber) {
         const pattern = /^(?:\+972|0)?([2345789]|5[012345678]|7\d)-?\d{7}$|^(?:\+972|0)?(5[012345678]|7\d)-?\d{8}$/;
@@ -31,6 +33,14 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
             if (mikveData.phone && !isValidPhoneNumber(mikveData.phone)) {
                 alert("אנא הכנס טלפון חוקי");
                 // Handle invalid phone number case (can show an alert or any other UI indication)
+                return;
+            }
+
+            const choosedCityName = mikveData.city.trim(); // Trim spaces from the city name
+            const trimmedCitiesList = citiesList.map((city) => city.trim()); // Trim spaces from all city names
+            if (!trimmedCitiesList.includes(choosedCityName)) {
+                console.log("x", mikveData.city, "x");
+                alert("העיר שהוזנה אינה נמצאת ברשימת הערים.");
                 return;
             }
 
@@ -111,7 +121,13 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
         const newValue = type === "checkbox" ? checked : value;
-
+        if (name === "city") {
+            setCities(
+                citiesList.filter((city) =>
+                    city.toLowerCase().includes(value.toLowerCase())
+                )
+            );
+        }
         if (name === "generalShelter") {
             // Handle special case for generalShelter
             setTempData((prevData) => ({
@@ -141,6 +157,14 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                 }));
             }
         }
+    };
+
+    const handleCitySelect = (value) => {
+        setTempData((prevData) => ({
+            ...prevData,
+            city: value,
+        }));
+
     };
 
     const handleAddId = () => {
@@ -215,14 +239,34 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                             <span className="required">*</span>
                         </label>
 
-                        <input
-                            type="text"
-                            id="edit-mikve-city"
-                            name="city"
-                            value={editField === "city" ? tempData["city"] : mikveData["city"]}
-                            onChange={handleInputChange}
-                            disabled={editField !== "city"}
-                            required
+                        <Autocomplete
+                            getItemValue={(item) => item}
+                            items={cities}
+                            renderItem={(item, isHighlighted) => (
+                                <div
+                                    key={item}
+                                    className={`autocomplete-item ${isHighlighted ? 'highlighted' : ''}`}
+                                >
+                                    {item}
+                                </div>
+                            )}
+                            value={tempData.city}
+                            onChange={(e) => handleInputChange(e)}
+                            onSelect={handleCitySelect}
+                            inputProps={{
+                                id: "mikve-city",
+                                name: "city",
+                                required: true,
+                                className: "autocomplete-input",
+                                disabled: editField !== "city",
+                            }}
+                            wrapperStyle={{
+                                display: "flex",
+                                width: "100%",
+                                position: "relative",
+                                zIndex: "9999",
+                                color: "black",
+                            }}
                         />
                         {editField === "city" ? (
                             <button className="edit-button" type="button" onClick={() => handleFieldSave("city")}>
@@ -235,7 +279,6 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
                         )}
                     </div>
                     {[
-                        { id: "city", label: "עיר", type: "text", required: true },
                         { id: "address", label: "כתובת", type: "text", required: false },
                         { id: "phone", label: "טלפון", type: "tel", required: false },
                     ].map((field) => (
