@@ -5,8 +5,12 @@ import { AdminAddMikve } from "./AdminAddMikve";
 import { AdminDownloadData } from "./AdminDownloadData";
 import { AdminUploadSamplingXL } from "./AdminUploadSamplingXL";
 import { AdminStatistics } from './AdminStatistics';
+import useAuth from '../Authentication/AdminAuth';
+
 
 const AdminHeader = ({ allMikves, setAllMikves, handleUploadSuccess }) => {
+    const { logout } = useAuth();
+
     return (
         <div className="admin-header">
             <h1>ניהול מקוואות</h1>
@@ -29,6 +33,7 @@ const AdminHeader = ({ allMikves, setAllMikves, handleUploadSuccess }) => {
                     <AdminStatistics allMikves={allMikves} />
                 </div>
             </div>
+            <button className="logout-button" onClick={logout}>התנתק</button>
         </div>
     );
 };

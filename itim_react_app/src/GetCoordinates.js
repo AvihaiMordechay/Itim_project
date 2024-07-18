@@ -23,7 +23,6 @@ async function getCoordinates(address) {
                 lng: location.lng,
             };
         } else {
-            console.error('Geocoding API error:', response.data.status);
             return null;
         }
     } catch (error) {

@@ -1,10 +1,10 @@
 import "./AdminUploadSamplingXL.css";
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
-import { MdOutlineFileUpload } from "react-icons/md";
 import { db } from '../Firebase'; // Import your Firebase configuration
 import { collection, doc, writeBatch } from "firebase/firestore";
 import { RingLoader } from 'react-spinners';
+
 
 const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => {
     const [file, setFile] = useState(null);
@@ -17,6 +17,7 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
     const [missingIDs, setMissingIDs] = useState([]);
     const [uploadSuccessfuly, setUploadSuccessfuly] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -332,7 +333,6 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
                 onClick={() => document.getElementById('input-xl-file').click()}
             >
                 עדכן קובץ נתוני תבאורה
-                <MdOutlineFileUpload />
             </button>
             {errorUploadMessage && (
                 <div className="xl-error-message">

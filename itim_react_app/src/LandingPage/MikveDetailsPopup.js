@@ -4,7 +4,16 @@ import './MikveDetailsPopup.css';
 
 
 const MikveDetailsPopup = ({ mikve, onClose }) => {
-    console.log(mikve)
+    const generalShelterMap = {
+        "0": "ללא מיגון",
+        "1": "מיגון חלקי",
+        "2": "מיגון מלא"
+    }
+    const generalAccessibilityMap = {
+        "0": "לא נגיש",
+        "1": "נגישות חלקית",
+        "2": "נגישות מלאה"
+    }
     const getStaticMapUrl = (mikve) => {
         const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API;
         if (mikve.position && mikve.position.latitude && mikve.position.longitude) {
@@ -54,8 +63,8 @@ const MikveDetailsPopup = ({ mikve, onClose }) => {
                 <h2>{mikve.name || "מקווה"}</h2>
                 <p><strong>כתובת:</strong> {getAddress(mikve.address, mikve.city)}</p>
                 <p><strong>טלפון:</strong> {mikve.phone || 'לא קיים מידע בנושא'}</p>
-                <p><strong>נגישות:</strong> {mikve.accessibility || 'לא קיים מידע בנושא'}</p>
-                <p><strong>מיגון:</strong> {mikve.shelter || 'לא קיים מידע בנושא'}</p>
+                <p><strong>נגישות:</strong> {mikve.accessibility || generalAccessibilityMap[mikve.general_accessibility]}</p>
+                <p><strong>מיגון:</strong> {mikve.shelter || generalShelterMap[mikve.general_shelter]}</p>
                 <p><strong>השגחה:</strong> {mikve.levad !== undefined ? (mikve.levad ? 'מותר לרחוץ לבד' : 'אסור לרחוץ לבד') : 'לא קיים מידע בנושא'}</p>
                 <p><strong>בדיקת מים:</strong> {getWaterSampling(mikve.water_sampling)}</p>
 

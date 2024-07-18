@@ -3,8 +3,6 @@
     background-color: #605379e0;
     color: white;
     position: fixed;
-    /* padding: 20px; */
-    /* position: fixed; */
     top: 0;
     right: 0;
     width: 15%;
@@ -108,4 +106,22 @@
     cursor: pointer;
     padding: 0;
     text-align: right;
+}
+
+.logout-button {
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 30px;
+    text-align: center;
+    margin-top: auto;
+    margin: 10px;
+}
+
+.logout-button:hover {
+    font-weight: bold;
+    border-width: 2px;
 }

@@ -248,9 +248,8 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
               renderItem={(item, isHighlighted) => (
                 <div
                   key={item}
-                  className={`autocomplete-item ${
-                    isHighlighted ? "highlighted" : ""
-                  }`}
+                  className={`autocomplete-item ${isHighlighted ? "highlighted" : ""
+                    }`}
                 >
                   {item}
                 </div>
@@ -450,7 +449,7 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
 
           <div className="form-group levad-group">
             <label htmlFor="edit-mikve-levad" className="levad-label">
-              השגחה:
+              טבילה לבד:
             </label>
             <input
               type="checkbox"
@@ -539,18 +538,18 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
           <div className="adds-id">
             {editField === "ids"
               ? Object.entries(tempData.ids).map(([key, value]) => (
-                  <div key={key} className="added-id">
-                    <span>{key}</span>
-                    <button onClick={() => handleDeleteId(key)} type="button">
-                      X
-                    </button>
-                  </div>
-                ))
+                <div key={key} className="added-id">
+                  <span>{key}</span>
+                  <button onClick={() => handleDeleteId(key)} type="button">
+                    X
+                  </button>
+                </div>
+              ))
               : Object.entries(tempData.ids).map(([key, value]) => (
-                  <div key={key} className="added-id">
-                    <span>{key}</span>
-                  </div>
-                ))}
+                <div key={key} className="added-id">
+                  <span>{key}</span>
+                </div>
+              ))}
           </div>
 
           <div className="form-group">

@@ -160,7 +160,6 @@ const AdminAddMikve = () => {
       const choosedCityName = mikveData.city.trim(); // Trim spaces from the city name
       const trimmedCitiesList = citiesList.map((city) => city.trim()); // Trim spaces from all city names
       if (!trimmedCitiesList.includes(choosedCityName)) {
-        console.log("x", mikveData.city, "x");
         alert("העיר שהוזנה אינה נמצאת ברשימת הערים.");
         return;
       }
@@ -243,9 +242,8 @@ const AdminAddMikve = () => {
                   renderItem={(item, isHighlighted) => (
                     <div
                       key={item}
-                      className={`autocomplete-item ${
-                        isHighlighted ? "highlighted" : ""
-                      }`}
+                      className={`autocomplete-item ${isHighlighted ? "highlighted" : ""
+                        }`}
                     >
                       {item}
                     </div>
@@ -359,7 +357,7 @@ const AdminAddMikve = () => {
                   htmlFor="mikve-supervision"
                   className="supervision-label"
                 >
-                  השגחה:
+                  טבילה לבד:                  :
                 </label>
                 <input
                   type="checkbox"
