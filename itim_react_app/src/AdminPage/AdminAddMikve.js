@@ -109,10 +109,8 @@ const AdminAddMikve = () => {
     }));
   };
 
-  function isValidPhoneNumber(phoneNumber) {
-    const pattern =
-      /^(?:\+972|0)?([2345789]|5[012345678]|7\d)-?\d{7}$|^(?:\+972|0)?(5[012345678]|7\d)-?\d{8}$/;
-    return pattern.test(phoneNumber);
+  function isValidPhoneNumbers(phoneNumber) {
+    return /^[0-9-\s]+$/.test(phoneNumber);
   }
 
   const handleClosePopup = () => {
@@ -145,7 +143,7 @@ const AdminAddMikve = () => {
       mikveData.general_shelter &&
       mikveData.general_accessibility
     ) {
-      if (mikveData.phone && !isValidPhoneNumber(mikveData.phone)) {
+      if (mikveData.phone && !isValidPhoneNumbers(mikveData.phone)) {
         alert("אנא הכנס מספר טלפון חוקי.");
         return;
       }
@@ -156,9 +154,8 @@ const AdminAddMikve = () => {
           `${mikveData.address}, ${mikveData.city}`
         );
       } else {
-        coordinates = await getCoordinates(
-          `${mikveData.city}`)
-      };
+        coordinates = await getCoordinates(`${mikveData.city}`);
+      }
 
       const choosedCityName = mikveData.city.trim(); // Trim spaces from the city name
       const trimmedCitiesList = citiesList.map((city) => city.trim()); // Trim spaces from all city names
@@ -216,13 +213,16 @@ const AdminAddMikve = () => {
           <div className="add-mikve-content">
             <div className="add-mikve-header">
               <h2 className="add-mikve-title">הוספת מקווה:</h2>
-              <button className="add-mikve-close-icon" onClick={handleClosePopup} >X</button>
+              <button
+                className="add-mikve-close-icon"
+                onClick={handleClosePopup}
+              >
+                X
+              </button>
             </div>
             <form className="add-mikve-form">
               <div className="form-group">
-                <label htmlFor="mikve-name">
-                  שם המקווה:
-                </label>
+                <label htmlFor="mikve-name">שם המקווה:</label>
                 <input
                   type="text"
                   id="mikve-name"
@@ -243,7 +243,9 @@ const AdminAddMikve = () => {
                   renderItem={(item, isHighlighted) => (
                     <div
                       key={item}
-                      className={`autocomplete-item ${isHighlighted ? 'highlighted' : ''}`}
+                      className={`autocomplete-item ${
+                        isHighlighted ? "highlighted" : ""
+                      }`}
                     >
                       {item}
                     </div>
@@ -272,9 +274,7 @@ const AdminAddMikve = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="mikve-address">
-                  כתובת:
-                </label>
+                <label htmlFor="mikve-address">כתובת:</label>
                 <input
                   type="text"
                   id="mikve-address"
