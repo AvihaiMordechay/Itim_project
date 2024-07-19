@@ -1,0 +1,15 @@
+@font-face {
+    font-family: 'Tkuma Regular';
+    src: url('/fonts/tkumaregular.eot');
+    src: url('/fonts/tkumaregular.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/tkumaregular.woff2') format('woff2'),
+         url('/fonts/tkumaregular.woff') format('woff'),
+         url('/fonts/tkumaregular.ttf') format('truetype'),
+         url('/fonts/tkumaregular.svg#tkumaregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  body {
+    font-family: 'Tkuma Regular', Arial, sans-serif;
+  }
