@@ -140,10 +140,18 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
 
 
         const searchTerm = searchInput.trim().toLowerCase();
-        let searchLocation = userLocation;
-        if (!searchTerm) {
-            onClear();
-        } else if (searchType === 'address') {
+    let searchLocation = userLocation;
+
+    // Always filter mikvehs based on the current filters, regardless of search term
+    const filteredMikves = filterMikves(allMikves, searchTerm, searchType);
+
+    if (filteredMikves.length === 0) {
+        setPopupMessage('לא הצלחנו למצוא מקוואות המתאימות לחיפוש שלך. אנא נסי שנית.');
+        setShowPopup(true);
+        return;
+    }
+
+    if (searchType === 'address' && searchTerm) {
             try {
                 if (autocompleteRef.current && autocompleteRef.current.getPlace()) {
                     const addressObject = autocompleteRef.current.getPlace();
@@ -176,11 +184,8 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                 setShowPopup(true);
                 return;
             }
-
-            const filteredMikves = filterMikves(allMikves, searchTerm, searchType);
-            handleFilteredMikves(filteredMikves, searchLocation);
-            onSearch(searchTerm, searchLocation, searchType);
-        } else if (searchType === 'name') {
+            
+        } else if (searchType === 'name' && searchTerm) {
             const filteredMikves = filterMikves(allMikves, searchTerm, searchType);
             if (filteredMikves.length > 0) {
                 const mikveToShow = filteredMikves.find(mikve => mikve.position !== null);
@@ -198,8 +203,10 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                     return;
                 }
             }
-            onSearch(searchTerm, searchLocation, searchType);
         }
+
+        handleFilteredMikves(filteredMikves, searchLocation);
+    onSearch(searchTerm, searchLocation, searchType);
     };
 
     const filterMikves = (mikves, searchTerm, searchType) => {
