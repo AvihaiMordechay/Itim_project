@@ -13,6 +13,7 @@
     gap: 10px;
     align-items: center;
     justify-content: center;
+    flex-direction: row-reverse;
     width: 100%;
     margin-left: 10px;
 }
@@ -38,8 +39,8 @@
 .search-button {
     position: absolute;
     left: 5px;
-    top: 45%;
-    transform: translateY(-50%);
+    /* top: 45%; */
+    /* transform: translateY(-50%); */
     background: none;
     border: none;
     color: #605379;
@@ -57,11 +58,12 @@
     background-color: rgba(96, 83, 121, 0.1);
 }
 
+/*
 .search-button svg {
     width: 20px;
     height: 20px;
 }
-
+*/
 
 .advanced-search {
     width: 100%;
@@ -93,7 +95,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: end;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 35px;
@@ -102,13 +104,51 @@
 }
 
 .select-header {
-    margin-bottom: 5px;
-    font-size: 16px;
+    position: absolute;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
+
+.info-popup {
+    position: absolute;
+    width: inherit;
+    left: 5%; 
+    margin-bottom: 60px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 14px;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    text-align: right;
+    direction: rtl;
+}
+
+.info-popup button {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #605379;
+}
+
+.info-icon {
+    cursor: pointer;
+    margin-left: 5px;
+    color: #605379;
+}
+
 
 .select-input {
     width: 90%;
-    height: 30px;
+    height: 25px;
     font-size: 16px;
     box-sizing: border-box;
     border-radius: 20px;
@@ -221,6 +261,11 @@
 
 .autocomplete-popup {
     position: absolute;
+    position: absolute;
+    /* top: -100%; */
+    bottom: 100%;
+    right: 50%;
+    translate: 50% 0;
     background-color: #f9f9f9;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -276,5 +321,16 @@ body {
 
     .filters{
         flex-direction: column;
+    }
+    .autocomplete-popup {
+        position: absolute;
+    }
+    .info-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        max-width: 300px;
     }
   }

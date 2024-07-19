@@ -1,5 +1,7 @@
 // UserSearchForm.js
 import React, { useState, useEffect, useRef } from 'react';
+import { FaQuestionCircle } from 'react-icons/fa'; // Import question icon from react-icons
+import { IoMdClose } from 'react-icons/io'; // Import close icon from react-icons
 import { calculateDistance } from '../utils/distance';
 import './UserSearchForm.css';
 
@@ -14,6 +16,10 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
     const [popupMessage, setPopupMessage] = useState('');
     const [showInstruction, setShowInstruction] = useState(false);
     const [placeSelected, setPlaceSelected] = useState(false);
+    const [showAccessibilityInfo, setShowAccessibilityInfo] = useState(false);
+    const [showWaterSamplingInfo, setShowWaterSamplingInfo] = useState(false);
+    const [showShelterInfo, setShowShelterInfo] = useState(false);
+    const [showLevadInfo, setShowLevadInfo] = useState(false);
     const inputRef = useRef(null);
     const autocompleteRef = useRef(null);
 
@@ -134,10 +140,18 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
 
 
         const searchTerm = searchInput.trim().toLowerCase();
-        let searchLocation = userLocation;
-        if (!searchTerm) {
-            onClear();
-        } else if (searchType === 'address') {
+    let searchLocation = userLocation;
+
+    // Always filter mikvehs based on the current filters, regardless of search term
+    const filteredMikves = filterMikves(allMikves, searchTerm, searchType);
+
+    if (filteredMikves.length === 0) {
+        setPopupMessage('לא הצלחנו למצוא מקוואות המתאימות לחיפוש שלך. אנא נסי שנית.');
+        setShowPopup(true);
+        return;
+    }
+
+    if (searchType === 'address' && searchTerm) {
             try {
                 if (autocompleteRef.current && autocompleteRef.current.getPlace()) {
                     const addressObject = autocompleteRef.current.getPlace();
@@ -170,11 +184,8 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                 setShowPopup(true);
                 return;
             }
-
-            const filteredMikves = filterMikves(allMikves, searchTerm, searchType);
-            handleFilteredMikves(filteredMikves, searchLocation);
-            onSearch(searchTerm, searchLocation, searchType);
-        } else if (searchType === 'name') {
+            
+        } else if (searchType === 'name' && searchTerm) {
             const filteredMikves = filterMikves(allMikves, searchTerm, searchType);
             if (filteredMikves.length > 0) {
                 const mikveToShow = filteredMikves.find(mikve => mikve.position !== null);
@@ -192,8 +203,10 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                     return;
                 }
             }
-            onSearch(searchTerm, searchLocation, searchType);
         }
+
+        handleFilteredMikves(filteredMikves, searchLocation);
+    onSearch(searchTerm, searchLocation, searchType);
     };
 
     const filterMikves = (mikves, searchTerm, searchType) => {
@@ -250,6 +263,11 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
             <form className="search-form" onSubmit={handleSearch}>
                 <div className="search-bar-container">
                     <div className="search-input-wrapper">
+                    {showInstruction && searchType === 'address' && !placeSelected && (
+                <div ref={popupRef} className="autocomplete-popup">
+                    אנא בחרי כתובת מהרשימה המוצעת
+                </div>
+            )}
                         <input
                             ref={inputRef}
                             type="text"
@@ -277,59 +295,111 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                     </div>
                 </div>
                 <div className="advanced-search">
-                    <h3 className="advanced-search-header">חיפוש מתקדם</h3>
-                    <div className="filters">
-                        <div className="two-filters">
-                            <div className="select-box">
-                                <label className="select-header">נגישות פיזית</label>
-                                <select value={accessibility} onChange={(e) => setAccessibility(e.target.value)} className="select-input">
-                                    <option value="">בחר</option>
-                                    <option value="0">לא נגיש</option>
-                                    <option value="1">נגישות חלקית</option>
-                                    <option value="2">נגישות מלאה</option>
-                                </select>
-                            </div>
-                            <div className="select-box">
-                                <label className="select-header">בדיקת מים</label>
-                                <select
-                                    value={waterSampling}
-                                    onChange={(e) => setWaterSampling(e.target.value)}
-                                    className="select-input"
-                                >
-                                    <option value="">בחר</option>
-                                    <option value="0">לא נבדק</option>
-                                    <option value="1">נבדק ותקין</option>
-                                    <option value="2">נבדק ולא תקין</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div className="two-filters">
-                            <div className="select-box">
-                                <label className="select-header">מיגון</label>
-                                <select value={shelter} onChange={(e) => setShelter(e.target.value)} className="select-input">
-                                    <option value="">בחר</option>
-                                    <option value="0">ללא מיגון</option>
-                                    <option value="1">מיגון חלקי</option>
-                                    <option value="2">מיגון מלא</option>
-                                </select>
-                            </div>
-                            <div className="select-box">
-                                <label className="select-header">טבילה לבד</label>
-                                <select value={levad} onChange={(e) => setLevad(e.target.value)} className="select-input">
-                                    <option value="">בחר</option>
-                                    <option value="true">מותר לרחוץ לבד</option>
-                                    <option value="false">אסור לרחוץ לבד</option>
-                                </select>
-                            </div>
-                        </div>
+    <h3 className="advanced-search-header">חיפוש מתקדם</h3>
+    <div className="filters">
+        <div className="two-filters">
+            <div className="select-box">
+                <label className="select-header">
+                    נגישות פיזית
+                    <FaQuestionCircle 
+                        className="info-icon" 
+                        onClick={() => setShowAccessibilityInfo(true)}
+                    />
+                </label>
+                <select value={accessibility} onChange={(e) => setAccessibility(e.target.value)} className="select-input">
+                    <option value="">בחר</option>
+                    <option value="0">לא נגיש</option>
+                    <option value="1">נגישות חלקית</option>
+                    <option value="2">נגישות מלאה</option>
+                </select>
+                {showAccessibilityInfo && (
+                    <div className="info-popup">
+                        <p>בהתאם למידע שנמסר לנו על ידי הרשויות המקומיות והמועצות הדתיות.</p>
+                        <button onClick={() => setShowAccessibilityInfo(false)}>
+                            <IoMdClose />
+                        </button>
                     </div>
-                </div>
+                )}
+            </div>
+            <div className="select-box">
+                <label className="select-header">
+                    בדיקת מים
+                    <FaQuestionCircle 
+                        className="info-icon" 
+                        onClick={() => setShowWaterSamplingInfo(true)}
+                    />
+                </label>
+                <select
+                    value={waterSampling}
+                    onChange={(e) => setWaterSampling(e.target.value)}
+                    className="select-input"
+                >
+                    <option value="">בחר</option>
+                    <option value="0">לא נבדק</option>
+                    <option value="1">נבדק ותקין</option>
+                    <option value="2">נבדק ולא תקין</option>
+                </select>
+                {showWaterSamplingInfo && (
+                    <div className="info-popup">
+                        <p>בהתאם לנהלי משרד הבריאות, בכל מקווה צריכה להתבצע בדיקת זיהומים במים פעם בחודש. המידע המופיע כאן הוא בהתאם לבדיקה האחרונה שנעשתה.</p>
+                        <button onClick={() => setShowWaterSamplingInfo(false)}>
+                            <IoMdClose />
+                        </button>
+                    </div>
+                )}
+            </div>
+        </div>
+        <div className="two-filters">
+            <div className="select-box">
+                <label className="select-header">
+                    מיגון
+                    <FaQuestionCircle 
+                        className="info-icon" 
+                        onClick={() => setShowShelterInfo(true)}
+                    />
+                </label>
+                <select value={shelter} onChange={(e) => setShelter(e.target.value)} className="select-input">
+                    <option value="">בחר</option>
+                    <option value="0">ללא מיגון</option>
+                    <option value="1">מיגון חלקי</option>
+                    <option value="2">מיגון מלא</option>
+                </select>
+                {showShelterInfo && (
+                    <div className="info-popup">
+                        <p>בהתאם למידע שנמסר לנו על ידי המשרד לשירותי דת.</p>
+                        <button onClick={() => setShowShelterInfo(false)}>
+                            <IoMdClose />
+                        </button>
+                    </div>
+                )}
+            </div>
+            <div className="select-box">
+                <label className="select-header">
+                    טבילה לבד
+                    <FaQuestionCircle 
+                        className="info-icon" 
+                        onClick={() => setShowLevadInfo(true)}
+                    />
+                </label>
+                <select value={levad} onChange={(e) => setLevad(e.target.value)} className="select-input">
+                    <option value="">בחר</option>
+                    <option value="true">מותר לרחוץ לבד</option>
+                    <option value="false">אסור לרחוץ לבד</option>
+                </select>
+                {showLevadInfo && (
+                    <div className="info-popup">
+                        <p>בהתאם לפסיקת בג"ץ ולחוזר מנכ"ל כל אישה שמעוניינת בכך רשאית לטבול לבד ללא נוכחות בלנית. בשנים האחרונות בדקנו האם המקוואות מקיימים פסיקה זו ובאמת מאפשרים זאת.</p>
+                        <button onClick={() => setShowLevadInfo(false)}>
+                            <IoMdClose />
+                        </button>
+                    </div>
+                )}
+            </div>
+        </div>
+    </div>
+</div>
             </form>
-            {showInstruction && searchType === 'address' && !placeSelected && (
-                <div ref={popupRef} className="autocomplete-popup">
-                    אנא בחרי כתובת מהרשימה המוצעת
-                </div>
-            )}
+            
             {showPopup && (
                 <div className="popup">
                     <div className="popup-content">

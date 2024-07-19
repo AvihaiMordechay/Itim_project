@@ -19,8 +19,11 @@ const UserHeader = () => {
                 <div className="admin-icon" onClick={() => setIsAdminPopupOpen(true)}>
                     <RiAdminLine size={30} /> {/* Adjusted size */}
                 </div>
+                <div className="header-wrapper">
                 <h1>חיפוש מקוואות נשים</h1>
-                <img src={`${process.env.PUBLIC_URL}/logo.jpg`} alt="Logo" />
+                <a href="https://www.itim.org.il/" target="_blank" rel="noopener noreferrer" className="logo-link">
+  <img src={`${process.env.PUBLIC_URL}/logo.jpg`} alt="Logo" />
+</a>                </div>
             </div>
 
             {isAdminPopupOpen && (

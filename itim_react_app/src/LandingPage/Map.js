@@ -6,6 +6,10 @@ import './Map.css';
 
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API;
 
+const isMobile = window.innerWidth <= 768;
+const initialZoom = isMobile ? 14 : 10;
+
+
 const defaultCenter = {
     lat: 31.7683,
     lng: 35.2137, // Jerusalem coordinates
@@ -145,7 +149,7 @@ const Map = ({ mikves, userLocation, searchLocation, searchType }) => {
                 key={mapKey}
                 mapContainerStyle={mapContainerStyle}
                 center={mapCenter}
-                zoom={mapZoom}
+                zoom={initialZoom}
                 onLoad={onLoad}
                 options={{
                     disableDefaultUI: true,
@@ -178,7 +182,7 @@ const Map = ({ mikves, userLocation, searchLocation, searchType }) => {
                         <div className="marker-info-window">
                             <h3>מקווה</h3>
                             <p><strong>{selectedMikve.name}</strong></p>
-                            {selectedMikve.address && (<p>{selectedMikve.address}</p>)}
+                            {selectedMikve.address && (<p style={{display: 'block'}}>{selectedMikve.address}</p>)}
                             <p>{selectedMikve.city}</p>
                             <button onClick={() => handleShowDetails(selectedMikve)}>מידע נוסף</button>
                         </div>
