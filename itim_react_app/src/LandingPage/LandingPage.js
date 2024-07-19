@@ -11,7 +11,7 @@ import { calculateDistance } from '../utils/distance';
 import './LandingPage.css';
 import { set } from 'date-fns';
 import { FaWhatsapp, FaEnvelope, FaPhone } from 'react-icons/fa'; // Add this line
-
+import { trackVisit } from './VisitorTracker';
 
 const libraries = ['places'];
 
@@ -30,6 +30,11 @@ const LandingPage = () => {
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API,
         libraries,
     });
+
+    useEffect(() => {
+        trackVisit();  // Add this line to track visits
+    }, []);
+
 
     useEffect(() => {
         const fetchMikves = async () => {
