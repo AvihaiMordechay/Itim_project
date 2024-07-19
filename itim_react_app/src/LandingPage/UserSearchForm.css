@@ -104,6 +104,8 @@
 }
 
 .select-header {
+    position: absolute;
+    margin-bottom: 25px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -112,6 +114,7 @@
 .info-popup {
     position: absolute;
     width: inherit;
+    left: 5%; 
     margin-bottom: 60px;
     background-color: #f9f9f9;
     border: 1px solid #ccc;
@@ -145,7 +148,7 @@
 
 .select-input {
     width: 90%;
-    height: 30px;
+    height: 25px;
     font-size: 16px;
     box-sizing: border-box;
     border-radius: 20px;

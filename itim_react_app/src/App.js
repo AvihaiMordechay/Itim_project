@@ -5,8 +5,11 @@ import { AdminPage } from './AdminPage/AdminPage';
 import { AuthProvider } from './Authentication/AuthContext';
 import ProtectedRoute from './ProtectedRoute';
 
+
+
 function App() {
   return (
+
     <AuthProvider>
       <Router>
         <Routes>
@@ -16,7 +19,7 @@ function App() {
         </Routes>
       </Router>
     </AuthProvider>
-  );
+      );
 }
 
 export default App;

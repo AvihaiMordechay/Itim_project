@@ -55,6 +55,7 @@
 }
 
 .marker-info-window {
+    padding: 5px;
     font-family: Arial, sans-serif;
     direction: rtl;
     text-align: right;
@@ -67,11 +68,13 @@
 }
 
 .marker-info-window p {
+    display: inline-block;
     margin: 6px 0;
     font-size: 14px;
 }
 
 .marker-info-window button {
+    position: absolute;
     background-color: #00aec6;
     color: white;
     border: none;
@@ -79,7 +82,9 @@
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
-    margin-top: 12px;
+    left: 10px;
+    /* margin-right: auto; */
+    /* margin-top: 12px; */
     transition: background-color 0.3s ease;
 }
 
@@ -109,6 +114,11 @@
     width: 40px;
     height: 40px;
     animation: spin 1s linear infinite;
+}
+.gm-style-iw-chr {
+    position: absolute;
+    left: 0;
+    overflow: visible;
 }
 
 @keyframes spin {
