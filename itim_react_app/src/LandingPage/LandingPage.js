@@ -10,6 +10,8 @@ import { collection, getDocs } from "firebase/firestore";
 import { calculateDistance } from '../utils/distance';
 import './LandingPage.css';
 import { set } from 'date-fns';
+import { FaWhatsapp, FaEnvelope, FaPhone } from 'react-icons/fa'; // Add this line
+
 
 const libraries = ['places'];
 
@@ -54,7 +56,8 @@ const LandingPage = () => {
                         (error) => {
                             console.error('Error getting location:', error);
                             resolve({ lat: 31.7683, lng: 35.2137 }); // Default to Jerusalem
-                        }
+                        },
+                        {enableHighAccuracy:true, timeout: 5000, maximumAge: 0}
                     );
                 } else {
                     console.error('Geolocation is not supported by this browser.');
@@ -117,6 +120,8 @@ const LandingPage = () => {
     if (!isLoaded) return null;
 
     return (
+
+        <>
         <div className="landing-page">
             <UserHeader />
             <div className="user-main-content">
@@ -150,7 +155,24 @@ const LandingPage = () => {
                     </div>
                 </div>
             </div>
+            
         </div>
+
+        <div className="contact-section">
+                <h3>לסיוע והכוונה בשירותי הדת ללא תשלום</h3>
+                <div className="contact-icons">
+                    <a href="https://wa.me/972512818744" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                        <FaWhatsapp />
+                    </a>
+                    <a href="mailto:hodaot@itim.org.il" aria-label="Email">
+                        <FaEnvelope />
+                    </a>
+                    <a href="tel:*8083" aria-label="Phone">
+                        <FaPhone />
+                    </a>
+                </div>
+            </div>
+            </>
     );
 };
 

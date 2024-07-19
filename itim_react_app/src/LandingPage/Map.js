@@ -6,6 +6,10 @@ import './Map.css';
 
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API;
 
+const isMobile = window.innerWidth <= 768;
+const initialZoom = isMobile ? 14 : 10;
+
+
 const defaultCenter = {
     lat: 31.7683,
     lng: 35.2137, // Jerusalem coordinates
@@ -145,7 +149,7 @@ const Map = ({ mikves, userLocation, searchLocation, searchType }) => {
                 key={mapKey}
                 mapContainerStyle={mapContainerStyle}
                 center={mapCenter}
-                zoom={mapZoom}
+                zoom={initialZoom}
                 onLoad={onLoad}
                 options={{
                     disableDefaultUI: true,

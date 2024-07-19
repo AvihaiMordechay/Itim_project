@@ -116,6 +116,37 @@ body {
   color: #605379;
   font-weight: bold;
 }
+
+.contact-section {
+  background-color: #f0f0f0;
+  padding: 20px;
+  text-align: center;
+}
+
+.contact-section h3 {
+  font-size: 18px;
+  margin-top: 0px;
+  margin-bottom: 15px;
+  color: #605379;
+}
+
+.contact-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.contact-icons a {
+  color: #605379;
+  font-size: 24px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contact-icons a:hover {
+  color: #00aec6;
+}
+
 @media (max-width: 768px) {
   /* LandingPage.css */
 
@@ -214,4 +245,20 @@ body {
     font-size: 24px;
     margin: 10px 0;
   }
+
+  .contact-section {
+    padding: 15px;
+}
+
+.contact-section h3 {
+    font-size: 16px;
+}
+
+.contact-icons {
+    gap: 15px;
+}
+
+.contact-icons a {
+    font-size: 20px;
+}
 }
