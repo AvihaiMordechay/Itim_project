@@ -357,7 +357,7 @@ const AdminAddMikve = () => {
                   htmlFor="mikve-supervision"
                   className="supervision-label"
                 >
-                  טבילה לבד:                  :
+                  טבילה לבד:
                 </label>
                 <input
                   type="checkbox"

@@ -371,7 +371,7 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
                         )}
                         {showMikvesMissing && (
                             <div className="missing-ids-container">
-                                <h3 className="missing-ids">מקוואות חדשות שאותרו בקובץ:</h3>
+                                <h3 className="missing-ids">מקוואות חדשים שאותרו בקובץ:</h3>
                                 <ul className="missing-ids-list">
                                     {missingIDs.map(id => (
                                         <li key={id}>{id}</li>
