@@ -518,7 +518,7 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
               name="ids"
               value={newId}
               disabled={editField !== "ids"}
-              placeholder="הוסף לבור מקווה ID"
+              placeholder="הוסף בור מקווה ID"
               onChange={(e) => setNewId(e.target.value)}
             />
             {editField === "ids" && (
