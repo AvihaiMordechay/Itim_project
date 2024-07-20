@@ -539,10 +539,10 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
             {editField === "ids"
               ? Object.entries(tempData.ids).map(([key, value]) => (
                 <div key={key} className="added-id">
-                  <span>{key}</span>
                   <button onClick={() => handleDeleteId(key)} type="button">
                     X
                   </button>
+                  <span>{key}</span>
                 </div>
               ))
               : Object.entries(tempData.ids).map(([key, value]) => (
