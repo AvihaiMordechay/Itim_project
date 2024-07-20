@@ -48,9 +48,7 @@ label {
     justify-content: center;
     align-items: center;
     z-index: 9999;
-    /* הוסף את זה כדי לוודא שהפופאפ מעל כל דבר אחר */
     pointer-events: auto;
-    /* אפשר לאתר את הכפתורים שבפופאפ */
 }
 
 .mikve-upload-xl-popup-content {
