@@ -72,8 +72,11 @@ const AdminAddMikve = () => {
         general_shelter: inputValue,
       }));
     } else if (name === "ids") {
-      // Handle IDs separately to append to the array only if value is not empty
-      if (inputValue.trim() !== "") {
+      // Check if ID already exists in the ids object
+      if (inputValue.trim() in mikveData.ids) {
+        alert("הID כבר קיים במקווה זה");
+      } else if (inputValue.trim() !== "") {
+        // Handle IDs separately to append to the array only if value is not empty
         setMikveData((prevData) => ({
           ...prevData,
           ids: { ...prevData.ids, [inputValue.trim()]: "0" }, // Append new ID to the array
