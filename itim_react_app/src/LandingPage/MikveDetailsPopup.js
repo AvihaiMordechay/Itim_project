@@ -98,8 +98,8 @@ const MikveDetailsPopup = ({ mikve, onClose }) => {
                 <p><strong>נגישות:</strong> {mikve.accessibility || generalAccessibilityMap[mikve.general_accessibility]}</p>
                 <p><strong>מיגון:</strong> {mikve.shelter || generalShelterMap[mikve.general_shelter]}</p>
                 <p><strong>טבילה לבד:</strong> {mikve.levad !== undefined ? (mikve.levad ? 'מותר לרחוץ לבד' : 'אסור לרחוץ לבד') : 'לא קיים מידע בנושא'}</p>
-                {mikve.levad && (<p><strong>מתי נבדק האם ניתן לטבול לבד</strong> {mikve.when_levad !== undefined ? (format(new Date(mikve.when_levad), 'dd-MM-yyyy')) : 'לא קיים תאריך'}</p>)}
                 <p><strong>בדיקת מים:</strong> {getWaterSampling(mikve.water_sampling)}</p>
+                {mikve.water_sampling !== "0" && (<p><strong>תאריך דגימת מים</strong> {mikve.when_sampling !== undefined ? (format(new Date(mikve.when_sampling), 'dd-MM-yyyy')) : 'לא קיים תאריך'}</p>)}
 
                 <div className="mikve-map">
                     <img
