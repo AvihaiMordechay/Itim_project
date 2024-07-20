@@ -42,6 +42,12 @@ const AdminMikveSearch = ({ allMikves, setPresentationMikves, setVisibleCount, n
         setPresentationMikves(allMikves);
     };
 
+    const handleKeyPress = (e) => {
+        if (e.key === "Enter") {
+            handleSearchMikves();
+        }
+    };
+
     return (
         <div className="admin-mikve-search">
             <input
@@ -57,6 +63,7 @@ const AdminMikveSearch = ({ allMikves, setPresentationMikves, setVisibleCount, n
                 
                 }}
                 onChange={(e) => setSearchInput(e.target.value)}
+                onKeyPress={handleKeyPress}
             />
 
             <div className="admin-search-type">

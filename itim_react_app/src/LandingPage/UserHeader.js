@@ -29,6 +29,12 @@ const UserHeader = () => {
         setLoginError(""); // Clear any previous error message
     }
 
+    const handleKeyPress = (e) => {
+        if (e.key === "Enter") {
+            handleLogin();
+        }
+    }
+
     return (
         <div className="header-container">
             <div className="header">
@@ -39,7 +45,8 @@ const UserHeader = () => {
                     <h1>מקוואות נשים</h1>
                     <a href="https://www.itim.org.il/" target="_blank" rel="noopener noreferrer" className="logo-link">
                         <img src={`${process.env.PUBLIC_URL}/logo.jpg`} alt="Logo" />
-                    </a>                </div>
+                    </a>                
+                </div>
             </div>
 
             {isAdminPopupOpen && (
@@ -54,8 +61,23 @@ const UserHeader = () => {
                             <h2>התחברות לאזור ניהול</h2>
                         </div>
                         <div className="admin-popup-body">
-                            <input className="admin-input" id="email_login" placeholder="email..." onChange={(e) => setEmail(e.target.value)} dir="ltr"></input>
-                            <input className="admin-input" id="password_login" type="password" placeholder="password..." onChange={(e) => setPassword(e.target.value)} dir="ltr"></input>
+                            <input
+                                className="admin-input"
+                                id="email_login"
+                                placeholder="email..."
+                                onChange={(e) => setEmail(e.target.value)}
+                                dir="ltr"
+                                onKeyPress={handleKeyPress}
+                            />
+                            <input
+                                className="admin-input"
+                                id="password_login"
+                                type="password"
+                                placeholder="password..."
+                                onChange={(e) => setPassword(e.target.value)}
+                                dir="ltr"
+                                onKeyPress={handleKeyPress}
+                            />
                             {loginError && <p className="login-error">{loginError}</p>}
                             <button className="admin-button" id="button_login" onClick={handleLogin}>התחבר</button>
                         </div>
