@@ -168,6 +168,14 @@ label {
     margin-bottom: 20px;
 }
 
+.upload-xl-not-found {
+    border: 1px solid rgb(255, 170, 0);
+    background-color: rgba(250, 216, 149, 0.394);
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 20px;
+}
+
 .loading-spinner-upload-xl {
     border: 4px solid #f3f3f3;
     border-top: 4px solid #3498db;

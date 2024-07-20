@@ -307,6 +307,8 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
                 return newMikves;
             });
             updateFirebase(updatedMikves);
+        } else {
+            setUploadSuccessfuly("not found");
         }
     };
 
@@ -314,7 +316,6 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
     // Sets success or failure state based on the result.
     const updateFirebase = async (updatedMikves) => {
         const batch = writeBatch(db);
-
         try {
             updatedMikves.forEach((mikve) => {
                 const mikveDocRef = doc(collection(db, 'Mikves'), mikve.id);
@@ -324,7 +325,6 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
                     ...(mikve.when_sampling && { when_sampling: mikve.when_sampling })
                 });
             });
-
             await batch.commit();
             setUploadSuccessfuly("true");
         } catch (error) {
@@ -383,6 +383,9 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
                         )}
                         {uploadSuccessfuly === "false" && (
                             <h2 className="upload-xl-unsuccessfuly">העלאה נכשלה</h2>
+                        )}
+                        {uploadSuccessfuly === "not found" && (
+                            <h2 className="upload-xl-not-found">לא נמצאו מקוואות לעדכון</h2>
                         )}
                         {showMikvesMissing && (
                             <div className="missing-ids-container">
