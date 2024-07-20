@@ -54,8 +54,8 @@ const AdminContent = () => {
         setPresentationMikves((prevMikves) => prevMikves.filter((mikve) => mikve.id !== deletedMikveId));
     };
 
-    const handleUploadSuccess = () => {
-        setPresentationMikves(allMikves);
+    const handleUploadSuccess = (updatedMikves) => {
+        setPresentationMikves(updatedMikves);
     };
 
     return (
@@ -66,7 +66,7 @@ const AdminContent = () => {
                 handleUploadSuccess={handleUploadSuccess}
             />
             <div className="admin-main-content">
-                
+
                 <AdminMikveSearch
                     allMikves={allMikves}
                     setPresentationMikves={setPresentationMikves}

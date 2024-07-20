@@ -79,7 +79,6 @@ const AdminStatistics = ({ allMikves }) => {
             else if (water_sampling === "2") acc.waterSampling.mikveCheckedAndNotPassed += 1;
 
         }
-
         return acc;
     };
 
@@ -154,9 +153,9 @@ const AdminStatistics = ({ allMikves }) => {
                     labels: ['נבדק ולא תקין', 'נבדק ותקין', 'לא נבדק'],
                     datasets: [{
                         data: [
-                            mikvesData.waterSampling.mikveNotChecked,
+                            mikvesData.waterSampling.mikveCheckedAndNotPassed,
                             mikvesData.waterSampling.mikveCheckedAndPassed,
-                            mikvesData.waterSampling.mikveCheckedAndNotPassed
+                            mikvesData.waterSampling.mikveNotChecked,
                         ],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
