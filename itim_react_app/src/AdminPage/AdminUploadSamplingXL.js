@@ -347,7 +347,7 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
                 className="mikve-upload-button"
                 onClick={() => document.getElementById('input-xl-file').click()}
             >
-                עדכן קובץ נתוני תבאורה
+                עדכן קובץ נתוני תברואה
             </button>
             {errorUploadMessage && (
                 <div className="xl-error-message">

@@ -495,7 +495,7 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
 
           {isLevadChecked && (
             <div className="form-group">
-              <label htmlFor="edit-mikve-levad-date">תאריך בדיקת השגחה:</label>
+              <label htmlFor="edit-mikve-levad-date">תאריך בדיקה:</label>
               <input
                 type="date"
                 id="edit-mikve-levad-date"

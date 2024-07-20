@@ -373,7 +373,7 @@ const AdminAddMikve = () => {
 
               {isLevadChecked && (
                 <div className="form-group">
-                  <label htmlFor="mikve-supervision-date">מתי השגחה:</label>
+                  <label htmlFor="mikve-supervision-date">תאריך בדיקה:</label>
                   <input
                     type="date"
                     id="mikve-supervision-date"
