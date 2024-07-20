@@ -80,10 +80,7 @@
 }
 
 .operations-button {
-    border: 1px solid white;
-    padding: 5px;
     margin-left: 20px;
-    border-radius: 30px;
     cursor: pointer;
 }
 
@@ -98,13 +95,14 @@
 
 /* Make sure the inner button takes up the full space of the operations-button */
 .operations-button button {
-    width: 100%;
     background: none;
-    border: none;
+    border: 1px solid white !important;
+    width: 100%;
+    border-radius: 30px;
     color: inherit;
     font: inherit;
     cursor: pointer;
-    padding: 0;
+    padding: 5px;
     text-align: right;
 }
 

@@ -214,6 +214,10 @@
     margin-bottom: 10px;
 }
 
+.mikve-ids-label {
+    margin-bottom: 20px !important;
+}
+
 .supervision-group label {
     margin-left: 10px;
     margin-right: 10px;

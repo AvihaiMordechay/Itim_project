@@ -385,7 +385,7 @@ const AdminAddMikve = () => {
               )}
 
               <div className="form-group">
-                <label htmlFor="mikve-ids">הוסף ID בור מים:</label>
+                <label htmlFor="mikve-ids" className="mikve-ids-label">הוסף ID בור מים:</label>
                 <input
                   type="text"
                   id="mikve-ids-input"
