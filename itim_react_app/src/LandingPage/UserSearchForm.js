@@ -20,10 +20,17 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
     const [showWaterSamplingInfo, setShowWaterSamplingInfo] = useState(false);
     const [showShelterInfo, setShowShelterInfo] = useState(false);
     const [showLevadInfo, setShowLevadInfo] = useState(false);
+    const [activeInfoPopup, setActiveInfoPopup] = useState(null);
+
     const inputRef = useRef(null);
     const autocompleteRef = useRef(null);
 
     const popupRef = useRef(null);
+
+    const handleInfoClick = (popupName) => {
+        setActiveInfoPopup(activeInfoPopup === popupName ? null : popupName);
+    };
+
 
     const positionAutocompletePopup = () => {
         const inputElement = inputRef.current;
@@ -274,8 +281,8 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                             placeholder={searchType === 'name' ? "שם המקווה" : "עיר או רחוב"}
                             value={searchInput}
                             onChange={handleInputChange}
-                            className="search-bar"
-                        />
+                            className={`search-bar ${searchType === 'name' ? 'search-by-name' : ''}`}
+                            />
                         <button type="submit" className="search-button">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                                 <path d="M10 2a8 8 0 106.32 12.9l4.39 4.38a1 1 0 001.42-1.42l-4.38-4.39A8 8 0 0010 2zm0 2a6 6 0 11-4.24 10.24A6 6 0 0110 4z" />
@@ -303,7 +310,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                     נגישות פיזית
                     <FaQuestionCircle 
                         className="info-icon" 
-                        onClick={() => setShowAccessibilityInfo(true)}
+                        onClick={() => handleInfoClick('accessibility')}
                     />
                 </label>
                 <select value={accessibility} onChange={(e) => setAccessibility(e.target.value)} className="select-input">
@@ -312,10 +319,10 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                     <option value="1">נגישות חלקית</option>
                     <option value="2">נגישות מלאה</option>
                 </select>
-                {showAccessibilityInfo && (
+                {activeInfoPopup === 'accessibility' && (
                     <div className="info-popup">
                         <p>בהתאם למידע שנמסר לנו על ידי הרשויות המקומיות והמועצות הדתיות.</p>
-                        <button onClick={() => setShowAccessibilityInfo(false)}>
+                        <button onClick={() => setActiveInfoPopup(null)}>
                             <IoMdClose />
                         </button>
                     </div>
@@ -326,7 +333,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                     בדיקת מים
                     <FaQuestionCircle 
                         className="info-icon" 
-                        onClick={() => setShowWaterSamplingInfo(true)}
+                        onClick={() => handleInfoClick('waterSampling')}
                     />
                 </label>
                 <select
@@ -339,10 +346,10 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                     <option value="1">נבדק ותקין</option>
                     <option value="2">נבדק ולא תקין</option>
                 </select>
-                {showWaterSamplingInfo && (
+                {activeInfoPopup === 'waterSampling' && (
                     <div className="info-popup">
                         <p>בהתאם לנהלי משרד הבריאות, בכל מקווה צריכה להתבצע בדיקת זיהומים במים פעם בחודש. המידע המופיע כאן הוא בהתאם לבדיקה האחרונה שנעשתה.</p>
-                        <button onClick={() => setShowWaterSamplingInfo(false)}>
+                        <button onClick={() => setActiveInfoPopup(null)}>
                             <IoMdClose />
                         </button>
                     </div>
@@ -355,7 +362,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                     מיגון
                     <FaQuestionCircle 
                         className="info-icon" 
-                        onClick={() => setShowShelterInfo(true)}
+                        onClick={() => handleInfoClick('shelter')}
                     />
                 </label>
                 <select value={shelter} onChange={(e) => setShelter(e.target.value)} className="select-input">
@@ -364,10 +371,10 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                     <option value="1">מיגון חלקי</option>
                     <option value="2">מיגון מלא</option>
                 </select>
-                {showShelterInfo && (
+                {activeInfoPopup === 'shelter' && (
                     <div className="info-popup">
                         <p>בהתאם למידע שנמסר לנו על ידי המשרד לשירותי דת.</p>
-                        <button onClick={() => setShowShelterInfo(false)}>
+                        <button onClick={() => setActiveInfoPopup(null)}>
                             <IoMdClose />
                         </button>
                     </div>
@@ -378,7 +385,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                     טבילה לבד
                     <FaQuestionCircle 
                         className="info-icon" 
-                        onClick={() => setShowLevadInfo(true)}
+                        onClick={() => handleInfoClick('levad')}
                     />
                 </label>
                 <select value={levad} onChange={(e) => setLevad(e.target.value)} className="select-input">
@@ -386,10 +393,10 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                     <option value="true">מותר לרחוץ לבד</option>
                     <option value="false">אסור לרחוץ לבד</option>
                 </select>
-                {showLevadInfo && (
+                {activeInfoPopup === 'levad' && (
                     <div className="info-popup">
                         <p>בהתאם לפסיקת בג"ץ ולחוזר מנכ"ל כל אישה שמעוניינת בכך רשאית לטבול לבד ללא נוכחות בלנית. בשנים האחרונות בדקנו האם המקוואות מקיימים פסיקה זו ובאמת מאפשרים זאת.</p>
-                        <button onClick={() => setShowLevadInfo(false)}>
+                        <button onClick={() => setActiveInfoPopup(null)}>
                             <IoMdClose />
                         </button>
                     </div>
