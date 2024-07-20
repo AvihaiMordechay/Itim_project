@@ -114,8 +114,6 @@ const VisitorStatistics = () => {
         }
     };
 
-    console.log('visitorData before rendering:', visitorData);
-
     return (
         <div className="visitor-statistics">
             <h2>סטטיסטיקת מבקרים</h2>
