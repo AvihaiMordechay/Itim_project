@@ -140,7 +140,7 @@ const AdminStatistics = ({ allMikves }) => {
                 };
             case 'levad':
                 return {
-                    labels: ['עם השגחה', 'ללא השגחה'],
+                    labels: ['ניתן לטבול לבד', 'לא ניתן לטבול לבד'],
                     datasets: [{
                         data: [
                             mikvesData.levad.true,
@@ -198,7 +198,7 @@ const AdminStatistics = ({ allMikves }) => {
                         <button className="distribution-button" onClick={() => { setShowTrafficGraph(true); setChartType(''); }}>כניסות לאתר</button>
                         <button className="distribution-button" onClick={() => { setShowTrafficGraph(false); setChartType('shelter'); }}>מיגון</button>
                         <button className="distribution-button" onClick={() => { setShowTrafficGraph(false); setChartType('accessibility'); }}>נגישות</button>
-                        <button className="distribution-button" onClick={() => { setShowTrafficGraph(false); setChartType('levad'); }}>השגחה</button>
+                        <button className="distribution-button" onClick={() => { setShowTrafficGraph(false); setChartType('levad'); }}>טבילה לבד</button>
                         <button className="distribution-button" onClick={() => { setShowTrafficGraph(false); setChartType('waterSampling'); }}>תברואה</button>
                     </div>
                     <div className="distribution-content">
