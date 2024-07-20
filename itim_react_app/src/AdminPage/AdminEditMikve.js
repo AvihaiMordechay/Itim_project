@@ -165,11 +165,15 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
 
   const handleAddId = () => {
     if (newId.trim() !== "") {
-      setTempData((prevData) => ({
-        ...prevData,
-        ids: { ...prevData.ids, [newId.trim()]: "0" },
-      }));
-      setNewId("");
+      if (newId.trim() in tempData.ids) {
+        alert("ה-ID כבר קיים בבור מים.");
+      } else {
+        setTempData((prevData) => ({
+          ...prevData,
+          ids: { ...prevData.ids, [newId.trim()]: "0" },
+        }));
+        setNewId("");
+      }
     }
   };
 
