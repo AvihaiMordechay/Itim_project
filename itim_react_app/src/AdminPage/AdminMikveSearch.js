@@ -68,6 +68,7 @@ const AdminMikveSearch = ({ allMikves, setPresentationMikves, setVisibleCount, n
                 }}
                 onChange={(e) => setSearchInput(e.target.value)}
                 onKeyPress={handleKeyPress}
+                onKeyPress={handleKeyPress}
             />
 
             <div className="admin-search-type">
