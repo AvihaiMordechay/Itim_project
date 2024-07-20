@@ -4,7 +4,7 @@ from firebase_admin import credentials, firestore
 import requests
 
 # Google Maps Geocoding API key.
-with open("misc/google_api.txt", 'r') as file:
+with open("google_api.txt", 'r') as file:
     API_KEY = file.read()
 
 
@@ -16,8 +16,7 @@ def reverse_hebrew_text(text):
 
 def get_coordinates(address):
     # Prepare the request URL
-    url = f'https://maps.googleapis.com/maps/api/geocode/json?address={
-        address}&key={API_KEY}'
+    url = f'https://maps.googleapis.com/maps/api/geocode/json?address={address}&key={API_KEY}'
 
     # Send the request
     response = requests.get(url)
@@ -39,7 +38,7 @@ def get_coordinates(address):
 def init_database():
     # Initialize Firestore connection
     cred = credentials.Certificate(
-        'itim-mikves-project-firebase-adminsdk-vxagm-e207e072e2.json')
+        'itim-mikves-project-firebase-adminsdk-vxagm-1a69903a14.json')
     firebase_admin.initialize_app(cred)
     return firestore.client()
 
@@ -47,7 +46,7 @@ def init_database():
 def upload_data_to_firestore(df, db):
     for index, row in df.iterrows():
         # Parse IDs into a list
-        ids = row['ID'].replace('\n', ' ').split()
+        ids = row['ID'].replace('\n',' ').split()
 
         # Convert ids list to a dictionary
         ids_dict = {mikveId: "0" for mikveId in ids}
@@ -90,7 +89,7 @@ if __name__ == "__main__":
 
     # Read Excel file
     df = pd.read_excel(
-        '/Users/avihaimor/Desktop/Itim_project/misc/MikvesNewTest.xlsx', header=0)
+        '/Users/avihaimor/Desktop/Itim_project/misc/data_master.xlsx', header=0)
 
     # Convert all columns to string
     df = df.astype(str)
@@ -101,7 +100,7 @@ if __name__ == "__main__":
     # Set column names
     column_names = df.iloc[0]
     df.columns = column_names
-    df = df[1:]  # Remove the first row as it is used for headers
 
+    df = df[1:]  # Remove the first row as it is used for headers
     # Upload data to Firestore
     upload_data_to_firestore(df, db)
