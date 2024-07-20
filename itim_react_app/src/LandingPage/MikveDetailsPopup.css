@@ -18,14 +18,15 @@
     background-color: white;
     padding: 20px;
     border-radius: 8px;
-    max-width: 80%;
+    width: -webkit-fill-available;
+    max-width: 30%;
     max-height: 80%;
     overflow-y: auto;
     position: relative;
     flex-direction: column;
-    align-items: flex-start; /* Change this to align content to the right */
-    text-align: right; /* Ensure text is aligned to the right */
-    direction: rtl; /* Set RTL direction */
+    align-items: flex-start;
+    text-align: right;
+    direction: rtl;
 }
 
 .close-popup {
@@ -77,4 +78,10 @@
 
 .mikve-popup-content strong {
     color: #00aec6;
+}
+
+@media (max-width: 768px) {
+    .mikve-popup-content{
+        max-width: 80%;
+    }
 }
