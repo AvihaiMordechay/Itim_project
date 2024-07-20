@@ -79,6 +79,7 @@ const AdminContent = () => {
                     visibleCount={visibleCount}
                     setVisibleCount={setVisibleCount}
                     numOfRows={numOfRows}
+                    allMikves={allMikves}
                 />
                 {isEditMikvePopupOpen && (
                     <AdminEditMikve
@@ -88,9 +89,7 @@ const AdminContent = () => {
                         onDelete={handleDeleteMikve}
                     />
                 )}
-                <div className='admin-statistics'>
-                    <label>מספר המקוואות במערכת: {allMikves.length}</label>
-                </div>
+                
             </div>
         </div>
     );

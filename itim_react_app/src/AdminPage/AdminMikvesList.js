@@ -4,7 +4,7 @@ import { MdModeEdit } from "react-icons/md";
 import { format } from 'date-fns';
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 
-const AdminMikvesList = ({ presentationMikves, handleEditMikve, visibleCount, setVisibleCount, numOfRows }) => {
+const AdminMikvesList = ({ presentationMikves, handleEditMikve, visibleCount, setVisibleCount, numOfRows, allMikves }) => {
     const [sortColumn, setSortColumn] = useState(null);
     const [sortDirection, setSortDirection] = useState('asc');
 
@@ -86,19 +86,22 @@ const AdminMikvesList = ({ presentationMikves, handleEditMikve, visibleCount, se
                 </tbody>
             </table>
             {visibleCount < presentationMikves.length && (
-                <div>
-                    <label className="total-presentation-mikves">סה״כ: {visibleCount} </label>
+                <div className="list-bottom">
                     <button
                         className="admin-mikve-show-more-button"
                         onClick={handleShowMore}
                     >
                         הצג עוד
                     </button>
+                    
+                    <label className="total-presentation-mikves">מספר המקוואות במערכת: {allMikves.length}</label>
+                    <label className="total-presentation-mikves">סה״כ: {visibleCount} </label>
                 </div>
             )}
             {visibleCount >= presentationMikves.length && (
                 <label className="total-presentation-mikves">סה״כ: {presentationMikves.length} </label>
             )}
+
         </div>
     );
 };

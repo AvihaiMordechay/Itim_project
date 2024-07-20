@@ -244,6 +244,10 @@
     width: -webkit-fill-available;
 }
 
+.search-bar.search-by-name {
+    background-image: none;
+}
+
 /* Styles for the autocomplete instruction */
 .autocomplete-instruction {
     font-size: 12px;
