@@ -16,6 +16,9 @@ const AdminContent = () => {
     const [isEditMikvePopupOpen, setIsEditMikvePopupOpen] = useState(false);
     const [visibleCount, setVisibleCount] = useState(numOfRows);
 
+    //Fetches mikveh data from Firebase Firestore
+    // and updates the `allMikves` and `presentationMikves` states with the retrieved data.
+    // Each document is mapped to an object including its ID and data.
     const fetchMikves = async () => {
         const querySnapshot = await getDocs(collection(db, "Mikves"));
         const mikvesData = querySnapshot.docs.map((doc) => ({
@@ -89,7 +92,7 @@ const AdminContent = () => {
                         onDelete={handleDeleteMikve}
                     />
                 )}
-                
+
             </div>
         </div>
     );

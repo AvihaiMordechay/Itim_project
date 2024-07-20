@@ -18,7 +18,8 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
     const [uploadSuccessfuly, setUploadSuccessfuly] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
-
+    // Updates the file state and file name when a new file is selected.
+    // Shows the upload confirmation popup.
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         setFile(selectedFile);
@@ -26,11 +27,13 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
         setMikveUploadPopup(true);
     };
 
+    // Closes the loading and missing mikvehs popup by setting their visibility to false.
     const handleExitLoadingUploading = () => {
         setShowLoadingUploading(false);
         setShowMikvesMissing(false);
     }
 
+    // Resets the file input and hides the upload confirmation popup.
     const handleCancelUploadPopup = () => {
         setFile(null);
         setFileName('');
@@ -39,6 +42,8 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
         inputElement.value = ''; // Reset the input value
     };
 
+    // Reads the selected file, parses it as an XLSX workbook, and initializes sanitation data if the file format is valid.
+    // Displays an error message if the file format is incorrect.
     const handleFileUpload = () => {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -62,6 +67,8 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
         reader.readAsArrayBuffer(file);
     };
 
+    // Validates the XLSX data by ensuring required columns for sanitation data are present and non-null.
+    // Returns true if the file contains valid sanitation data, otherwise false.
     const checkXlFile = (jsonData) => {
         for (const row of jsonData) {
             if (row['__EMPTY_5'] && typeof row['__EMPTY_5'] === 'string' && row['__EMPTY_5'].includes('NP')) {
@@ -80,7 +87,8 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
         return false;
     };
 
-
+    // Initializes sanitation data from the XLSX JSON data. Processes each row to update the mikveh's sanitation status, 
+    // date, and cleanliness based on the values. Updates the state with the processed data.
     const initSanitationData = (jsonData) => {
         const result = [];
         let updatedDate;
@@ -161,6 +169,8 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
     }, [sanitationData]);
 
 
+    // Validates sanitation values against predefined thresholds. Returns true if all values are within acceptable limits, 
+    // otherwise returns false. Handles special cases for non-numeric or missing values.
     const checkValues = (values) => {
         const details = {
             "coliforms": values['קוליפורמים'],
@@ -211,6 +221,8 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
         }
     };
 
+    // Updates mikveh data with the latest sanitation results. Marks mikvehs as updated, checks their status, 
+    // and updates Firebase if there are changes. Displays missing mikvehs if any.
     const updateMikvesSanitation = () => {
         const MIKVE_NOT_CHECKED = "0";
         const MIKVE_CHECKED_AND_PASSED = "1";
@@ -298,6 +310,8 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
         }
     };
 
+    // Performs a batch update to Firebase with the new mikveh sanitation data.
+    // Sets success or failure state based on the result.
     const updateFirebase = async (updatedMikves) => {
         const batch = writeBatch(db);
 

@@ -2,6 +2,10 @@ import React from 'react';
 import * as XLSX from 'xlsx';
 
 const AdminDownloadData = ({ allMikves }) => {
+
+    // Converts the `allMikves` data into an Excel file using the `xlsx` library.
+    // Maps the mikveh data into a structured format, creates a worksheet and workbook,
+    // and initiates a download of the file named 'MikvesData.xlsx'.
     const handleDownload = () => {
         const dataToExport = allMikves.map(mikve => ({
             ids: mikve.id,

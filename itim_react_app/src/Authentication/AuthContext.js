@@ -1,8 +1,10 @@
-// AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { myAuth } from '../Firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 
+// AuthContext.js
+// Provides authentication context for the app.
+// Sets up user state and handles authentication changes using Firebase.
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);

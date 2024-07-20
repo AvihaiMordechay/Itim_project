@@ -6,6 +6,9 @@ const AdminMikveSearch = ({ allMikves, setPresentationMikves, setVisibleCount, n
     const [searchInput, setSearchInput] = useState("");
     const [searchType, setSearchType] = useState("name");
 
+    // Filters the list of mikvehs based on the specified search type and input,
+    // updating the state with the filtered results.
+    // Adjusts the visible count and updates the presentation list.
     const handleSearchMikves = () => {
         let filteredMikves = [];
         switch (searchType) {
@@ -42,6 +45,13 @@ const AdminMikveSearch = ({ allMikves, setPresentationMikves, setVisibleCount, n
         setPresentationMikves(allMikves);
     };
 
+    // Triggers the search function when the Enter key is pressed.
+    const handleKeyPress = (e) => {
+        if (e.key === "Enter") {
+            handleSearchMikves();
+        }
+    };
+
     return (
         <div className="admin-mikve-search">
             <input
@@ -54,9 +64,10 @@ const AdminMikveSearch = ({ allMikves, setPresentationMikves, setVisibleCount, n
                     width: '25%',
                     height: '-webkit-fill-available',
                     borderRadius: '20px'
-                
+
                 }}
                 onChange={(e) => setSearchInput(e.target.value)}
+                onKeyPress={handleKeyPress}
             />
 
             <div className="admin-search-type">
@@ -78,7 +89,7 @@ const AdminMikveSearch = ({ allMikves, setPresentationMikves, setVisibleCount, n
                 </select>
             </div>
             <button
-                type="button"
+                type="submit"
                 id="mikve-button-search"
                 className="mikve-button-bar"
                 onClick={handleSearchMikves}

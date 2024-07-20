@@ -2,6 +2,9 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 import { signOut, signInWithEmailAndPassword } from "firebase/auth";
 import { myAuth } from '../Firebase';
 
+// useAuth.js
+// Custom hook for authentication operations. Provides `login` and `logout` functions using Firebase authentication.
+// Redirects users to specific routes upon login or logout.
 const useAuth = () => {
     const navigate = useNavigate(); // Initialize useNavigate hook
 

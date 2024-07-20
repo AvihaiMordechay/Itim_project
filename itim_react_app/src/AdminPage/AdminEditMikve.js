@@ -17,10 +17,15 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
   const [mikveDeletePopup, setMikveDeletePopup] = useState(false);
   const [cities, setCities] = useState(citiesList);
 
+  //  Validates a phone number.
+  // Checks if the phone number contains only digits, dashes, and spaces.
   function isValidPhoneNumbers(phoneNumber) {
     return /^[0-9-\s]+$/.test(phoneNumber);
   }
 
+  // Validates required fields, checks phone number format, verifies city existence,
+  // fetches coordinates for the mikve address or city, and updates the mikve data in Firestore.
+  // Displays alerts for missing or invalid data and calls onSave and onClose callbacks upon success.
   const handleSave = async () => {
     // Check if all required fields are filled
     if (
@@ -37,7 +42,6 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
       const choosedCityName = mikveData.city.trim(); // Trim spaces from the city name
       const trimmedCitiesList = citiesList.map((city) => city.trim()); // Trim spaces from all city names
       if (!trimmedCitiesList.includes(choosedCityName)) {
-        console.log("x", mikveData.city, "x");
         alert("העיר שהוזנה אינה נמצאת ברשימת הערים.");
         return;
       }
@@ -86,6 +90,9 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
     setEditField(field);
   };
 
+  // Saves the edited field data to the main mikveData state.
+  // Updates specific fields like 'levad', 'general_shelter', and 'general_accessibility'
+  // and resets the editField state.
   const handleFieldSave = (field) => {
     if (field === "levad") {
       setIsLevadChecked(tempData[field]);
@@ -177,6 +184,8 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
     }
   };
 
+  // Adds a new ID to the mikve's IDs if it's not empty or already exists.
+  // Updates the `tempData` state with the new ID and clears the input field.
   const handleDeleteId = (id) => {
     const { [id]: _, ...updatedIds } = tempData.ids;
     setTempData((prevData) => ({
@@ -185,6 +194,8 @@ const AdminEditMikve = ({ mikve, onClose, onSave, onDelete }) => {
     }));
   };
 
+  // Deletes the mikve from the Firestore database and triggers onDelete callback.
+  // Closes the edit popup after successful deletion.
   const handleDeleteMikve = async () => {
     try {
       await deleteDoc(doc(db, "Mikves", mikve.id));

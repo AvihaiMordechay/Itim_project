@@ -13,6 +13,8 @@ const AdminStatistics = ({ allMikves }) => {
     const [filteredMikves, setFilteredMikves] = useState(allMikves);
     const [showTrafficGraph, setShowTrafficGraph] = useState(false);
 
+    // Computes and memoizes the list of cities with at least two mikvehs,
+    // sorted alphabetically. Updates when `allMikves` changes.
     const cities = useMemo(() => {
         const cityCounts = allMikves.reduce((acc, mikve) => {
             acc[mikve.city] = (acc[mikve.city] || 0) + 1;
@@ -26,6 +28,9 @@ const AdminStatistics = ({ allMikves }) => {
 
         return filteredCities;
     }, [allMikves]);
+
+    // Filters `allMikves` by the selected city and updates `filteredMikves`.
+    // If no city is selected, resets to the full list of mikvehs.
     const handleFilter = (city) => {
         const filtered = city ? allMikves.filter(mikve => mikve.city === city) : allMikves;
         setFilteredMikves(filtered);
@@ -37,6 +42,8 @@ const AdminStatistics = ({ allMikves }) => {
         setFilteredMikves(allMikves);
     }
 
+    // Aggregates mikveh data into categories: shelter, accessibility, levad, and waterSampling.
+    // Counts occurrences based on the specified attributes and returns an object with the aggregated data.
     const collectMikveData = (data) => {
         const acc = {
             generalShelter: {
@@ -82,6 +89,8 @@ const AdminStatistics = ({ allMikves }) => {
         return acc;
     };
 
+    // Generates data for a pie chart based on the selected type ('shelter', 'accessibility', 'levad', or 'waterSampling').
+    // Uses `collectMikveData` to gather statistics and formats them into chart-compatible datasets.
     const getPieChartData = (type) => {
         const mikvesData = collectMikveData(filteredMikves);
         switch (type) {
