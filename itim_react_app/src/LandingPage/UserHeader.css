@@ -22,9 +22,10 @@
   flex-direction: row-reverse;
 }
 
-.logo-link{
+.logo-link {
   display: contents;
 }
+
 .logo-link img {
   position: absolute;
   right: 0;
@@ -37,7 +38,8 @@
 .header h1 {
   font-size: 42px;
   color: #faccce;
-  margin: 0; /* Add this to remove default margins */
+  margin: 0;
+  /* Add this to remove default margins */
 }
 
 .admin-icon {
@@ -140,6 +142,14 @@
   background-color: #008fa3;
 }
 
+.login-error {
+  color: red;
+  font-size: 16px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  text-align: right;
+}
+
 @media (max-width: 768px) {
   .header-container {
     padding-top: 20px;
@@ -149,11 +159,13 @@
   .header {
     height: auto;
     padding: 10px 0;
-    flex-wrap: wrap; /* Allow items to wrap */
-    justify-content: flex-start; /* Align items to the start (right in RTL) */
+    flex-wrap: wrap;
+    /* Allow items to wrap */
+    justify-content: flex-start;
+    /* Align items to the start (right in RTL) */
   }
 
-  .header-wrapper{
+  .header-wrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -164,15 +176,18 @@
   .header img {
     position: unset;
     width: 80px;
-    order: -1; /* Ensure the image is first */
+    order: -1;
+    /* Ensure the image is first */
     margin: 0;
   }
 
   .header h1 {
     font-size: 24px;
     text-align: center;
-    width: 100%; /* Full width to center the text */
-    order: 0; /* Place the h1 after the image */
+    width: 100%;
+    /* Full width to center the text */
+    order: 0;
+    /* Place the h1 after the image */
     margin: 10px 0;
   }
 

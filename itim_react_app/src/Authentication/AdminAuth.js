@@ -7,15 +7,15 @@ const useAuth = () => {
 
     const login = async (email, password) => {
         if (email === "" || password === "") {
-            alert("אנא מלא את כל השדות")
-            return;
+            return { success: false, error: "אנא מלא את כל השדות" };
         }
         try {
             await signInWithEmailAndPassword(myAuth, email, password);
             navigate('/Admin');
+            return { success: true };
         }
         catch (error) {
-            alert("אחד מהשדות שהכנסת אינם נכונים")
+            return { success: false, error: "אימייל או סיסמא לא נכונים" };
         }
     };
 
