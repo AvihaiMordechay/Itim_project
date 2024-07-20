@@ -194,7 +194,7 @@ const AdminAddMikve = () => {
       }
       //Close and clear the popup.
     } else {
-      alert("אנא מלא את כל השדות.");
+      alert("אנא מלא את כל שדות החובה");
     }
   };
 
