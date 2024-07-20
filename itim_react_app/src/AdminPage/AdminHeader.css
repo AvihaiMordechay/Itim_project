@@ -31,8 +31,13 @@
     margin: 0;
 }
 
+.add-id {
+    width: auto !important;
+}
+
 /* New styles for the buttons */
 .admin-operations button {
+
     background: none;
     border: none;
     color: white;

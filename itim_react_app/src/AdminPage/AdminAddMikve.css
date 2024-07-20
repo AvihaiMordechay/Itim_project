@@ -142,6 +142,7 @@
 
 .confirm-add-mikve-button,
 .add-id {
+    text-align: center !important;
     background-color: #00aec6 !important;
     color: white;
     margin-right: 10px;
