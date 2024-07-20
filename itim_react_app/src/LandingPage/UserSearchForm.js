@@ -330,7 +330,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
             </div>
             <div className="select-box">
                 <label className="select-header">
-                    בדיקת מים
+                    תברואה 
                     <FaQuestionCircle 
                         className="info-icon" 
                         onClick={() => handleInfoClick('waterSampling')}
@@ -390,8 +390,8 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                 </label>
                 <select value={levad} onChange={(e) => setLevad(e.target.value)} className="select-input">
                     <option value="">בחר</option>
-                    <option value="true">מותר לרחוץ לבד</option>
-                    <option value="false">אסור לרחוץ לבד</option>
+                    <option value="true">ניתן לטבול לבד</option>
+                    <option value="false">לא ניתן לטבול לבד</option>
                 </select>
                 {activeInfoPopup === 'levad' && (
                     <div className="info-popup">

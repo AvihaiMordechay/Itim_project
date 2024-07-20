@@ -30,7 +30,7 @@ const UserMikvesList = ({ mikves, loadMore, hasMore }) => {
                 ))}
             </div>
             {hasMore && (
-                <button onClick={loadMore} className="load-more-button">טען עוד</button>
+                <button onClick={loadMore} className="load-more-button">מקוואות נוספים</button>
             )}
 
             {showDetailsPopup && selectedMikve && (
