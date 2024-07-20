@@ -3,6 +3,12 @@ import useAuth from '../Authentication/AdminAuth';
 import './UserHeader.css';
 import { RiAdminLine } from "react-icons/ri";
 
+/**
+ * UserHeader Component
+ * 
+ * This component renders the header of the user interface, including the title,
+ * logo, and admin login functionality.
+ */
 const UserHeader = () => {
     const { login } = useAuth();
     const [email, setEmail] = useState("");
@@ -10,6 +16,9 @@ const UserHeader = () => {
     const [isAdminPopupOpen, setIsAdminPopupOpen] = useState(false);
     const [loginError, setLoginError] = useState("");
 
+    /**
+     * Handles the login process
+     */
     const handleLogin = async () => {
         const result = await login(email, password);
         if (!result.success) {
@@ -17,6 +26,9 @@ const UserHeader = () => {
         }
     }
 
+    /**
+     * Closes the admin login popup and resets related states
+     */
     const handleClosePopup = () => {
         setIsAdminPopupOpen(false);
         setLoginError(""); // Clear the error message
@@ -24,11 +36,18 @@ const UserHeader = () => {
         setPassword(""); // Clear the password input
     }
 
+    /**
+     * Opens the admin login popup
+     */
     const handleOpenPopup = () => {
         setIsAdminPopupOpen(true);
         setLoginError(""); // Clear any previous error message
     }
 
+    /**
+     * Handles key press events in the login inputs
+     * @param {Event} e - The key press event
+     */
     const handleKeyPress = (e) => {
         if (e.key === "Enter") {
             handleLogin();

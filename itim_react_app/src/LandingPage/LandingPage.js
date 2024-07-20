@@ -13,8 +13,15 @@ import { set } from 'date-fns';
 import { FaWhatsapp, FaEnvelope, FaPhone } from 'react-icons/fa'; // Add this line
 import { trackVisit } from './VisitorTracker';
 
+// Define the libraries needed for Google Maps
 const libraries = ['places'];
 
+/**
+ * LandingPage Component
+ * 
+ * This component serves as the main page of the application, integrating various components
+ * such as the header, search form, map, and list of mikves.
+ */
 const LandingPage = () => {
     let NUM_OF_MIKVES = 15;
     const [allMikves, setAllMikves] = useState([]);
@@ -26,16 +33,18 @@ const LandingPage = () => {
     const [searchLocation, setSearchLocation] = useState(null);
     const [displayCount, setDisplayCount] = useState(NUM_OF_MIKVES);
 
+    // Load Google Maps script
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API,
         libraries,
     });
 
+    // Track visit on component mount
     useEffect(() => {
         trackVisit();  // Add this line to track visits
     }, []);
 
-
+    // Fetch mikves and initialize data
     useEffect(() => {
         const fetchMikves = async () => {
             try {
@@ -84,6 +93,12 @@ const LandingPage = () => {
         initializeData();
     }, []);
 
+    /**
+     * Sort mikves by distance from a given location
+     * @param {Array} mikves - Array of mikve objects
+     * @param {Object} location - Location object with lat and lng properties
+     * @returns {Array} Sorted array of mikves
+     */
     const sortMikvesByDistance = (mikves, location) => {
         return mikves.map(mikve => ({
             ...mikve,
@@ -93,6 +108,10 @@ const LandingPage = () => {
             })
         })).sort((a, b) => a.distance - b.distance);
     };
+
+    /**
+     * Clear search results and reset to initial state
+     */
     const onClear = () => {
         setFilteredMikves(initMikves);
         setDisplayedMikves(filteredMikves.slice(0, NUM_OF_MIKVES));
@@ -101,14 +120,24 @@ const LandingPage = () => {
 
     }
 
+    // Update displayed mikves when filtered mikves or display count changes
     useEffect(() => {
         setDisplayedMikves(filteredMikves.slice(0, displayCount));
     }, [filteredMikves, displayCount]);
 
+    /**
+     * Load more mikves
+     */
     const loadMore = () => {
         setDisplayCount(prevCount => prevCount + NUM_OF_MIKVES);
     };
 
+    /**
+     * Handle search action
+     * @param {string} searchTerm - The search term entered by the user
+     * @param {Object} location - The location object resulting from the search
+     * @param {string} searchType - The type of search performed (address or name)
+     */
     const handleSearch = (searchTerm, location, searchType) => {
         if (searchType === 'address') {
             setSearchType("address")

@@ -2,18 +2,36 @@
 import React from 'react';
 import './MikveDetailsPopup.css';
 
-
+/**
+ * MikveDetailsPopup Component
+ * 
+ * This component displays a popup with detailed information about a specific mikve.
+ * It includes information such as address, phone number, accessibility, shelter status,
+ * supervision rules, water sampling status, and a map of the mikve's location.
+ *
+ * @param {Object} mikve - The mikve object containing all the details to be displayed
+ * @param {function} onClose - Function to close the popup
+ */
 const MikveDetailsPopup = ({ mikve, onClose }) => {
+    // Mapping for shelter status
     const generalShelterMap = {
         "0": "ללא מיגון",
         "1": "מיגון חלקי",
         "2": "מיגון מלא"
     }
+
+    // Mapping for accessibility status
     const generalAccessibilityMap = {
         "0": "לא נגיש",
         "1": "נגישות חלקית",
         "2": "נגישות מלאה"
     }
+
+    /**
+     * Generates a URL for a static Google Map image of the mikve's location
+     * @param {Object} mikve - The mikve object
+     * @returns {string} The URL for the static map image
+     */
     const getStaticMapUrl = (mikve) => {
         const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API;
         if (mikve.position && mikve.position.latitude && mikve.position.longitude) {
@@ -23,7 +41,9 @@ const MikveDetailsPopup = ({ mikve, onClose }) => {
         }
     };
 
-
+    /**
+     * Opens Google Maps in a new tab with the mikve's location
+     */
     const openInGoogleMaps = () => {
         if (mikve && mikve.position) {
             const url = `https://www.google.com/maps/search/?api=1&query=${mikve.position.latitude},${mikve.position.longitude}`;
@@ -32,7 +52,12 @@ const MikveDetailsPopup = ({ mikve, onClose }) => {
 
     };
 
-
+    /**
+     * Formats the address string based on available information
+     * @param {string} address - The street address of the mikve
+     * @param {string} city - The city where the mikve is located
+     * @returns {string} Formatted address string
+     */
     const getAddress = (address, city) => {
         if (address && city) {
             return `${address}, ${city}`;
@@ -44,6 +69,12 @@ const MikveDetailsPopup = ({ mikve, onClose }) => {
             return 'לא קיים מידע בנושא';
         }
     };
+
+    /**
+     * Translates the water sampling status code to a human-readable string
+     * @param {string} waterSampling - The water sampling status code
+     * @returns {string} Human-readable water sampling status
+     */
     const getWaterSampling = (waterSampling) => {
         if (waterSampling === "0") {
             return 'לא נבדק'

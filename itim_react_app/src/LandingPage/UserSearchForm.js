@@ -5,6 +5,19 @@ import { IoMdClose } from 'react-icons/io'; // Import close icon from react-icon
 import { calculateDistance } from '../utils/distance';
 import './UserSearchForm.css';
 
+/**
+ * UserSearchForm Component
+ * 
+ * This component provides a search interface for users to find mikves based on various criteria.
+ * It includes a main search bar, search type selector, and advanced search options.
+ * 
+ * @param {function} setFilteredMikves - Function to update the filtered mikves list
+ * @param {array} allMikves - Array of all mikves in the system
+ * @param {object} userLocation - User's current location
+ * @param {function} onSearch - Function to handle search submission
+ * @param {function} onClear - Function to clear the search
+ */
+
 const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, onClear }) => {
     const [searchInput, setSearchInput] = useState('');
     const [searchType, setSearchType] = useState('address');
@@ -22,30 +35,20 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
     const [showLevadInfo, setShowLevadInfo] = useState(false);
     const [activeInfoPopup, setActiveInfoPopup] = useState(null);
 
+    // Refs for DOM elements
     const inputRef = useRef(null);
     const autocompleteRef = useRef(null);
-
     const popupRef = useRef(null);
 
+    /**
+     * Handles the click on info icons, toggling the visibility of info popups
+     * @param {string} popupName - Name of the popup to toggle
+     */
     const handleInfoClick = (popupName) => {
         setActiveInfoPopup(activeInfoPopup === popupName ? null : popupName);
     };
 
-
-    const positionAutocompletePopup = () => {
-        const inputElement = inputRef.current;
-        const popup = popupRef.current;
-        if (inputElement && popup) {
-            const rect = inputElement.getBoundingClientRect();
-            const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-            popup.style.top = `${rect.top + scrollTop - popup.offsetHeight - 5}px`;
-            popup.style.left = `${rect.left + scrollLeft}px`;
-            popup.style.width = `${rect.width * 0.9}px`;
-        }
-    };
-
+    // Effect for setting up Google Maps Autocomplete
     useEffect(() => {
         if (searchType === 'address' && window.google && window.google.maps && window.google.maps.places) {
             if (!autocompleteRef.current) {
@@ -100,6 +103,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
         };
     }, [searchType]);
 
+    // Effect for showing/hiding autocomplete instruction
     useEffect(() => {
         if (searchType === 'address') {
             if (searchInput === '' || placeSelected) {
@@ -112,6 +116,12 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
         }
     }, [searchInput, placeSelected, searchType]);
 
+
+    /**
+     * Handles the selection of a place from Google Maps Autocomplete
+     * shows limited info about the mikveh on the map 
+     */
+
     const handlePlaceSelect = () => {
         if (autocompleteRef.current && searchType === 'address') {
             const addressObject = autocompleteRef.current.getPlace();
@@ -123,6 +133,10 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
         }
     };
 
+    /**
+     * Handles changes to the search input field
+     * @param {Event} e - Input change event
+     */
     const handleInputChange = (e) => {
         const value = e.target.value;
         setSearchInput(value);
@@ -134,6 +148,10 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
         }
     };
 
+    /**
+     * Handles changes to the search type (address or name)
+     * @param {Event} e - Select change event
+     */
     const handleSearchTypeChange = (e) => {
         setSearchType(e.target.value);
         setSearchInput('');
@@ -141,12 +159,16 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
         setPlaceSelected(false);
     };
 
+    /**
+     * Handles the search form submission
+     * @param {Event} e - Form submit event
+     */
     const handleSearch = async (e) => {
         e.preventDefault();
         setShowInstruction(false);
 
 
-        const searchTerm = searchInput.trim().toLowerCase();
+    const searchTerm = searchInput.trim().toLowerCase();
     let searchLocation = userLocation;
 
     // Always filter mikvehs based on the current filters, regardless of search term
@@ -216,6 +238,14 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
     onSearch(searchTerm, searchLocation, searchType);
     };
 
+    /**
+     * Filters mikves based on search criteria
+     * @param {array} mikves - Array of mikves to filter
+     * @param {string} searchTerm - Search term entered by the user
+     * @param {string} searchType - Type of search (address or name)
+     * @returns {array} Filtered array of mikves
+     */
+
     const filterMikves = (mikves, searchTerm, searchType) => {
         return mikves.filter(mikve => {
             const nameMatch = searchType === 'name' ? mikve.name.toLowerCase().includes(searchTerm) : true;
@@ -236,6 +266,12 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
             return nameMatch && accessibilityMatches && waterSamplingMatches && levadMatches && shelterMatches;
         });
     };
+
+    /**
+     * Handles the filtered mikves, sorts them by distance, and updates state
+     * @param {array} filteredMikves - Array of filtered mikves
+     * @param {object} location - Location to calculate distances from
+     */
 
     const handleFilteredMikves = (filteredMikves, location) => {
         if (filteredMikves.length === 0) {
@@ -260,6 +296,9 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
         setFilteredMikves(sortedMikves);
     };
 
+    /**
+     * Closes the error popup
+     */
 
     const closePopup = () => {
         setShowPopup(false);

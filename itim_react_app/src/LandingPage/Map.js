@@ -6,20 +6,23 @@ import './Map.css';
 
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API;
 
+// Determine if the device is mobile
 const isMobile = window.innerWidth <= 768;
 const initialZoom = isMobile ? 14 : 10;
 
-
+// Default center coordinates (Jerusalem)
 const defaultCenter = {
     lat: 31.7683,
     lng: 35.2137, // Jerusalem coordinates
 };
 
+// Map container style
 const mapContainerStyle = {
     width: '100%',
     height: '100%',
 };
 
+// Custom map styles
 const mapStyles = [
     {
         featureType: "all",
@@ -83,6 +86,17 @@ const mapStyles = [
     }
 ];
 
+/**
+ * Map Component
+ * 
+ * This component renders a Google Map with markers for mikves and handles user interactions.
+ * 
+ * @param {Object[]} mikves - Array of mikve objects to display on the map
+ * @param {Object} userLocation - User's current location
+ * @param {Object} searchLocation - Location based on user's search
+ * @param {string} searchType - Type of search performed (e.g., "name" or "address")
+ */
+
 const Map = ({ mikves, userLocation, searchLocation, searchType }) => {
     const { isLoaded, loadError } = useJsApiLoader({
         googleMapsApiKey: GOOGLE_MAPS_API_KEY,
@@ -99,6 +113,7 @@ const Map = ({ mikves, userLocation, searchLocation, searchType }) => {
         mapRef.current = map;
     }, []);
 
+    // Effect to update map center and zoom when location or mikves change
     useEffect(() => {
         if (mapRef.current) {
             const newCenter = searchLocation || userLocation || defaultCenter;
@@ -107,34 +122,40 @@ const Map = ({ mikves, userLocation, searchLocation, searchType }) => {
         }
     }, [userLocation, searchLocation, mikves, searchType]);
 
-
+    // Effect to trigger map resize when the component loads
     useEffect(() => {
         if (isLoaded && mapRef.current) {
             window.google.maps.event.trigger(mapRef.current, 'resize');
         }
     }, [isLoaded]);
 
+    // Handler for marker click events
     const handleMarkerClick = (mikve) => {
         setSelectedMikve(mikve);
     };
 
+    // Handler for closing the info window
     const handleCloseInfoWindow = () => {
         setSelectedMikve(null);
     };
 
+    // Handler for showing mikve details
     const handleShowDetails = (mikve) => {
         setSelectedMikve(mikve);
         setShowDetailsPopup(true);
     };
 
+    // Handler for closing the details popup
     const handleCloseDetailsPopup = () => {
         setShowDetailsPopup(false);
     };
 
+    // Display error message if map fails to load
     if (loadError) {
         return <div className="map-error">Error loading maps</div>;
     }
 
+    // Display loading spinner while map is loading
     if (!isLoaded) {
         return (
             <div className="map-loading">
