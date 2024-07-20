@@ -97,7 +97,7 @@ const MikveDetailsPopup = ({ mikve, onClose }) => {
                 <p><strong>טלפון:</strong> {mikve.phone || 'לא קיים מידע בנושא'}</p>
                 <p><strong>נגישות:</strong> {mikve.accessibility || generalAccessibilityMap[mikve.general_accessibility]}</p>
                 <p><strong>מיגון:</strong> {mikve.shelter || generalShelterMap[mikve.general_shelter]}</p>
-                <p><strong>טבילה לבד:</strong> {mikve.levad !== undefined ? (mikve.levad ? 'מותר לרחוץ לבד' : 'אסור לרחוץ לבד') : 'לא קיים מידע בנושא'}</p>
+                <p><strong>טבילה לבד:</strong> {mikve.levad !== undefined ? (mikve.levad ? 'ניתן לטבול לבד' : 'לא ניתן לטבול לבד') : 'לא קיים מידע בנושא'}</p>
                 <p><strong>בדיקת מים:</strong> {getWaterSampling(mikve.water_sampling)}</p>
                 {mikve.water_sampling !== "0" && (<p><strong>תאריך דגימת מים</strong> {mikve.when_sampling !== undefined ? (format(new Date(mikve.when_sampling), 'dd-MM-yyyy')) : 'לא קיים תאריך'}</p>)}
 
