@@ -288,12 +288,13 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
         if (updatedMikves.length > 0) {
             setAllMikves(prevMikves => {
                 const updatedMikveIds = new Set(updatedMikves.map(mikve => mikve.id));
-                return prevMikves.map(mikve =>
+                const newMikves = prevMikves.map(mikve =>
                     updatedMikveIds.has(mikve.id) ? updatedMikves.find(updated => updated.id === mikve.id) : mikve
                 );
+                onUploadSuccess(newMikves); // Pass the newMikves to onUploadSuccess
+                return newMikves;
             });
             updateFirebase(updatedMikves);
-            onUploadSuccess();
         }
     };
 

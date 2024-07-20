@@ -16,7 +16,8 @@ def reverse_hebrew_text(text):
 
 def get_coordinates(address):
     # Prepare the request URL
-    url = f'https://maps.googleapis.com/maps/api/geocode/json?address={address}&key={API_KEY}'
+    url = f'https://maps.googleapis.com/maps/api/geocode/json?address={
+        address}&key={API_KEY}'
 
     # Send the request
     response = requests.get(url)
@@ -46,7 +47,7 @@ def init_database():
 def upload_data_to_firestore(df, db):
     for index, row in df.iterrows():
         # Parse IDs into a list
-        ids = row['ID'].replace('\n',' ').split()
+        ids = row['ID'].replace('\n', ' ').split()
 
         # Convert ids list to a dictionary
         ids_dict = {mikveId: "0" for mikveId in ids}
@@ -77,6 +78,8 @@ def upload_data_to_firestore(df, db):
         for col in df.columns:
             if col not in ['ID', 'position', 'levad']:
                 doc_data[col] = row[col]
+            if col == "water_sampling":
+                doc_data[col] = "0"
 
         # Set document in Firestore
         # Use the first ID as document name
