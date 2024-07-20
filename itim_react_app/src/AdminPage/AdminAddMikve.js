@@ -407,10 +407,10 @@ const AdminAddMikve = () => {
               <div className="added-ids">
                 {Object.keys(mikveData.ids).map((id) => (
                   <div key={id} className="added-id">
+                    <span>{id}</span>
                     <button onClick={() => handleDeleteId(id)} type="button">
                       X
                     </button>
-                    <span>{id}</span>
                   </div>
                 ))}
               </div>
