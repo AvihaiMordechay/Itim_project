@@ -15,6 +15,7 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
     const [showMikvesMissing, setShowMikvesMissing] = useState(false);
     const [showLoadingUploading, setShowLoadingUploading] = useState(false);
     const [missingIDs, setMissingIDs] = useState([]);
+    const [lenUpdatedMikves, setLenUpdatedMikves] = useState(0);
     const [uploadSuccessfuly, setUploadSuccessfuly] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
@@ -31,6 +32,9 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
     const handleExitLoadingUploading = () => {
         setShowLoadingUploading(false);
         setShowMikvesMissing(false);
+        setUploadSuccessfuly("");
+        setLenUpdatedMikves("0");
+        setMissingIDs([]);
     }
 
     // Resets the file input and hides the upload confirmation popup.
@@ -327,6 +331,7 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
             });
             await batch.commit();
             setUploadSuccessfuly("true");
+            setLenUpdatedMikves(updatedMikves.length);
         } catch (error) {
             console.error("Error updating Firebase:", error);
             setUploadSuccessfuly("false");
@@ -379,7 +384,10 @@ const AdminUploadSamplingXL = ({ allMikves, setAllMikves, onUploadSuccess }) => 
                             </div>
                         )}
                         {uploadSuccessfuly === "true" && (
-                            <h2 className="upload-xl-successfuly">הקובץ הועלה בהצלחה</h2>
+                            <div className="successfuly-uploaded-labels">
+                                <h2 className="upload-xl-successfuly">הקובץ הועלה בהצלחה</h2>,
+                                <h3 className="len-updated-mikves">מקוואות שעודכנו: {lenUpdatedMikves}</h3>
+                            </div>
                         )}
                         {uploadSuccessfuly === "false" && (
                             <h2 className="upload-xl-unsuccessfuly">העלאה נכשלה</h2>

@@ -168,19 +168,19 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
         setShowInstruction(false);
 
 
-    const searchTerm = searchInput.trim().toLowerCase();
-    let searchLocation = userLocation;
+        const searchTerm = searchInput.trim().toLowerCase();
+        let searchLocation = userLocation;
 
-    // Always filter mikvehs based on the current filters, regardless of search term
-    const filteredMikves = filterMikves(allMikves, searchTerm, searchType);
+        // Always filter mikvehs based on the current filters, regardless of search term
+        const filteredMikves = filterMikves(allMikves, searchTerm, searchType);
 
-    if (filteredMikves.length === 0) {
-        setPopupMessage('לא הצלחנו למצוא מקוואות המתאימות לחיפוש שלך. אנא נסי שנית.');
-        setShowPopup(true);
-        return;
-    }
+        if (filteredMikves.length === 0) {
+            setPopupMessage('לא הצלחנו למצוא מקוואות המתאימות לחיפוש שלך. אנא נסי שנית.');
+            setShowPopup(true);
+            return;
+        }
 
-    if (searchType === 'address' && searchTerm) {
+        if (searchType === 'address' && searchTerm) {
             try {
                 if (autocompleteRef.current && autocompleteRef.current.getPlace()) {
                     const addressObject = autocompleteRef.current.getPlace();
@@ -213,7 +213,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                 setShowPopup(true);
                 return;
             }
-            
+
         } else if (searchType === 'name' && searchTerm) {
             const filteredMikves = filterMikves(allMikves, searchTerm, searchType);
             if (filteredMikves.length > 0) {
@@ -235,7 +235,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
         }
 
         handleFilteredMikves(filteredMikves, searchLocation);
-    onSearch(searchTerm, searchLocation, searchType);
+        onSearch(searchTerm, searchLocation, searchType);
     };
 
     /**
@@ -309,11 +309,11 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
             <form className="search-form" onSubmit={handleSearch}>
                 <div className="search-bar-container">
                     <div className="search-input-wrapper">
-                    {showInstruction && searchType === 'address' && !placeSelected && (
-                <div ref={popupRef} className="autocomplete-popup">
-                    אנא בחרי כתובת מהרשימה המוצעת
-                </div>
-            )}
+                        {showInstruction && searchType === 'address' && !placeSelected && (
+                            <div ref={popupRef} className="autocomplete-popup">
+                                אנא בחרי כתובת מהרשימה המוצעת
+                            </div>
+                        )}
                         <input
                             ref={inputRef}
                             type="text"
@@ -321,7 +321,7 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                             value={searchInput}
                             onChange={handleInputChange}
                             className={`search-bar ${searchType === 'name' ? 'search-by-name' : ''}`}
-                            />
+                        />
                         <button type="submit" className="search-button">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                                 <path d="M10 2a8 8 0 106.32 12.9l4.39 4.38a1 1 0 001.42-1.42l-4.38-4.39A8 8 0 0010 2zm0 2a6 6 0 11-4.24 10.24A6 6 0 0110 4z" />
@@ -329,123 +329,123 @@ const UserSearchForm = ({ setFilteredMikves, allMikves, userLocation, onSearch, 
                         </button>
                     </div>
                     <div className="select-box">
-                        <label className="select-header">סוג חיפוש</label>
+                        <label className="select-header">חיפוש לפי</label>
                         <select
                             value={searchType}
                             onChange={handleSearchTypeChange}
                             className="select-input"
                         >
-                            <option value="address">חיפוש לפי כתובת</option>
-                            <option value="name">חיפוש לפי שם</option>
+                            <option value="address">כתובת</option>
+                            <option value="name">שם מקווה</option>
                         </select>
                     </div>
                 </div>
                 <div className="advanced-search">
-    <h3 className="advanced-search-header">חיפוש מתקדם</h3>
-    <div className="filters">
-        <div className="two-filters">
-            <div className="select-box">
-                <label className="select-header">
-                    נגישות פיזית
-                    <FaQuestionCircle 
-                        className="info-icon" 
-                        onClick={() => handleInfoClick('accessibility')}
-                    />
-                </label>
-                <select value={accessibility} onChange={(e) => setAccessibility(e.target.value)} className="select-input">
-                    <option value="">בחר</option>
-                    <option value="0">לא נגיש</option>
-                    <option value="1">נגישות חלקית</option>
-                    <option value="2">נגישות מלאה</option>
-                </select>
-                {activeInfoPopup === 'accessibility' && (
-                    <div className="info-popup">
-                        <p>בהתאם למידע שנמסר לנו על ידי הרשויות המקומיות והמועצות הדתיות.</p>
-                        <button onClick={() => setActiveInfoPopup(null)}>
-                            <IoMdClose />
-                        </button>
+                    <h3 className="advanced-search-header">חיפוש מתקדם</h3>
+                    <div className="filters">
+                        <div className="two-filters">
+                            <div className="select-box">
+                                <label className="select-header">
+                                    נגישות פיזית
+                                    <FaQuestionCircle
+                                        className="info-icon"
+                                        onClick={() => handleInfoClick('accessibility')}
+                                    />
+                                </label>
+                                <select value={accessibility} onChange={(e) => setAccessibility(e.target.value)} className="select-input">
+                                    <option value="">בחר</option>
+                                    <option value="0">לא נגיש</option>
+                                    <option value="1">נגישות חלקית</option>
+                                    <option value="2">נגישות מלאה</option>
+                                </select>
+                                {activeInfoPopup === 'accessibility' && (
+                                    <div className="info-popup">
+                                        <p>בהתאם למידע שנמסר לנו על ידי הרשויות המקומיות והמועצות הדתיות.</p>
+                                        <button onClick={() => setActiveInfoPopup(null)}>
+                                            <IoMdClose />
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="select-box">
+                                <label className="select-header">
+                                    תברואה
+                                    <FaQuestionCircle
+                                        className="info-icon"
+                                        onClick={() => handleInfoClick('waterSampling')}
+                                    />
+                                </label>
+                                <select
+                                    value={waterSampling}
+                                    onChange={(e) => setWaterSampling(e.target.value)}
+                                    className="select-input"
+                                >
+                                    <option value="">בחר</option>
+                                    <option value="0">לא נבדק</option>
+                                    <option value="1">נבדק ותקין</option>
+                                    <option value="2">נבדק ולא תקין</option>
+                                </select>
+                                {activeInfoPopup === 'waterSampling' && (
+                                    <div className="info-popup">
+                                        <p>בהתאם לנהלי משרד הבריאות, בכל מקווה צריכה להתבצע בדיקת זיהומים במים פעם בחודש. המידע המופיע כאן הוא בהתאם לבדיקה האחרונה שנעשתה.</p>
+                                        <button onClick={() => setActiveInfoPopup(null)}>
+                                            <IoMdClose />
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className="two-filters">
+                            <div className="select-box">
+                                <label className="select-header">
+                                    מיגון
+                                    <FaQuestionCircle
+                                        className="info-icon"
+                                        onClick={() => handleInfoClick('shelter')}
+                                    />
+                                </label>
+                                <select value={shelter} onChange={(e) => setShelter(e.target.value)} className="select-input">
+                                    <option value="">בחר</option>
+                                    <option value="0">ללא מיגון</option>
+                                    <option value="1">מיגון חלקי</option>
+                                    <option value="2">מיגון מלא</option>
+                                </select>
+                                {activeInfoPopup === 'shelter' && (
+                                    <div className="info-popup">
+                                        <p>בהתאם למידע שנמסר לנו על ידי המשרד לשירותי דת.</p>
+                                        <button onClick={() => setActiveInfoPopup(null)}>
+                                            <IoMdClose />
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="select-box">
+                                <label className="select-header">
+                                    טבילה לבד
+                                    <FaQuestionCircle
+                                        className="info-icon"
+                                        onClick={() => handleInfoClick('levad')}
+                                    />
+                                </label>
+                                <select value={levad} onChange={(e) => setLevad(e.target.value)} className="select-input">
+                                    <option value="">בחר</option>
+                                    <option value="true">ניתן לטבול לבד</option>
+                                    <option value="false">לא ניתן לטבול לבד</option>
+                                </select>
+                                {activeInfoPopup === 'levad' && (
+                                    <div className="info-popup">
+                                        <p>בהתאם לפסיקת בג"ץ ולחוזר מנכ"ל כל אישה שמעוניינת בכך רשאית לטבול לבד ללא נוכחות בלנית. בשנים האחרונות בדקנו האם המקוואות מקיימים פסיקה זו ובאמת מאפשרים זאת.</p>
+                                        <button onClick={() => setActiveInfoPopup(null)}>
+                                            <IoMdClose />
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
-                )}
-            </div>
-            <div className="select-box">
-                <label className="select-header">
-                    תברואה 
-                    <FaQuestionCircle 
-                        className="info-icon" 
-                        onClick={() => handleInfoClick('waterSampling')}
-                    />
-                </label>
-                <select
-                    value={waterSampling}
-                    onChange={(e) => setWaterSampling(e.target.value)}
-                    className="select-input"
-                >
-                    <option value="">בחר</option>
-                    <option value="0">לא נבדק</option>
-                    <option value="1">נבדק ותקין</option>
-                    <option value="2">נבדק ולא תקין</option>
-                </select>
-                {activeInfoPopup === 'waterSampling' && (
-                    <div className="info-popup">
-                        <p>בהתאם לנהלי משרד הבריאות, בכל מקווה צריכה להתבצע בדיקת זיהומים במים פעם בחודש. המידע המופיע כאן הוא בהתאם לבדיקה האחרונה שנעשתה.</p>
-                        <button onClick={() => setActiveInfoPopup(null)}>
-                            <IoMdClose />
-                        </button>
-                    </div>
-                )}
-            </div>
-        </div>
-        <div className="two-filters">
-            <div className="select-box">
-                <label className="select-header">
-                    מיגון
-                    <FaQuestionCircle 
-                        className="info-icon" 
-                        onClick={() => handleInfoClick('shelter')}
-                    />
-                </label>
-                <select value={shelter} onChange={(e) => setShelter(e.target.value)} className="select-input">
-                    <option value="">בחר</option>
-                    <option value="0">ללא מיגון</option>
-                    <option value="1">מיגון חלקי</option>
-                    <option value="2">מיגון מלא</option>
-                </select>
-                {activeInfoPopup === 'shelter' && (
-                    <div className="info-popup">
-                        <p>בהתאם למידע שנמסר לנו על ידי המשרד לשירותי דת.</p>
-                        <button onClick={() => setActiveInfoPopup(null)}>
-                            <IoMdClose />
-                        </button>
-                    </div>
-                )}
-            </div>
-            <div className="select-box">
-                <label className="select-header">
-                    טבילה לבד
-                    <FaQuestionCircle 
-                        className="info-icon" 
-                        onClick={() => handleInfoClick('levad')}
-                    />
-                </label>
-                <select value={levad} onChange={(e) => setLevad(e.target.value)} className="select-input">
-                    <option value="">בחר</option>
-                    <option value="true">ניתן לטבול לבד</option>
-                    <option value="false">לא ניתן לטבול לבד</option>
-                </select>
-                {activeInfoPopup === 'levad' && (
-                    <div className="info-popup">
-                        <p>בהתאם לפסיקת בג"ץ ולחוזר מנכ"ל כל אישה שמעוניינת בכך רשאית לטבול לבד ללא נוכחות בלנית. בשנים האחרונות בדקנו האם המקוואות מקיימים פסיקה זו ובאמת מאפשרים זאת.</p>
-                        <button onClick={() => setActiveInfoPopup(null)}>
-                            <IoMdClose />
-                        </button>
-                    </div>
-                )}
-            </div>
-        </div>
-    </div>
-</div>
+                </div>
             </form>
-            
+
             {showPopup && (
                 <div className="popup">
                     <div className="popup-content">
